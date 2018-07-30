@@ -40,7 +40,6 @@ class RestaurantPage extends StatelessWidget {
       slivers: <Widget>[
         SliverAppBar(
           pinned: false,
-          snap: true,
           expandedHeight: 250.0,
           flexibleSpace: FlexibleSpaceBar(
             title: Text('sa'),
