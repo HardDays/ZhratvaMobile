@@ -46,6 +46,19 @@ class RestaurantPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+<<<<<<< HEAD
+    return CustomScrollView(
+      slivers: <Widget>[
+        SliverAppBar(
+          pinned: false,
+          expandedHeight: 250.0,
+          flexibleSpace: FlexibleSpaceBar(
+            title: Text('sa'),
+            background: Image.asset('assets/images/placeholder.jpg',
+              width: MediaQuery.of(context).size.width * 0.5,
+              height: MediaQuery.of(context).size.width * 0.5,
+              fit: BoxFit.cover,  
+=======
     return Scaffold(
       appBar: AppBar(
           title: Text('Restaurant'),
@@ -206,6 +219,7 @@ class RestaurantPage extends StatelessWidget {
               );
             },
             childCount: 1
+>>>>>>> 519bc44b4e99e6ab81b06c9ed9dc74ebc19a8c1f
             ),
           ),
           SliverPadding(padding: EdgeInsets.only(top: 10.0)),
