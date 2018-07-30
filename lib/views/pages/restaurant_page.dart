@@ -13,7 +13,7 @@ class RestaurantPage extends StatelessWidget {
     openNow: true,
     rating: 4.5,
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi ac quam vel risus aliquam semper. Nam auctor imperdiet lectus, sit amet bibendum est ullamcorper tincidunt. Aenean tincidunt ipsum eget sem vulputate, et egestas mauris porttitor. Vivamus nec risus dapibus, tristique ante hendrerit, porta odio. Etiam accumsan, odio vitae molestie aliquet, arcu magna faucibus enim, in pharetra libero leo molestie ante. Cras sed congue lacus. Duis rutrum risus lectus, sed dapibus ante luctus a. Etiam mollis nunc at ante dapibus vehicula.',
-    distance: 2000
+    distance: 200
   );
 
   List <MenuCategory> _list = [
@@ -54,7 +54,7 @@ class RestaurantPage extends StatelessWidget {
       body: CustomScrollView(
         slivers: <Widget>[
           SliverFixedExtentList(
-            itemExtent: MediaQuery.of(context).size.height * 0.43,
+            itemExtent: 260.0,
             delegate: SliverChildBuilderDelegate((context, index){
               return Container(
                 child: Stack(
@@ -75,7 +75,7 @@ class RestaurantPage extends StatelessWidget {
                     Container(
                       alignment: Alignment.center,
                       width: MediaQuery.of(context).size.width * 0.95, 
-                      height: MediaQuery.of(context).size.height * 0.33,
+                      height: 250.0,
                       margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.1),
                       child: Card(
                         child: Container(
@@ -117,11 +117,13 @@ class RestaurantPage extends StatelessWidget {
                                 ),    
                               ),     
                               Padding(padding: EdgeInsets.only(top: 25.0)),
-                              Row(
+                              Stack(
                                 children: [
                                   Container(
-                                    width: MediaQuery.of(context).size.width * 0.3,
+                                    margin: EdgeInsets.only(right: 200.0),
+                                    alignment: Alignment.center,
                                     child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
                                       children: [
                                         Text(_restaurant.hours,
                                           maxLines: 1,
@@ -144,7 +146,7 @@ class RestaurantPage extends StatelessWidget {
                                     )
                                   ),
                                   Container(
-                                    width: MediaQuery.of(context).size.width * 0.3,
+                                    alignment: Alignment.center,
                                     child: Column(
                                       children:[ 
                                         Text(_restaurant.rating != null ? '${_restaurant.rating}' : 'Not rated',
@@ -168,7 +170,8 @@ class RestaurantPage extends StatelessWidget {
                                     ),  
                                   ),
                                   Container(
-                                    width: MediaQuery.of(context).size.width * 0.25,
+                                    margin: EdgeInsets.only(left: 175.0),
+                                    alignment: Alignment.center,
                                     child: Column(
                                       children: [
                                         Text(_restaurant.distance != null ? '${_restaurant.distance} km' : 'Inf',
