@@ -23,16 +23,22 @@ class RestaurantsStatePage extends State<RestaurantsPage> with AutomaticKeepAliv
         name: 'Good cafe',
         address: 'Kazan, Rrussia',
         hours: '12:00 - 15:00',
+        openNow: true,
+        distance: 2000
       ),
       Restaurant(
         name: 'Nice coffee',
         address: 'Kazan, Russia, Peterburgskaya street',
         hours: '12:00 - 15:00',
+        openNow: false,
+        distance: 500
       ),
       Restaurant(
         name: 'Hipsto Coffee',
         address: 'Kazan, Russia',
         hours: 'Closed',
+        openNow: true,
+        distance: 2000
       ),
     ];
   }
@@ -57,14 +63,22 @@ class RestaurantsStatePage extends State<RestaurantsPage> with AutomaticKeepAliv
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Container(
-                        width: MediaQuery.of(context).size.width - 20.0,
-                        height: MediaQuery.of(context).size.width * 0.5,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),   
-                          image: DecorationImage(
-                            image: ExactAssetImage('assets/images/placeholder.jpg'),
-                            fit: BoxFit.cover,
+                      GestureDetector(
+                        onTap: (){
+                           Navigator.push(
+                            context,
+                            DefaultPageRoute(builder: (context) => RestaurantPage()),
+                          );
+                        },
+                        child: Container(  
+                          width: MediaQuery.of(context).size.width - 20.0,
+                          height: MediaQuery.of(context).size.width * 0.5,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(10.0)),   
+                            image: DecorationImage(
+                              image: ExactAssetImage('assets/images/placeholder.jpg'),
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                       ),
@@ -101,7 +115,7 @@ class RestaurantsStatePage extends State<RestaurantsPage> with AutomaticKeepAliv
                             ),
                             Container(
                               margin: const EdgeInsets.only(top: 2.0),
-                              child:Text(_list[index].hours,
+                              child:Text('${_list[index].distance} km',
                                 style: TextStyle(
                                   fontSize: 14.0,
                                   color: Colors.grey
@@ -112,29 +126,24 @@ class RestaurantsStatePage extends State<RestaurantsPage> with AutomaticKeepAliv
                           ],
                         ),
                       ),
-                      ButtonTheme.bar( 
-                        child: ButtonBar(
-                          children: <Widget>[     
-                            SizedBox( 
-                              width: MediaQuery.of(context).size.width * 0.3,
-                              child: RaisedButton(
-                                color: Color.fromARGB(255, 247, 131, 6),
-                                child: Text('Menu',
-                                  style: TextStyle(
-                                    fontSize: 14.0,
-                                    color: Colors.white
-                                  ),
-                                ),
-                                shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
-                                onPressed: () { 
-                                  Navigator.push(
-                                    context,
-                                    DefaultPageRoute(builder: (context) => RestaurantPage()),
-                                  );
-                                },
-                              ),
+                      Container(
+                        margin: const EdgeInsets.only(top: 5.0),
+                        width: MediaQuery.of(context).size.width * 0.3,
+                        height: 30.0,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)), 
+                          border: Border.all(
+                            color: _list[index].openNow ? Color.fromARGB(128, 80, 163, 24) : Color.fromARGB(128, 181, 42, 42)
+                          )
+                        ),
+                        child: Container(
+                          margin: const EdgeInsets.only(top: 5.0),
+                          child:Text(_list[index].openNow ? 'Open now' : 'Closed',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: _list[index].openNow ? Color.fromARGB(128, 0, 163, 24) : Color.fromARGB(128, 181, 42, 42)
                             ),
-                          ],
+                          ),
                         ),
                       ),
                     ],
