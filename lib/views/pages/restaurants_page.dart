@@ -20,7 +20,7 @@ class RestaurantsStatePage extends State<RestaurantsPage> with AutomaticKeepAliv
     super.initState();
     _list = [
       Restaurant(
-        name: 'Good cafe',
+        name: 'Good cafe ffds sf sf s sf sfs sddfdsassdad',
         address: 'Kazan, Rrussia',
         hours: '12:00 - 15:00',
         openNow: true,
@@ -30,14 +30,14 @@ class RestaurantsStatePage extends State<RestaurantsPage> with AutomaticKeepAliv
         name: 'Nice coffee',
         address: 'Kazan, Russia, Peterburgskaya street',
         hours: '12:00 - 15:00',
-        openNow: false,
+        openNow: true,
         distance: 500
       ),
       Restaurant(
         name: 'Hipsto Coffee',
         address: 'Kazan, Russia',
         hours: 'Closed',
-        openNow: true,
+        openNow: false,
         distance: 2000
       ),
     ];
@@ -48,8 +48,17 @@ class RestaurantsStatePage extends State<RestaurantsPage> with AutomaticKeepAliv
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
+          centerTitle: true,
           title: Text('Restaurants'),
           backgroundColor: Color.fromARGB(255, 247, 131, 6),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.add_shopping_cart),
+              onPressed: () {
+                
+              },
+            ),
+          ],
         ),
         body: ListView.builder(
           itemCount: _list.length,
@@ -115,10 +124,10 @@ class RestaurantsStatePage extends State<RestaurantsPage> with AutomaticKeepAliv
                             ),
                             Container(
                               margin: const EdgeInsets.only(top: 2.0),
-                              child:Text('${_list[index].distance} km',
+                              child:Text(_list[index].openNow ? 'Open now' : 'Closed',
                                 style: TextStyle(
                                   fontSize: 14.0,
-                                  color: Colors.grey
+                                  color: _list[index].openNow ? Color.fromARGB(128, 0, 163, 24) : Color.fromARGB(128, 181, 42, 42)
                                 ),
                                 overflow: TextOverflow.clip,
                               ),
@@ -129,19 +138,19 @@ class RestaurantsStatePage extends State<RestaurantsPage> with AutomaticKeepAliv
                       Container(
                         margin: const EdgeInsets.only(top: 5.0),
                         width: MediaQuery.of(context).size.width * 0.3,
-                        height: 30.0,
+                        height: 32.0,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(10.0)), 
                           border: Border.all(
-                            color: _list[index].openNow ? Color.fromARGB(128, 80, 163, 24) : Color.fromARGB(128, 181, 42, 42)
+                            color: Colors.grey
                           )
                         ),
                         child: Container(
-                          margin: const EdgeInsets.only(top: 5.0),
-                          child:Text(_list[index].openNow ? 'Open now' : 'Closed',
+                          margin: const EdgeInsets.only(top: 8.0),
+                          child: Text('${_list[index].distance} km',
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              color: _list[index].openNow ? Color.fromARGB(128, 0, 163, 24) : Color.fromARGB(128, 181, 42, 42)
+                              color: Colors.grey
                             ),
                           ),
                         ),

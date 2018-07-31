@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'main_page.dart';
+import 'menu_page.dart';
 import '../routes/default_page_route.dart';
 import '../../models/menu_category.dart';
 import '../../models/restaurant.dart';
@@ -46,28 +46,24 @@ class RestaurantPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-<<<<<<< HEAD
-    return CustomScrollView(
-      slivers: <Widget>[
-        SliverAppBar(
-          pinned: false,
-          expandedHeight: 250.0,
-          flexibleSpace: FlexibleSpaceBar(
-            title: Text('sa'),
-            background: Image.asset('assets/images/placeholder.jpg',
-              width: MediaQuery.of(context).size.width * 0.5,
-              height: MediaQuery.of(context).size.width * 0.5,
-              fit: BoxFit.cover,  
-=======
     return Scaffold(
       appBar: AppBar(
-          title: Text('Restaurant'),
-          backgroundColor: Color.fromARGB(255, 247, 131, 6),
+        centerTitle: true,
+        title: Text(_restaurant.name),
+        backgroundColor: Color.fromARGB(255, 247, 131, 6),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.add_shopping_cart),
+            onPressed: () {
+                
+            },
+          ),
+        ],
       ),
       body: CustomScrollView(
         slivers: <Widget>[
           SliverFixedExtentList(
-            itemExtent: 260.0,
+            itemExtent: 290.0,
             delegate: SliverChildBuilderDelegate((context, index){
               return Container(
                 child: Stack(
@@ -94,10 +90,10 @@ class RestaurantPage extends StatelessWidget {
                         child: Container(
                           alignment: Alignment.center,
                           margin: EdgeInsets.only(
-                            top: MediaQuery.of(context).size.width * 0.03, 
-                            left: MediaQuery.of(context).size.width * 0.03, 
-                            right: MediaQuery.of(context).size.width * 0.03, 
-                            bottom: MediaQuery.of(context).size.width * 0.03
+                            top: 10.0, 
+                            left: 10.0, 
+                            right: 10.0, 
+                            bottom: 10.0
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -110,18 +106,55 @@ class RestaurantPage extends StatelessWidget {
                                 ),  
                               ),
                               Padding(padding: EdgeInsets.only(top: 2.0)),
-                              Text('cafe',
+                              Container(
+                                height: 15.0,
+                                child: Row(
+                                  children: [
+                                    Text('${_restaurant.rating}',
+                                      style: TextStyle(
+                                        color: Color.fromARGB(255, 247, 131, 6)
+                                      ),
+                                    ),
+                                    Icon(Icons.star, color: Color.fromARGB(255, 247, 131, 6), size: 15.0,),
+                                    Icon(Icons.star, color: Color.fromARGB(255, 247, 131, 6), size: 15.0),
+                                    Icon(Icons.star, color: Color.fromARGB(255, 247, 131, 6), size: 15.0),
+                                    Icon(Icons.star, color: Color.fromARGB(255, 247, 131, 6), size: 15.0),
+                                    Icon(Icons.star, color: Color.fromARGB(255, 247, 131, 6), size: 15.0)
+                                  ],
+                                ),
+                              ),
+                              /*Container(
+                                
+                                child: Text('cafe',
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontSize: 14.0,
+                                    color: Colors.grey
+                                  ),  
+                                ),
+                              ),*/
+                              Padding(padding: EdgeInsets.only(top: 7.0)),
+                              Text(_restaurant.address,
+                                maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                   fontSize: 14.0,
                                   color: Colors.grey
                                 ),  
-                              ),
+                              ),  
+                              Padding(padding: EdgeInsets.only(top: 7.0)),
+                              Text('Open till 18:00',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontSize: 14.0,
+                                  color: Colors.grey
+                                ),  
+                              ),  
                               Padding(padding: EdgeInsets.only(top: 10.0)),
                               Container(
-                                height: MediaQuery.of(context).size.height * 0.07,
                                 child: Text(_restaurant.description,
-                                  maxLines: 3,
+                                  maxLines: 4,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
                                     fontSize: 14.0,
@@ -129,11 +162,16 @@ class RestaurantPage extends StatelessWidget {
                                   ),  
                                 ),    
                               ),     
-                              Padding(padding: EdgeInsets.only(top: 25.0)),
-                              Stack(
+                              Padding(padding: EdgeInsets.only(top: 10.0)),
+                              InkWell(
+                                onTap: (){
+                                },
+                                child: Text('Show more',),
+                              )
+                            /*  Stack(
                                 children: [
                                   Container(
-                                    margin: EdgeInsets.only(right: 200.0),
+                                    margin: EdgeInsets.only(right: 0.0),
                                     alignment: Alignment.center,
                                     child: Column(
                                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -147,7 +185,7 @@ class RestaurantPage extends StatelessWidget {
                                           ),  
                                         ),  
                                         Padding(padding: EdgeInsets.only(top: 2.0)),
-                                        Text('hours',
+                                        Text('open now',
                                           maxLines: 1,
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
@@ -157,58 +195,9 @@ class RestaurantPage extends StatelessWidget {
                                         ),  
                                       ]
                                     )
-                                  ),
-                                  Container(
-                                    alignment: Alignment.center,
-                                    child: Column(
-                                      children:[ 
-                                        Text(_restaurant.rating != null ? '${_restaurant.rating}' : 'Not rated',
-                                          maxLines: 1,
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontSize: 25.0,
-                                            color: Colors.black
-                                          ),  
-                                        ),
-                                        Padding(padding: EdgeInsets.only(top: 2.0)),
-                                        Text('rating',
-                                          maxLines: 1,
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontSize: 12.0,
-                                            color: Colors.grey
-                                          ),  
-                                        ),  
-                                      ]
-                                    ),  
-                                  ),
-                                  Container(
-                                    margin: EdgeInsets.only(left: 175.0),
-                                    alignment: Alignment.center,
-                                    child: Column(
-                                      children: [
-                                        Text(_restaurant.distance != null ? '${_restaurant.distance} km' : 'Inf',
-                                          maxLines: 1,
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontSize: 18.0,
-                                            color: Colors.black
-                                          ),  
-                                        ),  
-                                        Padding(padding: EdgeInsets.only(top: 2.0)),
-                                        Text('distance',
-                                          maxLines: 1,
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontSize: 12.0,
-                                            color: Colors.grey
-                                          ),  
-                                        ),  
-                                      ],
-                                    ),
-                                  )
+                                  ),   
                                 ],
-                              )                     
+                              )   */                  
                             ],
                           ),
                         ),
@@ -219,7 +208,6 @@ class RestaurantPage extends StatelessWidget {
               );
             },
             childCount: 1
->>>>>>> 519bc44b4e99e6ab81b06c9ed9dc74ebc19a8c1f
             ),
           ),
           SliverPadding(padding: EdgeInsets.only(top: 10.0)),
@@ -249,53 +237,61 @@ class RestaurantPage extends StatelessWidget {
                   left: MediaQuery.of(context).size.width * 0.03, 
                   right: MediaQuery.of(context).size.width * 0.03, 
                 ),
-                child: Card(                 
-                  child: Container(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Container(
-                          margin: EdgeInsets.only(left: MediaQuery.of(context).size.height * 0.025),
-                          width: MediaQuery.of(context).size.height * 0.10,
-                          height: MediaQuery.of(context).size.height * 0.10,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: DecorationImage(
-                              image: ExactAssetImage('assets/images/placeholder.jpg'),
-                              fit: BoxFit.cover,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      DefaultPageRoute(builder: (context) => MenuPage()),
+                    );
+                  },
+                  child: Card(                 
+                    child: Container(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            margin: EdgeInsets.only(left: 15.0),
+                            width: MediaQuery.of(context).size.height * 0.10,
+                            height: MediaQuery.of(context).size.height * 0.10,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                image: ExactAssetImage('assets/images/placeholder.jpg'),
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(left: 15.0),
-                          height: 50.0,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(_list[index].name,
-                                maxLines: 1,
-                                textAlign: TextAlign.left,
-                                style: TextStyle(
-                                  fontSize: 20.0,
-                                  color: Colors.black
-                                ),  
-                              ), 
-                              Padding(padding: EdgeInsets.only(left: 2.0)),
-                              Text('${_list[index].count} items',
-                                maxLines: 1,
-                                textAlign: TextAlign.left,
-                                style: TextStyle(
-                                  fontSize: 14.0,
-                                  color: Colors.grey
-                                ),  
-                              ), 
-                            ] 
-                          )
-                        ), 
-                      ]
+                          Container(
+                            margin: EdgeInsets.only(left: 15.0),
+                            height: 50.0,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(_list[index].name,
+                                  maxLines: 1,
+                                  textAlign: TextAlign.left,
+                                  style: TextStyle(
+                                    fontSize: 20.0,
+                                    color: Colors.black
+                                  ),  
+                                ), 
+                                Padding(padding: EdgeInsets.only(left: 2.0)),
+                                Text('${_list[index].count} items',
+                                  maxLines: 1,
+                                  textAlign: TextAlign.left,
+                                  style: TextStyle(
+                                    fontSize: 14.0,
+                                    color: Colors.grey
+                                  ),  
+                                ), 
+                              ] 
+                            )
+                          ), 
+                        ]
+                      ),
                     ),
-                  )
-                )
+                  ),
+                ),
               );
             },
             childCount: _list.length

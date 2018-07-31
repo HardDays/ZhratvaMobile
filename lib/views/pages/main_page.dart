@@ -35,23 +35,62 @@ class MainPageState extends State<MainPage> with SingleTickerProviderStateMixin 
         controller: controller,
       ),
       bottomNavigationBar: Material(
-        child: TabBar(
-          tabs: <Tab>[
-            Tab(
-              icon: Icon(Icons.satellite),
-              text: "Specials",
-            ),
-            Tab(
-              icon: Icon(Icons.restaurant),
-              text: "Restaurants",
-            ),
-            Tab(
-              icon: Icon(Icons.people),
-              text: 'Profile'
-            ),
-          ],
-          // setup the controller
-          controller: controller,
+        child: Container(
+          height: 50.0,
+          child: 
+            TabBar(
+              tabs: [
+                Container(
+                  child: Column(
+                    children: [
+                      Padding(padding: EdgeInsets.only(top: 5.0)),
+                      Icon(Icons.restaurant,
+                        color: Colors.grey,
+                      ),
+                      Text("Specials",
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 12.0
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                 Container(
+                  child: Column(
+                    children: [
+                      Padding(padding: EdgeInsets.only(top: 5.0)),
+                      Icon(Icons.restaurant,
+                        color: Colors.grey,
+                      ),
+                      Text("Restaurants",
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 12.0
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                Container(
+                  child: Column(
+                    children: [
+                      Padding(padding: EdgeInsets.only(top: 5.0)),
+                      Icon(Icons.people,
+                        color: Colors.grey,
+                      ),
+                      Text("Profile",
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 12.0
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ], 
+            controller: controller,
+          ),
         ),
       ),
     );
