@@ -1,46 +1,41 @@
 import 'package:flutter/material.dart';
 
 import 'restaurant_page.dart';
+import 'cart_page.dart';
 
 import '../routes/default_page_route.dart';
 
-import '../../models/restaurant.dart';
+import '../../models/api/restaurant.dart';
+import '../../models/storage/cache.dart';
+import '../../models/storage/cart.dart';
 
 class RestaurantsPage extends StatefulWidget {
+
+  BuildContext _parentContext;
+
+  RestaurantsPage(parentContext){
+    _parentContext = parentContext;
+  }
+
   @override
-  RestaurantsStatePage createState() => RestaurantsStatePage();
+  RestaurantsStatePage createState() => RestaurantsStatePage(_parentContext);
 }
 
-class RestaurantsStatePage extends State<RestaurantsPage> with AutomaticKeepAliveClientMixin<RestaurantsPage>{
+class RestaurantsStatePage extends State<RestaurantsPage> with SingleTickerProviderStateMixin {
 
   List <Restaurant> _list = [];
+
+  BuildContext _parentContext;
+
+  RestaurantsStatePage(parentContext){
+    _parentContext = parentContext;
+  }
 
   @override
   void initState() {
     super.initState();
-    _list = [
-      Restaurant(
-        name: 'Good cafe ffds sf sf s sf sfs sddfdsassdad',
-        address: 'Kazan, Rrussia',
-        hours: '12:00 - 15:00',
-        openNow: true,
-        distance: 2000
-      ),
-      Restaurant(
-        name: 'Nice coffee',
-        address: 'Kazan, Russia, Peterburgskaya street',
-        hours: '12:00 - 15:00',
-        openNow: true,
-        distance: 500
-      ),
-      Restaurant(
-        name: 'Hipsto Coffee',
-        address: 'Kazan, Russia',
-        hours: 'Closed',
-        openNow: false,
-        distance: 2000
-      ),
-    ];
+    _list = Cache.restaurants;
+
   }
 
   @override 
@@ -52,13 +47,38 @@ class RestaurantsStatePage extends State<RestaurantsPage> with AutomaticKeepAliv
           title: Text('Restaurants'),
           backgroundColor: Color.fromARGB(255, 247, 131, 6),
           actions: [
-            IconButton(
-              icon: Icon(Icons.add_shopping_cart),
-              onPressed: () {
-                
-              },
-            ),
-          ],
+          Stack(
+            children:[
+              IconButton(
+                icon: Icon(Icons.shopping_cart,
+                ),
+                onPressed: () {          
+                   Navigator.push(
+                    context,
+                    DefaultPageRoute(builder: (context) => CartPage()),
+                  );
+                },
+              ),
+              Container(
+                width: 48.0,
+                height: 24.0,
+                alignment: Alignment.center,
+                margin: EdgeInsets.only(top: 24.0),
+                child: Text('${Cart.items.values.map((item) => item.count).reduce((a, b) => a + b)}',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500
+                  ),
+                ),
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.red
+                )
+              )
+            ]
+          )
+        ]       
         ),
         body: ListView.builder(
           itemCount: _list.length,
@@ -75,8 +95,8 @@ class RestaurantsStatePage extends State<RestaurantsPage> with AutomaticKeepAliv
                       GestureDetector(
                         onTap: (){
                            Navigator.push(
-                            context,
-                            DefaultPageRoute(builder: (context) => RestaurantPage()),
+                            _parentContext,
+                            DefaultPageRoute(builder: (context) => RestaurantPage(_list[index])),
                           );
                         },
                         child: Container(  

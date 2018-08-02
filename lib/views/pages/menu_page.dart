@@ -1,54 +1,68 @@
 import 'package:flutter/material.dart';
 import 'menu_item_page.dart';
+import 'cart_page.dart';
+
 import '../routes/default_page_route.dart';
-import '../../models/menu_item.dart';
+
+import '../../models/storage/cart.dart';
+import '../../models/api/menu_item.dart';
+
 
 class MenuPage extends StatelessWidget {
 
-  List <MenuItem> _list = [
-    MenuItem(
-      name: 'Пельмень', 
-      description: 'Вкусно',
-      price: 228
-    ),
-    MenuItem(
-      name: 'Оочень Большой Пельмень', 
-      description: 'Очень большой',
-      price: 1499
-    ),
-    MenuItem(
-      name: 'Борщ', 
-      description: 'Вкусно',
-      price: 123
-    ),
-    MenuItem(
-      name: 'Вискас', 
-      description: 'Для байта',
-      price: 228
-    ),
-    MenuItem(
-      name: 'Дошик', 
-      description: 'Элитная пища',
-      price: 228
-    )
-  ];
+  List <MenuItem> _list = [];
 
+  MenuPage(List<MenuItem> list){
+    _list = list;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Menu'),
+        title: Text('Menu',
+          style: TextStyle(
+            color: Colors.white
+          ),
+        ),
+        iconTheme: IconThemeData(
+          color: Colors.white
+        ),
         centerTitle: true,
         backgroundColor: Color.fromARGB(255, 247, 131, 6),
         actions: [
-            IconButton(
-              icon: Icon(Icons.add_shopping_cart),
-              onPressed: () {
-                
-              },
-            ),
-        ],
+          Stack(
+            children:[
+              IconButton(
+                icon: Icon(Icons.shopping_cart,
+                ),
+                onPressed: () {          
+                   Navigator.push(
+                    context,
+                    DefaultPageRoute(builder: (context) => CartPage()),
+                  );
+                },
+              ),
+              Container(
+                width: 48.0,
+                height: 24.0,
+                alignment: Alignment.center,
+                margin: EdgeInsets.only(top: 24.0),
+                child: Text('${Cart.items.values.map((item) => item.count).reduce((a, b) => a + b)}',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500
+                  ),
+                ),
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.red
+                )
+              )
+            ]
+          )
+        ]       
       ),
       body: GridView.count(
         crossAxisCount: 2,
@@ -110,7 +124,7 @@ class MenuPage extends StatelessWidget {
                     onPressed: (){
                       Navigator.push(
                         context,
-                        DefaultPageRoute(builder: (context) => MenuItemPage()),
+                        DefaultPageRoute(builder: (context) => MenuItemPage(_list[index])),
                       );
                     },
                     child: Text('Buy',

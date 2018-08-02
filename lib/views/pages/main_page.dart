@@ -31,7 +31,8 @@ class MainPageState extends State<MainPage> with SingleTickerProviderStateMixin 
   Widget build(BuildContext context) {
     return Scaffold(
       body: TabBarView(
-        children: <Widget>[SpecialsPage(), RestaurantsPage(), ProfilePage()],
+        physics: NeverScrollableScrollPhysics(),
+        children: <Widget>[SpecialsPage(), RestaurantsPage(context), ProfilePage()],
         controller: controller,
       ),
       bottomNavigationBar: Material(

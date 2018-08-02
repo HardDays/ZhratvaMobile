@@ -1,69 +1,70 @@
 import 'package:flutter/material.dart';
 import 'menu_page.dart';
+import 'cart_page.dart';
+
 import '../routes/default_page_route.dart';
-import '../../models/menu_category.dart';
-import '../../models/restaurant.dart';
+import '../../models/storage/cart.dart';
+import '../../models/api/restaurant.dart';
 
 class RestaurantPage extends StatelessWidget {
 
-  Restaurant _restaurant = Restaurant(
-    name: 'Good coffee',
-    address: 'Kazan, Rrussia, Universitetskaya 228',
-    hours: '12:00 - 15:00',
-    openNow: true,
-    rating: 4.5,
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi ac quam vel risus aliquam semper. Nam auctor imperdiet lectus, sit amet bibendum est ullamcorper tincidunt. Aenean tincidunt ipsum eget sem vulputate, et egestas mauris porttitor. Vivamus nec risus dapibus, tristique ante hendrerit, porta odio. Etiam accumsan, odio vitae molestie aliquet, arcu magna faucibus enim, in pharetra libero leo molestie ante. Cras sed congue lacus. Duis rutrum risus lectus, sed dapibus ante luctus a. Etiam mollis nunc at ante dapibus vehicula.',
-    distance: 200
-  );
+  Restaurant _restaurant;
 
-  List <MenuCategory> _list = [
-    MenuCategory(
-      name: 'Кофе', 
-      description: 'Вкусно',
-      count: 228
-    ),
-    MenuCategory(
-      name: 'Пельмени', 
-      description: 'Очень большой',
-      count: 1499
-    ),
-    MenuCategory(
-      name: 'Борщи', 
-      description: 'Вкусно',
-      count: 123
-    ),
-    MenuCategory(
-      name: 'Вискас', 
-      description: 'Для байта',
-      count: 228
-    ),
-    MenuCategory(
-      name: 'Дошики', 
-      description: 'Элитная пища',
-      count: 228
-    )
-  ];
+  RestaurantPage(Restaurant restaurant){
+    _restaurant = restaurant;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text(_restaurant.name),
+        title: Text(_restaurant.name,
+          style: TextStyle(
+            color: Colors.white
+          ),
+        ),
+        iconTheme: IconThemeData(
+          color: Colors.white
+        ),
         backgroundColor: Color.fromARGB(255, 247, 131, 6),
         actions: [
-          IconButton(
-            icon: Icon(Icons.add_shopping_cart),
-            onPressed: () {
-                
-            },
-          ),
-        ],
+          Stack(
+            children:[
+              IconButton(
+                icon: Icon(Icons.shopping_cart,
+                ),
+                onPressed: () {          
+                   Navigator.push(
+                    context,
+                    DefaultPageRoute(builder: (context) => CartPage()),
+                  );
+                },
+              ),
+              Container(
+                width: 48.0,
+                height: 24.0,
+                alignment: Alignment.center,
+                margin: EdgeInsets.only(top: 24.0),
+                child: Text('${Cart.items.values.map((item) => item.count).reduce((a, b) => a + b)}',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500
+                  ),
+                ),
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.red
+                )
+              )
+            ]
+          )
+        ]       
       ),
       body: CustomScrollView(
         slivers: <Widget>[
-          SliverFixedExtentList(
-            itemExtent: 290.0,
+          SliverList(
             delegate: SliverChildBuilderDelegate((context, index){
               return Container(
                 child: Stack(
@@ -84,7 +85,6 @@ class RestaurantPage extends StatelessWidget {
                     Container(
                       alignment: Alignment.center,
                       width: MediaQuery.of(context).size.width * 0.95, 
-                      height: 250.0,
                       margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.1),
                       child: Card(
                         child: Container(
@@ -115,24 +115,16 @@ class RestaurantPage extends StatelessWidget {
                                         color: Color.fromARGB(255, 247, 131, 6)
                                       ),
                                     ),
-                                    Icon(Icons.star, color: Color.fromARGB(255, 247, 131, 6), size: 15.0,),
-                                    Icon(Icons.star, color: Color.fromARGB(255, 247, 131, 6), size: 15.0),
-                                    Icon(Icons.star, color: Color.fromARGB(255, 247, 131, 6), size: 15.0),
-                                    Icon(Icons.star, color: Color.fromARGB(255, 247, 131, 6), size: 15.0),
-                                    Icon(Icons.star, color: Color.fromARGB(255, 247, 131, 6), size: 15.0)
+                                    Row(
+                                      children: List.generate(_restaurant.rating.floor(), 
+                                        (index) {
+                                          return Icon(Icons.star, color: Color.fromARGB(255, 247, 131, 6), size: 15.0,);
+                                        }
+                                      ),
+                                    ),
                                   ],
                                 ),
                               ),
-                              /*Container(
-                                
-                                child: Text('cafe',
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    fontSize: 14.0,
-                                    color: Colors.grey
-                                  ),  
-                                ),
-                              ),*/
                               Padding(padding: EdgeInsets.only(top: 7.0)),
                               Text(_restaurant.address,
                                 maxLines: 1,
@@ -168,36 +160,6 @@ class RestaurantPage extends StatelessWidget {
                                 },
                                 child: Text('Show more',),
                               )
-                            /*  Stack(
-                                children: [
-                                  Container(
-                                    margin: EdgeInsets.only(right: 0.0),
-                                    alignment: Alignment.center,
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Text(_restaurant.hours,
-                                          maxLines: 1,
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontSize: 18.0,
-                                            color: Colors.black
-                                          ),  
-                                        ),  
-                                        Padding(padding: EdgeInsets.only(top: 2.0)),
-                                        Text('open now',
-                                          maxLines: 1,
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontSize: 12.0,
-                                            color: Colors.grey
-                                          ),  
-                                        ),  
-                                      ]
-                                    )
-                                  ),   
-                                ],
-                              )   */                  
                             ],
                           ),
                         ),
@@ -215,6 +177,7 @@ class RestaurantPage extends StatelessWidget {
             itemExtent: 10.0,
             delegate: SliverChildBuilderDelegate(
               (context, index) {
+                print(_restaurant.menuCategories[index].cover);
                 return Container(
                   margin: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.04),
                   alignment: Alignment.topLeft,
@@ -234,14 +197,14 @@ class RestaurantPage extends StatelessWidget {
             delegate: SliverChildBuilderDelegate((context, index) {
               return Container(
                 margin: EdgeInsets.only(
-                  left: MediaQuery.of(context).size.width * 0.03, 
-                  right: MediaQuery.of(context).size.width * 0.03, 
+                  left: 10.0, 
+                  right: 10.0, 
                 ),
                 child: GestureDetector(
                   onTap: () {
                     Navigator.push(
                       context,
-                      DefaultPageRoute(builder: (context) => MenuPage()),
+                      DefaultPageRoute(builder: (context) => MenuPage(_restaurant.menuCategories[index].menuItems)),
                     );
                   },
                   child: Card(                 
@@ -250,13 +213,13 @@ class RestaurantPage extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Container(
-                            margin: EdgeInsets.only(left: 15.0),
+                            margin: EdgeInsets.only(left: 10.0),
                             width: MediaQuery.of(context).size.height * 0.10,
                             height: MediaQuery.of(context).size.height * 0.10,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               image: DecorationImage(
-                                image: ExactAssetImage('assets/images/placeholder.jpg'),
+                                image: ExactAssetImage(_restaurant.menuCategories[index].cover),
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -267,7 +230,7 @@ class RestaurantPage extends StatelessWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(_list[index].name,
+                                Text(_restaurant.menuCategories[index].name,
                                   maxLines: 1,
                                   textAlign: TextAlign.left,
                                   style: TextStyle(
@@ -276,7 +239,7 @@ class RestaurantPage extends StatelessWidget {
                                   ),  
                                 ), 
                                 Padding(padding: EdgeInsets.only(left: 2.0)),
-                                Text('${_list[index].count} items',
+                                Text('${_restaurant.menuCategories[index].menuItems.length} items',
                                   maxLines: 1,
                                   textAlign: TextAlign.left,
                                   style: TextStyle(
@@ -294,7 +257,7 @@ class RestaurantPage extends StatelessWidget {
                 ),
               );
             },
-            childCount: _list.length
+            childCount: _restaurant.menuCategories.length
             ),
           ),
           SliverPadding(padding: EdgeInsets.only(top: 40.0)),
