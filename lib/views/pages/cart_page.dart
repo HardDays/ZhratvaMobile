@@ -83,7 +83,7 @@ class _CartPageState extends State<CartPage> with SingleTickerProviderStateMixin
       body: Column( 
         children: [ 
           Container(
-            height: MediaQuery.of(context).size.height - 155,
+            height: MediaQuery.of(context).size.height * 0.75,
                 alignment: Alignment.center,
                 child: ListView(
                   children:  List.generate(Cart.items.length, (index){
@@ -210,17 +210,16 @@ class _CartPageState extends State<CartPage> with SingleTickerProviderStateMixin
               ),  
             ] 
           ),*/
-          Container(
-            height: 73.0,
+          Expanded(
+            child: Container(
             width: MediaQuery.of(context).size.width,
             color: Colors.white,
             child: Container(
-              margin: EdgeInsets.only(top: 10.0, bottom: 10.0, left: 40.0, right: 40.0),
+              margin: EdgeInsets.only(top: 15.0, bottom: 15.0, left: 40.0, right: 40.0),
               color: Colors.white,
               child: FlatButton(
                 color: Color.fromARGB(255, 247, 131, 6),
-                  onPressed: (){
-                    
+                  onPressed: (){    
                   },
                   child: Text('PAY ${_totalPrice}',
                     style: TextStyle(
@@ -230,6 +229,7 @@ class _CartPageState extends State<CartPage> with SingleTickerProviderStateMixin
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0))
               ),
             ),
+            )
           )
         ]
       )

@@ -72,113 +72,115 @@ class _MenuItemPageState extends State<MenuItemPage> with SingleTickerProviderSt
       ),
       body: Builder(
         builder: (BuildContext context) {
-          return Container(
-            alignment: Alignment.center,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  margin: EdgeInsets.only(top: 30.0),
-                  width:  MediaQuery.of(context).size.width * 0.55,
-                  height: MediaQuery.of(context).size.width * 0.55,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                      image: ExactAssetImage('assets/images/placeholder.jpg'),
-                      fit: BoxFit.cover,
+          return SingleChildScrollView(
+            child: Container(
+              alignment: Alignment.center,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(top: 30.0),
+                    width:  MediaQuery.of(context).size.width * 0.55,
+                    height: MediaQuery.of(context).size.width * 0.55,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                        image: ExactAssetImage('assets/images/placeholder.jpg'),
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
-                ),
-                Padding(padding: EdgeInsets.only(top: 15.0)),
-                Text('${widget.item.price} р',
-                  style: TextStyle(
-                    color: Color.fromARGB(255, 247, 131, 6),
-                    fontSize: 30.0
-                  )
-                ),
-                Container(
-                  margin: EdgeInsets.only(top: 15.0, left: MediaQuery.of(context).size.width * 0.15, right: MediaQuery.of(context).size.width * 0.15),      
-                  child: Text(widget.item.description,
-                    maxLines: 3,
-                    textAlign: TextAlign.center,
+                  Padding(padding: EdgeInsets.only(top: 35.0)),
+                  Text('${widget.item.price} р',
                     style: TextStyle(
-                      fontSize: 16.0,
-                      color: Colors.grey
+                      color: Color.fromARGB(255, 247, 131, 6),
+                      fontSize: 30.0
+                    )
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: 35.0, left: MediaQuery.of(context).size.width * 0.15, right: MediaQuery.of(context).size.width * 0.15),      
+                    child: Text(widget.item.description,
+                      maxLines: 3,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        color: Colors.grey
+                      ),
                     ),
                   ),
-                ),
-                Padding(padding: EdgeInsets.only(top: 30.0)),
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.6,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        alignment: Alignment.center,
-                        height: 40.0,
-                        width: 40.0,
-                        child: FlatButton(
-                          color: Color.fromARGB(255, 227, 116, 116),
-                          onPressed: (){
-                            _onMinus();
-                          },
-                          child: Text('-',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20.0
+                  Padding(padding: EdgeInsets.only(top: 25.0)),
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.6,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          alignment: Alignment.center,
+                          height: 40.0,
+                          width: 40.0,
+                          child: FlatButton(
+                            color: Color.fromARGB(255, 227, 116, 116),
+                            onPressed: (){
+                              _onMinus();
+                            },
+                            child: Text('-',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20.0
+                              ),
                             ),
+                            shape: CircleBorder()
                           ),
-                          shape: CircleBorder()
+                        ),  
+                        Text('${_count}',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 25.0
+                          )
                         ),
-                      ),  
-                      Text('${_count}',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 25.0
-                        )
-                      ),
-                      Container(
-                        height: 40.0,
-                        width: 40.0,
-                        child: FlatButton(
-                          color: Color.fromARGB(255, 87, 176, 60),  
-                          onPressed: (){
-                            _onPlus();
-                          },
-                          child: Text('+',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20.0
+                        Container(
+                          height: 40.0,
+                          width: 40.0,
+                          child: FlatButton(
+                            color: Color.fromARGB(255, 87, 176, 60),  
+                            onPressed: (){
+                              _onPlus();
+                            },
+                            child: Text('+',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20.0
+                              ),
                             ),
+                            shape: CircleBorder()
                           ),
-                          shape: CircleBorder()
-                        ),
-                      ),  
-                    ],
+                        ),  
+                      ],
+                    ),
                   ),
-                ),
-                Padding(padding: EdgeInsets.only(top: 30.0)),
-                Container(
-                  width:  MediaQuery.of(context).size.width * 0.6,
-                  height: 50.0,
-                  child: 
-                    FlatButton(
-                      color: Color.fromARGB(255, 247, 131, 6),
-                      onPressed: (){
-                        _onAdd(context);
-                      },
-                      child: Text('ADD TO CART',
-                        style: TextStyle(
-                          color: Colors.white
+                  Padding(padding: EdgeInsets.only(top: 25.0)),
+                  Container(
+                    width:  MediaQuery.of(context).size.width * 0.6,
+                    height: 50.0,
+                    child: 
+                      FlatButton(
+                        color: Color.fromARGB(255, 247, 131, 6),
+                        onPressed: (){
+                          _onAdd(context);
+                        },
+                        child: Text('ADD TO CART',
+                          style: TextStyle(
+                            color: Colors.white
+                          ),
                         ),
-                      ),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0))
-                    )
-                ),  
-              ]
-            ),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0))
+                      )
+                  ),  
+                ]
+              ),
+            )
           );
         }
       )

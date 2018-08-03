@@ -27,7 +27,7 @@ class Cache {
               MenuItem(
                 id: 2,
                 name: 'Cappuccino',
-                description: 'Natural tasty coffee',
+                description: 'Natural tasty coffee Natural tasty coffee Natural tasty coffee Natural tasty coffee ',
                 price: 90.0
               ),
               MenuItem(
