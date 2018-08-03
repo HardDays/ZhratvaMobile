@@ -13,11 +13,27 @@ class CartPage extends StatefulWidget {
 class _CartPageState extends State<CartPage> with SingleTickerProviderStateMixin {
 
   double _totalPrice = 0.0;
-  List<CartItem> _items = [];
 
   _CartPageState(){
-    Cart.items.forEach((id, item){_totalPrice += item.count * item.item.price;});
-    _items = Cart.items.values.toList();
+    Cart.items.forEach((item){_totalPrice += item.count * item.item.price;});
+  }
+
+  void _onMinus(int index){
+    if (Cart.items[index].count > 1){
+      setState(() {
+        Cart.items[index].count -= 1;    
+        _totalPrice -= Cart.items[index].item.price;                                                  
+      });
+    }
+  }
+
+  void _onPlus(int index){
+    if (Cart.items[index].count < 5){
+      setState(() {
+        Cart.items[index].count += 1;
+        _totalPrice += Cart.items[index].item.price;
+      });
+    }
   }
 
   @override
@@ -40,7 +56,7 @@ class _CartPageState extends State<CartPage> with SingleTickerProviderStateMixin
       body: Column( 
         children: [ 
           Container(
-            height: MediaQuery.of(context).size.height * 0.72,
+            height: MediaQuery.of(context).size.height - 185,
             child: SingleChildScrollView(
               child:  Container(
                 alignment: Alignment.center,
@@ -75,14 +91,14 @@ class _CartPageState extends State<CartPage> with SingleTickerProviderStateMixin
                                     child: Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        Text(_items[index].item.name,
+                                        Text(Cart.items[index].item.name,
                                           maxLines: 1,
                                           style: TextStyle(
                                             fontSize: 16.0
                                           ),
                                         ),
                                         Padding(padding: EdgeInsets.only(top: 3.0)),
-                                        Text('${_items[index].item.price} р',
+                                        Text('${Cart.items[index].item.price} р',
                                           maxLines: 1,
                                           style: TextStyle(
                                             fontSize: 24.0,
@@ -105,12 +121,7 @@ class _CartPageState extends State<CartPage> with SingleTickerProviderStateMixin
                                           child: FlatButton(  
                                             color: Color.fromARGB(255, 227, 116, 116),
                                             onPressed: (){
-                                              if (_items[index].count > 1){
-                                                setState(() {
-                                                  _items[index].count -= 1;    
-                                                  _totalPrice -= _items[index].item.price;                                                  
-                                                });
-                                              }
+                                              _onMinus(index);
                                             },
                                             child: Text('-',
                                               textAlign: TextAlign.center,
@@ -122,7 +133,7 @@ class _CartPageState extends State<CartPage> with SingleTickerProviderStateMixin
                                             shape: CircleBorder()
                                           ),
                                         ),  
-                                        Text('${_items[index].count}',
+                                        Text('${Cart.items[index].count}',
                                           style: TextStyle(
                                             color: Colors.black,
                                             fontSize: 25.0
@@ -134,12 +145,7 @@ class _CartPageState extends State<CartPage> with SingleTickerProviderStateMixin
                                           child: FlatButton(
                                             color: Color.fromARGB(255, 87, 176, 60),  
                                             onPressed: (){
-                                              if (_items[index].count < 5){
-                                                setState(() {
-                                                  _items[index].count += 1;
-                                                  _totalPrice += _items[index].item.price;
-                                                });
-                                              }
+                                              _onPlus(index);
                                             },
                                             child: Text('+',
                                               textAlign: TextAlign.center,
@@ -157,7 +163,7 @@ class _CartPageState extends State<CartPage> with SingleTickerProviderStateMixin
                                 ]
                               )
                             ) 
-                          ),                 
+                          ), 
                         );
                       }),
                     ),
@@ -182,6 +188,7 @@ class _CartPageState extends State<CartPage> with SingleTickerProviderStateMixin
           ),
           Padding(padding: EdgeInsets.only(top: 10.0)),
           Container(
+            height: 50.0,
             width: MediaQuery.of(context).size.width * 0.6,
             child: FlatButton(
               color: Color.fromARGB(255, 247, 131, 6),

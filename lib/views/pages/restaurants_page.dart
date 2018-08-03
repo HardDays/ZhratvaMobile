@@ -63,7 +63,7 @@ class RestaurantsStatePage extends State<RestaurantsPage> with SingleTickerProvi
                   height: 24.0,
                   alignment: Alignment.center,
                   margin: EdgeInsets.only(top: 24.0),
-                  child: Text('${Cart.items.values.map((item) => item.count).reduce((a, b) => a + b)}',
+                  child: Text('${Cart.items.map((item) => item.count).reduce((a, b) => a + b)}',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.white,

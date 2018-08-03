@@ -23,19 +23,11 @@ class _MenuItemPageState extends State<MenuItemPage> with SingleTickerProviderSt
   Animation<double> _animation;
   AnimationController _controller;
 
-  CartItem _item;  
+  MenuItem _item;  
+  int _count = 1;
 
   _MenuItemPageState(MenuItem item){
-    if (Cart.items.containsKey(item.id)){
-      _item = Cart.items[item.id];
-    }
-    else{
-      _item = CartItem(
-        item: item,
-        count: 1
-      );
-    }
-
+    _item = item;
     _controller = AnimationController(duration: const Duration(milliseconds: 100), vsync: this);
     _animation = Tween(begin: 24.0, end: 34.0).animate(_controller)..addListener(() {
       setState(() {
@@ -48,12 +40,39 @@ class _MenuItemPageState extends State<MenuItemPage> with SingleTickerProviderSt
     });
   }
 
+  void _onMinus(){
+    if (_count > 1){
+      setState(() {
+        _count -= 1;                                                      
+      });
+    }
+  }
+
+  void _onPlus(){
+    if (_count < 5){
+        setState(() {
+        _count += 1;
+      });
+    }
+  }
+
+  void _onAdd(BuildContext context){
+    Scaffold.of(context).showSnackBar(new SnackBar(
+      content: new Text('${_item.name} added to your cart'),
+    ));
+    _controller.forward();
+    Cart.items.add(CartItem(
+      count: _count,
+      item: _item
+    ));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(  
       appBar: AppBar(
         centerTitle: true,
-        title: Text(_item.item.name,
+        title: Text(_item.name,
           style: TextStyle(
             color: Colors.white
           ),
@@ -79,7 +98,7 @@ class _MenuItemPageState extends State<MenuItemPage> with SingleTickerProviderSt
                   height: 24.0,
                   alignment: Alignment.center,
                   margin: EdgeInsets.only(top: 24.0),
-                  child: Text('${Cart.items.values.map((item) => item.count).reduce((a, b) => a + b)}',
+                  child: Text('${Cart.items.map((item) => item.count).reduce((a, b) => a + b)}',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.white,
@@ -124,7 +143,7 @@ class _MenuItemPageState extends State<MenuItemPage> with SingleTickerProviderSt
                   ),
                 ),
                 Padding(padding: EdgeInsets.only(top: 15.0)),
-                Text('${_item.item.price} р',
+                Text('${_item.price} р',
                   style: TextStyle(
                     color: Color.fromARGB(255, 247, 131, 6),
                     fontSize: 30.0
@@ -132,7 +151,7 @@ class _MenuItemPageState extends State<MenuItemPage> with SingleTickerProviderSt
                 ),
                 Container(
                   margin: EdgeInsets.only(top: 15.0, left: MediaQuery.of(context).size.width * 0.15, right: MediaQuery.of(context).size.width * 0.15),      
-                  child: Text(_item.item.description,
+                  child: Text(_item.description,
                     maxLines: 3,
                     textAlign: TextAlign.center,
                     style: TextStyle(
@@ -154,11 +173,7 @@ class _MenuItemPageState extends State<MenuItemPage> with SingleTickerProviderSt
                         child: FlatButton(
                           color: Color.fromARGB(255, 227, 116, 116),
                           onPressed: (){
-                            if (_item.count > 1){
-                              setState(() {
-                                _item.count -= 1;                                                      
-                              });
-                            }
+                            _onMinus();
                           },
                           child: Text('-',
                             textAlign: TextAlign.center,
@@ -170,7 +185,7 @@ class _MenuItemPageState extends State<MenuItemPage> with SingleTickerProviderSt
                           shape: CircleBorder()
                         ),
                       ),  
-                      Text('${_item.count}',
+                      Text('${_count}',
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 25.0
@@ -182,11 +197,7 @@ class _MenuItemPageState extends State<MenuItemPage> with SingleTickerProviderSt
                         child: FlatButton(
                           color: Color.fromARGB(255, 87, 176, 60),  
                           onPressed: (){
-                            if (_item.count < 5){
-                              setState(() {
-                                _item.count += 1;
-                              });
-                            }
+                            _onPlus();
                           },
                           child: Text('+',
                             textAlign: TextAlign.center,
@@ -205,22 +216,19 @@ class _MenuItemPageState extends State<MenuItemPage> with SingleTickerProviderSt
                 Container(
                   width:  MediaQuery.of(context).size.width * 0.6,
                   height: 50.0,
-                  child: FlatButton(
-                    color: Color.fromARGB(255, 247, 131, 6),
-                    onPressed: (){
-                      Scaffold.of(context).showSnackBar(new SnackBar(
-                        content: new Text('${_item.item.name} added to your cart'),
-                      ));
-                      _controller.forward();
-                      Cart.items[_item.item.id] = _item;
-                    },
-                    child: Text('ADD TO CART',
-                      style: TextStyle(
-                        color: Colors.white
+                  child: 
+                    FlatButton(
+                      color: Color.fromARGB(255, 247, 131, 6),
+                      onPressed: (){
+                        _onAdd(context);
+                      },
+                      child: Text('ADD TO CART',
+                        style: TextStyle(
+                          color: Colors.white
+                        ),
                       ),
-                    ),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0))
-                  ),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0))
+                    )
                 ),  
               ]
             ),

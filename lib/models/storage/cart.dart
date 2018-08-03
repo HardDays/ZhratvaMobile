@@ -5,5 +5,5 @@ import '../cart_item.dart';
 class Cart {
   //static List<CartItem> items = [];
 
-  static Map<int, CartItem> items = {};
+  static List<CartItem> items = [];
 }
