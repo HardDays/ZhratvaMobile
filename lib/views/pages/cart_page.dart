@@ -31,20 +31,23 @@ class _CartPageState extends State<CartPage> with SingleTickerProviderStateMixin
           content: Text("Do you want to remove item from your cart?"),
           actions: [
             FlatButton(
+              child: const Text('NO'),
+              onPressed: () {
+                Navigator.pop(context);
+              }
+            ),
+            FlatButton(
               child: const Text('YES'),
               onPressed: () { 
                 setState(() {
                   Cart.items.removeAt(index);             
                   Navigator.pop(context);     
                 });
+                if (Cart.items.isEmpty){
+                  Navigator.pop(context);
+                }
               }
             ),
-            FlatButton(
-              child: const Text('NO'),
-              onPressed: () {
-                Navigator.pop(context);
-              }
-            )
           ],
         )
       );

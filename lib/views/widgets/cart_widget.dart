@@ -41,32 +41,37 @@ class CartWidgetState extends State<CartWidget> with SingleTickerProviderStateMi
   @override 
   Widget build(BuildContext context) {
     if (Cart.items.isNotEmpty) {
-      return Stack(
-        children:[
-          IconButton(
-            icon: Icon(Icons.shopping_cart,),
-            onPressed: () {          
-              _onCart(context);
-            },
-          ),
-          Container(
-            width: 48.0,
-            height: 24.0,
-            alignment: Alignment.center,
-            margin: EdgeInsets.only(top: 24.0),
-            child: Text('${Cart.items.map((item) => item.count).reduce((a, b) => a + b)}',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w500
-              ),
+      return GestureDetector(
+        onTap: (){
+          _onCart(context);
+        },
+        child: Stack(
+          children:[
+            IconButton(
+              icon: Icon(Icons.shopping_cart,),
+              onPressed: () {          
+                _onCart(context);
+              },
             ),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
+            Container(
+              width: 48.0,
+              height: 24.0,
+              alignment: Alignment.center,
+              margin: EdgeInsets.only(top: 24.0),
+              child: Text('${Cart.items.map((item) => item.count).reduce((a, b) => a + b)}',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w500
+                ),
+              ),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
                 color: Colors.red
+              )
             )
-          )
-        ]
+          ]
+        )
       );
     }
     else{
