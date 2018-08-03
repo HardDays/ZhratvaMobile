@@ -29,38 +29,46 @@ class RestaurantPage extends StatelessWidget {
         ),
         backgroundColor: Color.fromARGB(255, 247, 131, 6),
         actions: [
-          Stack(
-            children:[
-              IconButton(
-                icon: Icon(Icons.shopping_cart,
+            (Cart.items.length > 0) ? Stack(
+              children:[
+                IconButton(
+                  icon: Icon(Icons.shopping_cart,),
+                  onPressed: () {          
+                    Navigator.push(
+                      context,
+                      DefaultPageRoute(builder: (context) => CartPage()),
+                    );
+                  },
                 ),
-                onPressed: () {          
-                   Navigator.push(
-                    context,
-                    DefaultPageRoute(builder: (context) => CartPage()),
-                  );
-                },
-              ),
-              Container(
-                width: 48.0,
-                height: 24.0,
-                alignment: Alignment.center,
-                margin: EdgeInsets.only(top: 24.0),
-                child: Text('${Cart.items.values.map((item) => item.count).reduce((a, b) => a + b)}',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w500
+                Container(
+                  width: 48.0,
+                  height: 24.0,
+                  alignment: Alignment.center,
+                  margin: EdgeInsets.only(top: 24.0),
+                  child: Text('${Cart.items.values.map((item) => item.count).reduce((a, b) => a + b)}',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500
+                    ),
                   ),
-                ),
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.red
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.red
+                  )
                 )
-              )
-            ]
-          )
-        ]       
+              ]
+            ) :  
+            IconButton(
+              icon: Icon(Icons.shopping_cart,),
+              onPressed: () {          
+                Navigator.push(
+                  context,
+                  DefaultPageRoute(builder: (context) => CartPage()),
+                );
+              },
+            ),
+          ]       
       ),
       body: CustomScrollView(
         slivers: <Widget>[
