@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'cart_page.dart';
+import '../widgets/cart_widget.dart';
 
 import '../routes/default_page_route.dart';
 import '../../models/cart_item.dart';
@@ -9,36 +9,20 @@ import '../../models/api/menu_item.dart';
 
 class MenuItemPage extends StatefulWidget {
   
-  MenuItem _item;
+  MenuItem item;
 
-  MenuItemPage(MenuItem item){
-    _item = item;
+  MenuItemPage({this.item}){
   }
 
   @override
-  _MenuItemPageState createState() => _MenuItemPageState(_item);
+  _MenuItemPageState createState() => _MenuItemPageState();
 }
   
 class _MenuItemPageState extends State<MenuItemPage> with SingleTickerProviderStateMixin {
-  Animation<double> _animation;
-  AnimationController _controller;
 
-  MenuItem _item;  
+  CartWidget _cart;
+
   int _count = 1;
-
-  _MenuItemPageState(MenuItem item){
-    _item = item;
-    _controller = AnimationController(duration: const Duration(milliseconds: 100), vsync: this);
-    _animation = Tween(begin: 24.0, end: 34.0).animate(_controller)..addListener(() {
-      setState(() {
-      });
-    });
-    _animation.addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        _controller.reverse();
-      }
-    });
-  }
 
   void _onMinus(){
     if (_count > 1){
@@ -58,21 +42,23 @@ class _MenuItemPageState extends State<MenuItemPage> with SingleTickerProviderSt
 
   void _onAdd(BuildContext context){
     Scaffold.of(context).showSnackBar(new SnackBar(
-      content: new Text('${_item.name} added to your cart'),
+      content: new Text('${widget.item.name} added to your cart'),
     ));
-    _controller.forward();
     Cart.items.add(CartItem(
       count: _count,
-      item: _item
+      item: widget.item
     ));
+    setState(() {          
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    _cart = CartWidget();
     return Scaffold(  
       appBar: AppBar(
         centerTitle: true,
-        title: Text(_item.name,
+        title: Text(widget.item.name,
           style: TextStyle(
             color: Colors.white
           ),
@@ -82,46 +68,8 @@ class _MenuItemPageState extends State<MenuItemPage> with SingleTickerProviderSt
         ),
         backgroundColor: Color.fromARGB(255, 247, 131, 6),
         actions: [
-            (Cart.items.length > 0) ? Stack(
-              children:[
-                IconButton(
-                  icon: Icon(Icons.shopping_cart,),
-                  onPressed: () {          
-                    Navigator.push(
-                      context,
-                      DefaultPageRoute(builder: (context) => CartPage()),
-                    );
-                  },
-                ),
-                Container(
-                  width: 48.0,
-                  height: 24.0,
-                  alignment: Alignment.center,
-                  margin: EdgeInsets.only(top: 24.0),
-                  child: Text('${Cart.items.map((item) => item.count).reduce((a, b) => a + b)}',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w500
-                    ),
-                  ),
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.red
-                  )
-                )
-              ]
-            ) :  
-            IconButton(
-              icon: Icon(Icons.shopping_cart,),
-              onPressed: () {          
-                Navigator.push(
-                  context,
-                  DefaultPageRoute(builder: (context) => CartPage()),
-                );
-              },
-            ),
-          ]           
+          _cart
+        ]           
       ),
       body: Builder(
         builder: (BuildContext context) {
@@ -143,7 +91,7 @@ class _MenuItemPageState extends State<MenuItemPage> with SingleTickerProviderSt
                   ),
                 ),
                 Padding(padding: EdgeInsets.only(top: 15.0)),
-                Text('${_item.price} р',
+                Text('${widget.item.price} р',
                   style: TextStyle(
                     color: Color.fromARGB(255, 247, 131, 6),
                     fontSize: 30.0
@@ -151,7 +99,7 @@ class _MenuItemPageState extends State<MenuItemPage> with SingleTickerProviderSt
                 ),
                 Container(
                   margin: EdgeInsets.only(top: 15.0, left: MediaQuery.of(context).size.width * 0.15, right: MediaQuery.of(context).size.width * 0.15),      
-                  child: Text(_item.description,
+                  child: Text(widget.item.description,
                     maxLines: 3,
                     textAlign: TextAlign.center,
                     style: TextStyle(

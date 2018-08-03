@@ -173,6 +173,10 @@ class _CartPageState extends State<CartPage> with SingleTickerProviderStateMixin
               )
             )
           ),
+          Divider(
+            color: Colors.grey, 
+            height: 1.0,
+          ),
           Padding(padding: EdgeInsets.only(top: 5.0)),
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,

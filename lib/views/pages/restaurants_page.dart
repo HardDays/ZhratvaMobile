@@ -1,35 +1,28 @@
 import 'package:flutter/material.dart';
 
 import 'restaurant_page.dart';
-import 'cart_page.dart';
 
 import '../routes/default_page_route.dart';
+import '../widgets/cart_widget.dart';
 
 import '../../models/api/restaurant.dart';
 import '../../models/storage/cache.dart';
-import '../../models/storage/cart.dart';
 
 class RestaurantsPage extends StatefulWidget {
 
-  BuildContext _parentContext;
+  BuildContext parentContext;
 
-  RestaurantsPage(parentContext){
-    _parentContext = parentContext;
+  RestaurantsPage({this.parentContext}){
   }
 
   @override
-  RestaurantsStatePage createState() => RestaurantsStatePage(_parentContext);
+  RestaurantsPageState createState() => RestaurantsPageState();
 }
 
-class RestaurantsStatePage extends State<RestaurantsPage> with SingleTickerProviderStateMixin {
+class RestaurantsPageState extends State<RestaurantsPage> with SingleTickerProviderStateMixin {
 
   List <Restaurant> _list = [];
 
-  BuildContext _parentContext;
-
-  RestaurantsStatePage(parentContext){
-    _parentContext = parentContext;
-  }
 
   @override
   void initState() {
@@ -47,45 +40,7 @@ class RestaurantsStatePage extends State<RestaurantsPage> with SingleTickerProvi
           title: Text('Restaurants'),
           backgroundColor: Color.fromARGB(255, 247, 131, 6),
           actions: [
-            (Cart.items.length > 0) ? Stack(
-              children:[
-                IconButton(
-                  icon: Icon(Icons.shopping_cart,),
-                  onPressed: () {          
-                    Navigator.push(
-                      context,
-                      DefaultPageRoute(builder: (context) => CartPage()),
-                    );
-                  },
-                ),
-                Container(
-                  width: 48.0,
-                  height: 24.0,
-                  alignment: Alignment.center,
-                  margin: EdgeInsets.only(top: 24.0),
-                  child: Text('${Cart.items.map((item) => item.count).reduce((a, b) => a + b)}',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w500
-                    ),
-                  ),
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.red
-                  )
-                )
-              ]
-            ) :  
-            IconButton(
-              icon: Icon(Icons.shopping_cart,),
-              onPressed: () {          
-                Navigator.push(
-                  context,
-                  DefaultPageRoute(builder: (context) => CartPage()),
-                );
-              },
-            ),
+            CartWidget(parentContext: widget.parentContext)
           ]       
         ),
         body: ListView.builder(
@@ -103,8 +58,8 @@ class RestaurantsStatePage extends State<RestaurantsPage> with SingleTickerProvi
                       GestureDetector(
                         onTap: (){
                            Navigator.push(
-                            _parentContext,
-                            DefaultPageRoute(builder: (context) => RestaurantPage(_list[index])),
+                            widget.parentContext,
+                            DefaultPageRoute(builder: (context) => RestaurantPage(restaurant: _list[index])),
                           );
                         },
                         child: Container(  

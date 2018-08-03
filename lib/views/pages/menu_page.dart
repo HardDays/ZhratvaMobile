@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'menu_item_page.dart';
-import 'cart_page.dart';
+
+import '../widgets/cart_widget.dart';
 
 import '../routes/default_page_route.dart';
 
-import '../../models/storage/cart.dart';
 import '../../models/api/menu_item.dart';
 
 
@@ -31,46 +31,8 @@ class MenuPage extends StatelessWidget {
         centerTitle: true,
         backgroundColor: Color.fromARGB(255, 247, 131, 6),
         actions: [
-            (Cart.items.length > 0) ? Stack(
-              children:[
-                IconButton(
-                  icon: Icon(Icons.shopping_cart,),
-                  onPressed: () {          
-                    Navigator.push(
-                      context,
-                      DefaultPageRoute(builder: (context) => CartPage()),
-                    );
-                  },
-                ),
-                Container(
-                  width: 48.0,
-                  height: 24.0,
-                  alignment: Alignment.center,
-                  margin: EdgeInsets.only(top: 24.0),
-                  child: Text('${Cart.items.map((item) => item.count).reduce((a, b) => a + b)}',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w500
-                    ),
-                  ),
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.red
-                  )
-                )
-              ]
-            ) :  
-            IconButton(
-              icon: Icon(Icons.shopping_cart,),
-              onPressed: () {          
-                Navigator.push(
-                  context,
-                  DefaultPageRoute(builder: (context) => CartPage()),
-                );
-              },
-            ),
-          ]       
+          CartWidget()
+        ]       
       ),
       body: GridView.count(
         crossAxisCount: 2,
@@ -132,7 +94,7 @@ class MenuPage extends StatelessWidget {
                     onPressed: (){
                       Navigator.push(
                         context,
-                        DefaultPageRoute(builder: (context) => MenuItemPage(_list[index])),
+                        DefaultPageRoute(builder: (context) => MenuItemPage(item: _list[index])),
                       );
                     },
                     child: Text('Buy',
