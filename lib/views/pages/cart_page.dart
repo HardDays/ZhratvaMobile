@@ -83,14 +83,10 @@ class _CartPageState extends State<CartPage> with SingleTickerProviderStateMixin
       body: Column( 
         children: [ 
           Container(
-            height: MediaQuery.of(context).size.height - 185,
-            child: SingleChildScrollView(
-              child:  Container(
+            height: MediaQuery.of(context).size.height - 155,
                 alignment: Alignment.center,
-                child: Column(
-                  children: [
-                    Column(
-                      children: List.generate(Cart.items.length, (index){
+                child: ListView(
+                  children:  List.generate(Cart.items.length, (index){
                         return Container(
                           margin: EdgeInsets.only(left: 10.0, right: 10.0),
                           width: MediaQuery.of(context).size.width * 1.0,
@@ -194,17 +190,14 @@ class _CartPageState extends State<CartPage> with SingleTickerProviderStateMixin
                         );
                       }),
                     ),
-                    Padding(padding: EdgeInsets.only(top: 5.0)),
-                  ]
-                )
-              )
-            )
+                  
+
           ),
           Divider(
             color: Colors.grey, 
             height: 1.0,
           ),
-          Padding(padding: EdgeInsets.only(top: 5.0)),
+        /*  Padding(padding: EdgeInsets.only(top: 5.0)),
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -216,22 +209,26 @@ class _CartPageState extends State<CartPage> with SingleTickerProviderStateMixin
                 ),
               ),  
             ] 
-          ),
-          Padding(padding: EdgeInsets.only(top: 10.0)),
+          ),*/
           Container(
-            height: 50.0,
-            width: MediaQuery.of(context).size.width * 0.6,
-            child: FlatButton(
-              color: Color.fromARGB(255, 247, 131, 6),
-                onPressed: (){
-                  
-                },
-                child: Text('PROCESS ORDER',
-                  style: TextStyle(
-                    color: Colors.white
+            height: 73.0,
+            width: MediaQuery.of(context).size.width,
+            color: Colors.white,
+            child: Container(
+              margin: EdgeInsets.only(top: 10.0, bottom: 10.0, left: 40.0, right: 40.0),
+              color: Colors.white,
+              child: FlatButton(
+                color: Color.fromARGB(255, 247, 131, 6),
+                  onPressed: (){
+                    
+                  },
+                  child: Text('PAY ${_totalPrice}',
+                    style: TextStyle(
+                      color: Colors.white
+                    ),
                   ),
-                ),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0))
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0))
+              ),
             ),
           )
         ]

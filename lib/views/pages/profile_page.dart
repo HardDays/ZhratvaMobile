@@ -7,10 +7,13 @@ class ProfilePage extends StatelessWidget {
       title: 'Profile',
       home: Scaffold(
         appBar: AppBar(
+          centerTitle: true,
           title: Text('Profile'),
+          backgroundColor: Color.fromARGB(255, 247, 131, 6),     
         ),
         body: Center(
-          child: Text('Hello World'),
+          child: SingleChildScrollView(
+          )
         ),
       ),
     );

@@ -4,7 +4,7 @@ import '../../models/storage/cart.dart';
 
 import '../pages/cart_page.dart';
 
-import '../routes/default_page_route.dart';
+import '../routes/menu_page_route.dart';
 
 class CartWidget extends StatefulWidget {
 
@@ -19,7 +19,6 @@ class CartWidget extends StatefulWidget {
 
 class CartWidgetState extends State<CartWidget> with SingleTickerProviderStateMixin {
 
-
   void _onCart(BuildContext context){
     var ctx = widget.parentContext != null ? widget.parentContext : context;
     
@@ -33,7 +32,7 @@ class CartWidgetState extends State<CartWidget> with SingleTickerProviderStateMi
     }else{
       Navigator.push(
         ctx,
-        DefaultPageRoute(builder: (ctx) => CartPage()),
+        MenuPageRoute(builder: (ctx) => CartPage()),
       );
     }
   }

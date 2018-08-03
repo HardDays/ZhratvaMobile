@@ -147,7 +147,6 @@ class RestaurantPage extends StatelessWidget {
             itemExtent: 10.0,
             delegate: SliverChildBuilderDelegate(
               (context, index) {
-                print(restaurant.menuCategories[index].cover);
                 return Container(
                   margin: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.04),
                   alignment: Alignment.topLeft,
@@ -235,4 +234,4 @@ class RestaurantPage extends StatelessWidget {
       )
     );
   }
-}
+} 

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../widgets/cart_widget.dart';
 
-import '../routes/default_page_route.dart';
 import '../../models/cart_item.dart';
 import '../../models/storage/cart.dart';
 import '../../models/api/menu_item.dart';
