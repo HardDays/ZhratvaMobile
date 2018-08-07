@@ -59,7 +59,7 @@ class MenuPage extends StatelessWidget {
                             decoration: BoxDecoration(
                             shape: BoxShape.circle,
                               image: DecorationImage(
-                                image: ExactAssetImage('assets/images/placeholder.jpg'),
+                                image: NetworkImage(_list[index].cover()),
                                 fit: BoxFit.cover,
                               ),
                             ),

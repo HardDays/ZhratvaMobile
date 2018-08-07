@@ -85,7 +85,7 @@ class _MenuItemPageState extends State<MenuItemPage> with SingleTickerProviderSt
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       image: DecorationImage(
-                        image: ExactAssetImage('assets/images/placeholder.jpg'),
+                        image: NetworkImage(widget.item.cover()),
                         fit: BoxFit.cover,
                       ),
                     ),

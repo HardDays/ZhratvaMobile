@@ -103,7 +103,7 @@ class _CartPageState extends State<CartPage> with SingleTickerProviderStateMixin
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,
                                       image: DecorationImage(
-                                        image: ExactAssetImage('assets/images/placeholder.jpg'),
+                                        image: NetworkImage(Cart.items[index].item.cover()),
                                         fit: BoxFit.cover,
                                       ),
                                     ),
@@ -150,7 +150,7 @@ class _CartPageState extends State<CartPage> with SingleTickerProviderStateMixin
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
                                                 color: Colors.white,
-                                                fontSize: 12.0
+                                                fontSize: 16.0
                                               ),
                                             ),
                                             shape: CircleBorder()
@@ -174,7 +174,7 @@ class _CartPageState extends State<CartPage> with SingleTickerProviderStateMixin
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
                                                 color: Colors.white,
-                                                fontSize: 12.0
+                                                fontSize: 16.0
                                               ),
                                             ),
                                             shape: CircleBorder()

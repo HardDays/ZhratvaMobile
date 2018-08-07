@@ -46,22 +46,26 @@ class CartWidgetState extends State<CartWidget> with SingleTickerProviderStateMi
         },
         child: Stack(
           children:[
-            IconButton(
-              icon: Icon(Icons.shopping_cart,),
-              onPressed: () {          
-                _onCart(context);
-              },
+            Container(
+              margin: EdgeInsets.only(left: 10.0),
+              child: IconButton(
+                icon: Icon(Icons.shopping_cart,),
+                onPressed: () {          
+                  _onCart(context);
+                },
+              )
             ),
             Container(
               width: 48.0,
-              height: 24.0,
+              height: 20.0,
               alignment: Alignment.center,
-              margin: EdgeInsets.only(top: 24.0),
+              margin: EdgeInsets.only(top: 25.0),
               child: Text('${Cart.items.map((item) => item.count).reduce((a, b) => a + b)}',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.white,
-                  fontWeight: FontWeight.w500
+                  fontWeight: FontWeight.w500,
+                  fontSize: 11.0
                 ),
               ),
               decoration: BoxDecoration(

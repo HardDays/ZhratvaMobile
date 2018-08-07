@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
+
+import 'helpers/util/geolocation_cache.dart';
+
 import 'views/pages/start_page.dart';
 import 'views/pages/main_page.dart';
 
-void main() => runApp(new MyApp());
+void main() => runApp(new App());
 
-class MyApp extends StatelessWidget {
+class App extends StatelessWidget {
+
+  App(){
+    GeolocationCache.init();
+  }
+
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
