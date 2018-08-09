@@ -34,6 +34,13 @@ flutter:
     - assets/images/placeholder.jpg
     - assets/images/coffee.jpg
     - assets/images/dessert.jpg
+    - assets/images/logo.png
+
+  fonts:
+    - family: icons
+      fonts: 
+        - asset: assets/fonts/icons.ttf
+
 
   #  - images/a_dot_ham.jpeg
 

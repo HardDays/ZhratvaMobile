@@ -1,61 +1,6 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 
-import '../widgets/keyboard_visible_widget.dart';
-
-
-class LoginPage extends StatefulWidget {
-
-  @override
-  LoginPageState createState() => new LoginPageState();
-
-}
-
-class LoginPageState extends State<LoginPage> {
-
-  FocusNode focusNode1 = FocusNode();
-  FocusNode focusNode2 = FocusNode();
-
-  Container dumb;
-
-  ScrollController scrollController = ScrollController();
-
-
-  @override
-  void initState() {
-    super.initState();
-    //MediaQuery.of(context).viewInsets.bottom
-/*
-    focusNode1.addListener(
-      (){
-        if (focusNode1.hasFocus){
-          print('here1');
-          scrollController.animateTo(MediaQuery.of(this.context).viewInsets.bottom, curve: Curves.easeOut, duration: Duration(milliseconds: 300));
-        }
-      }
-    );
-
-    focusNode2.addListener(
-      () async {
-        if (focusNode2.hasFocus){
-          await new Future.delayed(const Duration(milliseconds: 1800));
-          var t = TextField();
-          var pos = scrollController.position;
-          //pos.ensureVisible(context.findRenderObject());
-          
-          print(MediaQuery.of(this.context).viewInsets.bottom);
-          scrollController.animateTo(MediaQuery.of(context).viewInsets.bottom, curve: Curves.easeOut, duration: Duration(milliseconds: 300));
-        }
-      }
-    );*/
-  }
-
-   @override
-  void dispose() {
-
-
-    super.dispose();
-  }
+class SignupPage extends StatelessWidget {
 
   void _onLogin(){
 
@@ -63,7 +8,6 @@ class LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    dumb = new Container();
     return Material(
       child: Container(
         decoration: BoxDecoration(
@@ -77,8 +21,6 @@ class LoginPageState extends State<LoginPage> {
           )
         ),
         child: SingleChildScrollView(
-          physics: NeverScrollableScrollPhysics(),
-          controller: scrollController,
           child: Container(
             alignment: Alignment.center,
             child: Column(
@@ -97,8 +39,8 @@ class LoginPageState extends State<LoginPage> {
                     ),
                   )
                 ),
-                Padding(padding: EdgeInsets.only(top: 5.0)),    
-                Text('${MediaQuery.of(this.context).viewInsets.bottom}',
+                Padding(padding: EdgeInsets.only(top: 5.0)),  
+                Text('Eat Up',
                   style: TextStyle(
                     fontSize: 45.0,
                     color: Colors.white,
@@ -138,27 +80,20 @@ class LoginPageState extends State<LoginPage> {
                       primaryColor: Color.fromARGB(128, 255, 255, 255),
                       hintColor: Color.fromARGB(128, 255, 255, 255)
                     ),
-                    child: KeyboardVisibleWidget(
-                      focusNode: focusNode1,
-                      scrollController: scrollController,
-                      child: TextField(
-                        onSubmitted: (text){
-                          print('kek');
-                        },
-                        focusNode: focusNode1,
-                        textAlign: TextAlign.center,
-                        decoration: InputDecoration(
-                          hintText: 'Password',
-                          hintStyle: TextStyle(
-                            color: Color.fromARGB(128, 255, 255, 255),
-                            fontSize: 20.0,
-                          ),
+                    child: TextField(
+                      textAlign: TextAlign.center,
+                      decoration: InputDecoration(
+                        hintText: 'Password',
+                        hintStyle: TextStyle(
+                          color: Color.fromARGB(128, 255, 255, 255),
+                          fontSize: 20.0,
                         ),
-                        style: TextStyle(
-                          color: Colors.white70,
-                          fontSize: 20.0
-                        ),
-                      )
+                        
+                      ),
+                      style: TextStyle(
+                        color: Colors.white70,
+                        fontSize: 20.0
+                      ),
                     )
                   )
                 ),
@@ -192,10 +127,9 @@ class LoginPageState extends State<LoginPage> {
                       ),
                       onPressed: (){
                       },
-                    ),
+                    ),                  
                   ]
-                ),
-                Padding(padding: EdgeInsets.only(top: MediaQuery.of(this.context).viewInsets.bottom))
+                )
               ],
             ),
           )

@@ -15,10 +15,31 @@ class MainPageState extends State<MainPage> with SingleTickerProviderStateMixin 
   // Create a tab controller
   TabController controller;
 
+  List <Color> tabColors;
+
   @override
   void initState() {
     super.initState();
+
+    tabColors = [
+      Colors.grey,
+      Colors.grey,
+      Colors.grey
+    ];
+
     controller = TabController(length: 3, vsync: this, initialIndex: 1);
+    controller.addListener(
+      () {
+        setState(
+          () {
+            for (int i = 0; i < tabColors.length; i++){
+              tabColors[i] = Colors.grey;
+            }
+            tabColors[controller.index] = Color.fromARGB(255, 247, 131, 6);
+          }
+        );
+      }
+    );
   }
 
   @override
@@ -28,7 +49,7 @@ class MainPageState extends State<MainPage> with SingleTickerProviderStateMixin 
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) {  
     return Scaffold(
       body: TabBarView(
         physics: NeverScrollableScrollPhysics(),
@@ -39,34 +60,18 @@ class MainPageState extends State<MainPage> with SingleTickerProviderStateMixin 
         child: Container(
           height: 50.0,
           child: 
-            TabBar(
+            TabBar(            
               tabs: [
                 Container(
                   child: Column(
                     children: [
                       Padding(padding: EdgeInsets.only(top: 5.0)),
-                      Icon(Icons.restaurant,
-                        color: Colors.grey,
+                      Icon(IconData(0xe801, fontFamily: 'icons'),
+                        color: tabColors[0],
                       ),
-                      Text("Specials",
+                      Text('Specials',
                         style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 12.0
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                 Container(
-                  child: Column(
-                    children: [
-                      Padding(padding: EdgeInsets.only(top: 5.0)),
-                      Icon(Icons.restaurant,
-                        color: Colors.grey,
-                      ),
-                      Text("Restaurants",
-                        style: TextStyle(
-                          color: Colors.grey,
+                          color: tabColors[0],
                           fontSize: 12.0
                         ),
                       )
@@ -77,12 +82,28 @@ class MainPageState extends State<MainPage> with SingleTickerProviderStateMixin 
                   child: Column(
                     children: [
                       Padding(padding: EdgeInsets.only(top: 5.0)),
-                      Icon(Icons.people,
-                        color: Colors.grey,
+                      Icon(Icons.restaurant,
+                        color: tabColors[1],
+                      ),
+                      Text("Restaurants",
+                        style: TextStyle(
+                          color: tabColors[1],
+                          fontSize: 12.0
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                Container(
+                  child: Column(
+                    children: [
+                      Padding(padding: EdgeInsets.only(top: 5.0)),
+                      Icon(IconData(0xe800, fontFamily: 'icons'),
+                        color: tabColors[2],
                       ),
                       Text("Profile",
                         style: TextStyle(
-                          color: Colors.grey,
+                          color: tabColors[2],
                           fontSize: 12.0
                         ),
                       )
