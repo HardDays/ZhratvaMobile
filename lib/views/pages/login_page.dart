@@ -1,8 +1,17 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:validator/validator.dart';
+
+import 'main_page.dart';
+
+import '../../helpers/api/main_api.dart';
+
+import '../../models/storage/database.dart';
+import '../../models/storage/cache.dart';
 
 import '../widgets/keyboard_visible_widget.dart';
-
+import '../routes/default_page_route.dart';
 
 class LoginPage extends StatefulWidget {
 
@@ -13,57 +22,48 @@ class LoginPage extends StatefulWidget {
 
 class LoginPageState extends State<LoginPage> {
 
-  FocusNode focusNode1 = FocusNode();
-  FocusNode focusNode2 = FocusNode();
+  FocusNode emailNode = FocusNode();
+  FocusNode passwordNode = FocusNode();
 
-  Container dumb;
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   ScrollController scrollController = ScrollController();
 
+  String email;
+  String password;
 
   @override
   void initState() {
     super.initState();
-    //MediaQuery.of(context).viewInsets.bottom
-/*
-    focusNode1.addListener(
-      (){
-        if (focusNode1.hasFocus){
-          print('here1');
-          scrollController.animateTo(MediaQuery.of(this.context).viewInsets.bottom, curve: Curves.easeOut, duration: Duration(milliseconds: 300));
-        }
-      }
-    );
-
-    focusNode2.addListener(
-      () async {
-        if (focusNode2.hasFocus){
-          await new Future.delayed(const Duration(milliseconds: 1800));
-          var t = TextField();
-          var pos = scrollController.position;
-          //pos.ensureVisible(context.findRenderObject());
-          
-          print(MediaQuery.of(this.context).viewInsets.bottom);
-          scrollController.animateTo(MediaQuery.of(context).viewInsets.bottom, curve: Curves.easeOut, duration: Duration(milliseconds: 300));
-        }
-      }
-    );*/
   }
 
    @override
   void dispose() {
-
-
     super.dispose();
   }
 
   void _onLogin(){
+    FormState form = formKey.currentState;
 
+    if (form.validate()) {
+      form.save();
+      MainAPI.authorize(email, password).then(
+        (res){
+          if (res != null){
+            Database.setCurrentUser(res);
+            Cache.currentUser = res;
+            Navigator.pushReplacement(
+              context,
+              DefaultPageRoute(builder: (context) => MainPage()),
+            );
+          }
+        } 
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    dumb = new Container();
     return Material(
       child: Container(
         decoration: BoxDecoration(
@@ -77,7 +77,7 @@ class LoginPageState extends State<LoginPage> {
           )
         ),
         child: SingleChildScrollView(
-          physics: NeverScrollableScrollPhysics(),
+          physics: MediaQuery.of(context).viewInsets.bottom > 0 ? NeverScrollableScrollPhysics() : PageScrollPhysics(),
           controller: scrollController,
           child: Container(
             alignment: Alignment.center,
@@ -98,70 +98,99 @@ class LoginPageState extends State<LoginPage> {
                   )
                 ),
                 Padding(padding: EdgeInsets.only(top: 5.0)),    
-                Text('${MediaQuery.of(this.context).viewInsets.bottom}',
+                Text('Eat Up',
                   style: TextStyle(
                     fontSize: 45.0,
                     color: Colors.white,
                     fontWeight: FontWeight.w700
                   ),
-                ),             
+                ),
                 Padding(padding: EdgeInsets.only(top: 30.0)),  
-                Container(
+                 Container(
                   width: MediaQuery.of(context).size.width * 0.6,
-                  child: Theme(
-                    data: ThemeData(
-                      primaryColor: Color.fromARGB(128, 255, 255, 255),
-                      hintColor: Color.fromARGB(128, 255, 255, 255)
-                    ),
-                    child: TextField(
-                      textAlign: TextAlign.center,
-                      decoration: InputDecoration(
-                        hintText: 'Email',
-                        hintStyle: TextStyle(
-                          color: Color.fromARGB(128, 255, 255, 255),
-                          fontSize: 20.0,
-                        ),
-                        
-                      ),
-                      style: TextStyle(
-                        color: Colors.white70,
-                        fontSize: 20.0
-                      ),
-                    )
-                  )
-                ),
-                Padding(padding: EdgeInsets.only(top: 5.0)),  
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.6,
-                  child: Theme(
-                    data: ThemeData(
-                      primaryColor: Color.fromARGB(128, 255, 255, 255),
-                      hintColor: Color.fromARGB(128, 255, 255, 255)
-                    ),
-                    child: KeyboardVisibleWidget(
-                      focusNode: focusNode1,
-                      scrollController: scrollController,
-                      child: TextField(
-                        onSubmitted: (text){
-                          print('kek');
-                        },
-                        focusNode: focusNode1,
-                        textAlign: TextAlign.center,
-                        decoration: InputDecoration(
-                          hintText: 'Password',
-                          hintStyle: TextStyle(
-                            color: Color.fromARGB(128, 255, 255, 255),
-                            fontSize: 20.0,
+                  child: Form(
+                    key: formKey,
+                    child: Column(
+                      children: [
+                        Theme(
+                          data: ThemeData(
+                            primaryColor: Color.fromARGB(128, 255, 255, 255),
+                            hintColor: Color.fromARGB(128, 255, 255, 255),
+                            errorColor: Color.fromARGB(128, 55, 0, 0)
                           ),
+                          child: KeyboardVisibleWidget(
+                            focusNode: emailNode,
+                            scrollController: scrollController,
+                            child: TextFormField(
+                              keyboardType: TextInputType.emailAddress,
+                              focusNode: emailNode,
+                              textAlign: TextAlign.center,
+                              decoration: InputDecoration(
+                                hintText: 'Email',
+                                hintStyle: TextStyle(
+                                  color: Color.fromARGB(128, 255, 255, 255),
+                                  fontSize: 20.0, 
+                                ),
+                              ),
+                              onSaved: (val) {
+                                email = val;
+                              },
+                              validator: (val) {
+                                if (!isEmail(val)){
+                                  return 'Not a valid email';
+                                }                               
+                              },                              
+                              onFieldSubmitted: (text){
+                                FocusScope.of(context).requestFocus(passwordNode);
+                              },
+                              style: TextStyle(
+                                color: Colors.white70,
+                                fontSize: 20.0
+                              ),
+                            )
+                          )
                         ),
-                        style: TextStyle(
-                          color: Colors.white70,
-                          fontSize: 20.0
-                        ),
-                      )
+                        Padding(padding: EdgeInsets.only(top: 5.0)),
+                        Theme(
+                          data: ThemeData(
+                            primaryColor: Color.fromARGB(128, 255, 255, 255),
+                            hintColor: Color.fromARGB(128, 255, 255, 255),
+                            errorColor: Color.fromARGB(128, 55, 0, 0)
+                          ),
+                          child: KeyboardVisibleWidget(
+                            focusNode: passwordNode,
+                            scrollController: scrollController,
+                            child: TextFormField(
+                              obscureText: true,                             
+                              focusNode: passwordNode,
+                              textAlign: TextAlign.center,
+                              decoration: InputDecoration(
+                                hintText: 'Password',
+                                hintStyle: TextStyle(
+                                  color: Color.fromARGB(128, 255, 255, 255),
+                                  fontSize: 20.0,
+                                ),
+                              ),
+                              style: TextStyle(
+                                color: Colors.white70,
+                                fontSize: 20.0
+                              ),
+                              validator: (val) {
+                                if (val.length < 6){
+                                  return 'Not a valid password';
+                                }                               
+                              },  
+                              onSaved: (val) {
+                                password = val;
+                              },
+                            )
+                          )
+                        )
+                      ],
                     )
                   )
                 ),
+                    
                 Padding(padding: EdgeInsets.only(top: 20.0)),  
                 Container(
                   width:  MediaQuery.of(context).size.width * 0.5,

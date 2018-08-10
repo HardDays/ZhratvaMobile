@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../widgets/cart_widget.dart';
 
+import '../../helpers/view/formatter.dart';
+
 import '../../models/cart_item.dart';
 import '../../models/storage/cart.dart';
 import '../../models/api/menu_item.dart';
@@ -80,8 +82,8 @@ class _MenuItemPageState extends State<MenuItemPage> with SingleTickerProviderSt
                 children: [
                   Container(
                     margin: EdgeInsets.only(top: 30.0),
-                    width:  MediaQuery.of(context).size.width * 0.55,
-                    height: MediaQuery.of(context).size.width * 0.55,
+                    width:  MediaQuery.of(context).size.width * 0.5,
+                    height: MediaQuery.of(context).size.width * 0.5,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       image: DecorationImage(
@@ -90,15 +92,65 @@ class _MenuItemPageState extends State<MenuItemPage> with SingleTickerProviderSt
                       ),
                     ),
                   ),
-                  Padding(padding: EdgeInsets.only(top: 35.0)),
+                  Padding(padding: EdgeInsets.only(top: 30.0)),
                   Text('${widget.item.price} р',
                     style: TextStyle(
                       color: Color.fromARGB(255, 247, 131, 6),
                       fontSize: 30.0
                     )
                   ),
+                  Padding(padding: EdgeInsets.only(top: 25.0)),
                   Container(
-                    margin: EdgeInsets.only(top: 35.0, left: MediaQuery.of(context).size.width * 0.15, right: MediaQuery.of(context).size.width * 0.15),      
+                    alignment: Alignment.topCenter,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        widget.item.creationTime != null ? 
+                        Row(
+                          children: [
+                            Icon(Icons.timer,
+                              color: Color.fromARGB(160, 0, 0, 0),
+                              size: 20.0,
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(right: 10.0, left: 3.0),
+                              child: Text('${Formatter.duration(Duration(seconds: widget.item.creationTime))}',
+                                maxLines: 3,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 16.0,
+                                  color: Color.fromARGB(160, 0, 0, 0)
+                                ),
+                              ) 
+                            )
+                          ]
+                        ): Container(),
+                        widget.item.kCal != null ? 
+                        Row(
+                          children: [
+                            Icon(Icons.flash_on,
+                              color: Color.fromARGB(160, 0, 0, 0),
+                              size: 20.0,
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(right: 10.0),
+                              child: Text('${widget.item.kCal} kcal',
+                                maxLines: 3,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 16.0,
+                                  color: Color.fromARGB(160, 0, 0, 0)
+                                ),
+                              ) 
+                            )
+                          ]
+                        ) : Container(),
+                      ],
+                    )
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top: 15.0, left: MediaQuery.of(context).size.width * 0.15, right: MediaQuery.of(context).size.width * 0.15),      
                     child: Text(widget.item.description,
                       maxLines: 3,
                       textAlign: TextAlign.center,
@@ -107,7 +159,7 @@ class _MenuItemPageState extends State<MenuItemPage> with SingleTickerProviderSt
                         color: Colors.grey
                       ),
                     ),
-                  ),
+                  ),  
                   Padding(padding: EdgeInsets.only(top: 25.0)),
                   Container(
                     width: MediaQuery.of(context).size.width * 0.6,

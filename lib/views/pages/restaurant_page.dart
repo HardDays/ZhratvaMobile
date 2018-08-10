@@ -27,13 +27,15 @@ class RestaurantPageState  extends State<RestaurantPage> {
   void initState() {
     super.initState();
 
-    MainAPI.getRestaurantMenu(widget.restaurant.id).then(
-      (res){
-        setState(() {
-          widget.restaurant.menuCategories = res;
-        });        
-      }     
-    );
+    if (widget.restaurant.menuCategories == null){
+      MainAPI.getRestaurantMenu(widget.restaurant.id).then(
+        (res){
+          setState(() {
+            widget.restaurant.menuCategories = res;
+          });        
+        }     
+      );
+    }
   }
 
   @override

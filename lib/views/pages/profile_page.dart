@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
 
+import 'start_page.dart';
+
+import '../routes/default_page_route.dart';
+
+import '../../models/storage/cache.dart';
+import '../../models/storage/database.dart';
+
 class ProfilePage extends StatelessWidget {
   @override 
   Widget build(BuildContext context) {
@@ -31,7 +38,7 @@ class ProfilePage extends StatelessWidget {
                   ),
                 ),  
                 Padding(padding: EdgeInsets.only(top: 20.0)),  
-                Text('Kek Cheburek',
+                Text('${Cache.currentUser.firstName} ${Cache.currentUser.lastName}',
                   style: TextStyle(
                     fontSize: 20.0
                   ),
@@ -121,7 +128,12 @@ class ProfilePage extends StatelessWidget {
                       ),
                     ),
                     onPressed: (){
-
+                      Cache.currentUser = null;
+                      Database.deleteCurrentUser(); 
+                      Navigator.pushReplacement(
+                        context, 
+                        DefaultPageRoute(builder: (context) => StartPage())
+                      );
                     },
                   )
                 ),

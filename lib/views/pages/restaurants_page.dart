@@ -22,35 +22,39 @@ class RestaurantsPage extends StatefulWidget {
   RestaurantsPageState createState() => RestaurantsPageState();
 }
 
-class RestaurantsPageState extends State<RestaurantsPage> with SingleTickerProviderStateMixin {
-
-  List <Restaurant> _list;
-
-
+class RestaurantsPageState extends State<RestaurantsPage> with AutomaticKeepAliveClientMixin  {
   @override
   void initState() {
     super.initState();
 
-    MainAPI.getRestaurants().then(
-      (res){
-        setState(() {
-          _list = res;          
-        });        
-      }     
-    );
+    if (Cache.restaurants == null){
+      MainAPI.getRestaurants().then(
+        (res){
+          setState(() {
+            Cache.restaurants = res;          
+          });        
+        }     
+      );
+    }
   }
 
   @override 
   Widget build(BuildContext context) {
-    if (_list == null){
-      return Container(child:
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            CircularProgressIndicator(backgroundColor: Color.fromARGB(255, 247, 131, 6)),
-          ],
-        ),
+    if (Cache.restaurants == null){
+      return MaterialApp(
+        home: Scaffold(
+          appBar: AppBar(
+            centerTitle: true,
+            title: Text('Restaurants'),
+            backgroundColor: Color.fromARGB(255, 247, 131, 6),
+            actions: [
+              CartWidget(parentContext: widget.parentContext)
+            ]       
+          ),
+          body: Center(
+            child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation(Color.fromARGB(255, 247, 131, 6))),            
+          ),
+        )
       );
     }
 
@@ -65,7 +69,7 @@ class RestaurantsPageState extends State<RestaurantsPage> with SingleTickerProvi
           ]       
         ),
         body: ListView.builder(
-          itemCount: _list.length,
+          itemCount: Cache.restaurants.length,
           itemBuilder: (context, index) {
             return Container(
               margin: const EdgeInsets.only(top: 15.0, left: 10.0, right: 10.0),
@@ -80,7 +84,7 @@ class RestaurantsPageState extends State<RestaurantsPage> with SingleTickerProvi
                         onTap: (){
                            Navigator.push(
                             widget.parentContext,
-                            DefaultPageRoute(builder: (context) => RestaurantPage(restaurant: _list[index])),
+                            DefaultPageRoute(builder: (context) => RestaurantPage(restaurant: Cache.restaurants[index])),
                           );
                         },
                         child: Container(  
@@ -89,7 +93,7 @@ class RestaurantsPageState extends State<RestaurantsPage> with SingleTickerProvi
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(10.0)),   
                             image: DecorationImage(
-                              image: NetworkImage(_list[index].cover),
+                              image: NetworkImage(Cache.restaurants[index].cover),
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -100,7 +104,7 @@ class RestaurantsPageState extends State<RestaurantsPage> with SingleTickerProvi
                   Container(
                     margin: const EdgeInsets.only(top: 5.0),
                     width: MediaQuery.of(context).size.width * 1.0,
-                    child: Text(_list[index].name,
+                    child: Text(Cache.restaurants[index].name,
                       maxLines: 1,
                       style: TextStyle(
                         fontSize: 20.0,
@@ -118,7 +122,7 @@ class RestaurantsPageState extends State<RestaurantsPage> with SingleTickerProvi
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            Text(_list[index].address,
+                            Text(Cache.restaurants[index].address,
                               style: TextStyle(
                                 fontSize: 14.0,
                                 color: Colors.grey,
@@ -128,10 +132,10 @@ class RestaurantsPageState extends State<RestaurantsPage> with SingleTickerProvi
                             ),
                             Container(
                               margin: const EdgeInsets.only(top: 2.0),
-                              child:Text(_list[index].openNow ? 'Open now' : 'Closed',
+                              child:Text(Cache.restaurants[index].openNow ? 'Open now' : 'Closed',
                                 style: TextStyle(
                                   fontSize: 14.0,
-                                  color: _list[index].openNow ? Color.fromARGB(128, 0, 163, 24) : Color.fromARGB(128, 181, 42, 42)
+                                  color: Cache.restaurants[index].openNow ? Color.fromARGB(128, 0, 163, 24) : Color.fromARGB(128, 181, 42, 42)
                                 ),
                                 overflow: TextOverflow.clip,
                               ),
@@ -151,7 +155,7 @@ class RestaurantsPageState extends State<RestaurantsPage> with SingleTickerProvi
                         ),
                         child: Container(
                           margin: const EdgeInsets.only(top: 8.0),
-                          child: Text(_list[index].travelTime != null ? Formatter.duration(_list[index].travelTime) : 'Far away',
+                          child: Text(Cache.restaurants[index].travelTime != null ? Formatter.duration(Cache.restaurants[index].travelTime) : 'Far away',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: Colors.grey

@@ -1,10 +1,11 @@
+import 'dart:async';
 import 'package:geolocation/geolocation.dart';
 
 class GeolocationCache {
 
   static Location lastLocation;
 
-  static void init() async {
+  static Future init() async {
     var res = await Geolocation.isLocationOperational();
 
     if (res.isSuccessful) {

@@ -228,6 +228,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.5.1"
+  path_provider:
+    dependency: "direct main"
+    description:
+      name: path_provider
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.4.1"
   plugin:
     dependency: transitive
     description:
@@ -352,6 +359,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.5"
+  unittest:
+    dependency: transitive
+    description:
+      name: unittest
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.11.7"
   utf:
     dependency: transitive
     description:
@@ -359,6 +373,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.9.0+4"
+  validator:
+    dependency: "direct main"
+    description:
+      name: validator
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.7"
   vector_math:
     dependency: transitive
     description:
@@ -389,3 +410,4 @@ packages:
     version: "2.1.13"
 sdks:
   dart: ">=2.0.0-dev.52.0 <=2.0.0-dev.58.0.flutter-f981f09760"
+  flutter: ">=0.1.4 <2.0.0"

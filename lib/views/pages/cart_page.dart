@@ -1,28 +1,37 @@
 import 'package:flutter/material.dart';
-import 'menu_page.dart';
+
 import '../routes/default_page_route.dart';
+
+import '../../helpers/view/formatter.dart';
+
 import '../../models/storage/cart.dart';
 import '../../models/cart_item.dart';
 
 class CartPage extends StatefulWidget {
   
   @override
-  _CartPageState createState() => _CartPageState();
+  CartPageState createState() => CartPageState();
 }
   
-class _CartPageState extends State<CartPage> with SingleTickerProviderStateMixin {
+class CartPageState extends State<CartPage> with SingleTickerProviderStateMixin {
 
   double _totalPrice = 0.0;
+  int _totalCal = 0;
+  int _totalCreationTime = 0;
 
-  _CartPageState(){
+  CartPageState(){
     Cart.items.forEach((item){_totalPrice += item.count * item.item.price;});
+    Cart.items.forEach((item){_totalCreationTime += item.item.creationTime ?? 0;});
+    Cart.items.forEach((item){_totalCal += item.item.kCal ?? 0;});
   }
 
   void _onMinus(int index){
     if (Cart.items[index].count > 1){
       setState(() {
         Cart.items[index].count -= 1;    
-        _totalPrice -= Cart.items[index].item.price;                                                  
+        _totalPrice -= Cart.items[index].item.price;     
+        _totalCreationTime -= Cart.items[index].item.creationTime ?? 0;           
+        _totalCal -= Cart.items[index].item.kCal ?? 0;                              
       });
     }else{
       showDialog(context: context, 
@@ -58,7 +67,9 @@ class _CartPageState extends State<CartPage> with SingleTickerProviderStateMixin
     if (Cart.items[index].count < 5){
       setState(() {
         Cart.items[index].count += 1;
-        _totalPrice += Cart.items[index].item.price;
+        _totalPrice += Cart.items[index].item.price;     
+        _totalCreationTime +=  Cart.items[index].item.creationTime ?? 0;           
+        _totalCal += Cart.items[index].item.kCal ?? 0;            
       });
     }
   }
@@ -83,7 +94,7 @@ class _CartPageState extends State<CartPage> with SingleTickerProviderStateMixin
       body: Column( 
         children: [ 
           Container(
-            height: MediaQuery.of(context).size.height * 0.75,
+            height: MediaQuery.of(context).size.height * 0.7,
                 alignment: Alignment.center,
                 child: ListView(
                   children:  List.generate(Cart.items.length, (index){
@@ -215,20 +226,95 @@ class _CartPageState extends State<CartPage> with SingleTickerProviderStateMixin
             width: MediaQuery.of(context).size.width,
             color: Colors.white,
             child: Container(
-              margin: EdgeInsets.only(top: 15.0, bottom: 15.0, left: 40.0, right: 40.0),
+              margin: EdgeInsets.only(top: 15.0, bottom: 15.0),
               color: Colors.white,
-              child: FlatButton(
-                color: Color.fromARGB(255, 247, 131, 6),
-                  onPressed: (){    
-                  },
-                  child: Text('PAY ${_totalPrice}',
-                    style: TextStyle(
-                      color: Colors.white
+              child: Column(
+                children: [
+                    Container(
+                      alignment: Alignment.topCenter,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Row(
+                            children: [
+                              Icon(Icons.attach_money,
+                                color: Color.fromARGB(160, 0, 0, 0),
+                                size: 20.0,
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(right: 10.0, left: 3.0),
+                                child: Text('${_totalPrice} p',
+                                  maxLines: 3,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 16.0,
+                                    color: Color.fromARGB(160, 0, 0, 0)
+                                  ),
+                                ) 
+                              )
+                            ]
+                          ),
+                          Row(
+                            children: [
+                              Icon(Icons.timer,
+                                color: Color.fromARGB(160, 0, 0, 0),
+                                size: 20.0,
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(right: 10.0, left: 3.0),
+                                child: Text('${Formatter.duration(Duration(seconds: _totalCreationTime))}',
+                                  maxLines: 3,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 16.0,
+                                    color: Color.fromARGB(160, 0, 0, 0)
+                                  ),
+                                ) 
+                              )
+                            ]
+                          ),
+                          Row(
+                            children: [
+                              Icon(Icons.flash_on,
+                                color: Color.fromARGB(160, 0, 0, 0),
+                                size: 20.0,
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(right: 10.0),
+                                child: Text('${_totalCal} kcal',
+                                  maxLines: 3,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 16.0,
+                                    color: Color.fromARGB(160, 0, 0, 0)
+                                  ),
+                                ) 
+                              )
+                            ]
+                          )
+                        ],
+                      )
                     ),
-                  ),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0))
+                    Padding(padding: EdgeInsets.only(top: 10.0)),
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.7,
+                      height: 50.0,
+                      child: FlatButton(
+                        color: Color.fromARGB(255, 247, 131, 6),
+                        onPressed: (){    
+                        },
+                        child: Text('PROCESS ORDER',
+                          style: TextStyle(
+                            color: Colors.white
+                          ),
+                        ),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0))
+                      ),
+                    )
+                  ],
+                )  
               ),
-            ),
             )
           )
         ]

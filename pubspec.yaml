@@ -12,6 +12,8 @@ dependencies:
   intl: ^0.15.7
   geolocation: ^0.2.1
   haversine: ^1.0.2
+  validator: ">=0.0.4 <0.1.0"
+  path_provider: ^0.4.1
 
 dev_dependencies:
   flutter_test:
@@ -40,7 +42,7 @@ flutter:
     - family: icons
       fonts: 
         - asset: assets/fonts/icons.ttf
-
+ 
 
   #  - images/a_dot_ham.jpeg
 

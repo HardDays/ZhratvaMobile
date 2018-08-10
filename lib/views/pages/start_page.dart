@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 
 import 'login_page.dart';
+import 'signup_page.dart';
 
 import '../routes/default_page_route.dart';
 
 class StartPage extends StatelessWidget {
-
-  void _onLogin(){
-
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -125,7 +122,7 @@ class StartPage extends StatelessWidget {
                   child: OutlineButton(
                     color: Colors.white,
                     onPressed: (){
-                      _onLogin();
+                      Navigator.push(context, DefaultPageRoute(builder: (context) => SignupPage()));
                     },
                     child: Text('SIGN UP',
                       style: TextStyle(

@@ -55,25 +55,18 @@ class KeyboardVisibleWidgetState extends State<KeyboardVisibleWidget> {
     // TODO: position doesn't seem to notify listeners when metrics change,
     // perhaps a NotificationListener around the scrollable could avoid
     // the need insert a delay here.
-    await new Future.delayed(const Duration(milliseconds: 1000));
-
-    print(widget);
+    await new Future.delayed(const Duration(milliseconds: 300));
 
     if (!widget.focusNode.hasFocus)
       return;
 
-    print('here');
-
     final RenderObject object = context.findRenderObject();
     final RenderAbstractViewport viewport = RenderAbstractViewport.of(object);
     assert(viewport != null);
-    
-
+  
     ScrollPosition position = widget.scrollController.position;
     double alignment;
 
-    print(position.pixels);
-    print(viewport.getOffsetToReveal(object, 1.0));
     if (position.pixels > viewport.getOffsetToReveal(object, 0.0)) {
       // Move down to the top of the viewport
       alignment = 0.0;
