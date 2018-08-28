@@ -58,6 +58,8 @@ class AppState extends State<App> {
         title: 'Flutter Demo',
         theme: ThemeData(
           primarySwatch: Colors.grey,
+          primaryColor: Color.fromARGB(255, 247, 131, 6),
+          accentColor: Colors.white
         ),
         home: SplashPage()
       );
@@ -67,6 +69,9 @@ class AppState extends State<App> {
         title: 'Flutter Demo',
         theme: ThemeData(
           primarySwatch: Colors.grey,
+          primaryColor: Color.fromARGB(255, 240, 240, 240),
+          accentColor: Color.fromARGB(255, 247, 131, 6),
+       
         ),
         home: MainPage(),
       );
@@ -75,6 +80,8 @@ class AppState extends State<App> {
         title: 'Flutter Demo',
         theme: ThemeData(
           primarySwatch: Colors.grey,
+          primaryColor: Color.fromARGB(255, 247, 131, 6),
+          accentColor: Color.fromARGB(255, 247, 131, 6),
         ),
         home: StartPage(),
       );

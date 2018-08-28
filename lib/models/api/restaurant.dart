@@ -15,6 +15,9 @@ class Restaurant{
   String address;
   String hours;
   String description;
+  String currency;
+  String phone;
+  String link;
 
   double rating;
 
@@ -30,7 +33,7 @@ class Restaurant{
   List <WorkingHour> workingHours = [];
   List <MenuCategory> menuCategories = [];
 
-  Restaurant({this.id, this.name, this.coverId, this.address, this.lat, this.lng, this.hours, this.workingHours, this.description, this.rating, this.menuCategories}){
+  Restaurant({this.id, this.name, this.distance, this.openNow, this.coverId, this.address, this.lat, this.lng, this.hours, this.link, this.phone, this.workingHours, this.description, this.currency, this.rating, this.menuCategories}){
     openNow = isOpenNow();
     distance = calcDistance();
     travelTime = calcTravelTime();
@@ -45,8 +48,8 @@ class Restaurant{
   }
 
   double calcDistance(){
-    var loc = GeolocationCache.lastLocation;
-    if (loc != null){
+    var loc = GeolocationCache.lastLocation();
+    if (loc != null && lat != null && lng != null){
       var dist = Haversine.fromDegrees(latitude1: loc.latitude, longitude1: loc.longitude, latitude2: lat, longitude2: lng);
       return dist.distance();
     }
@@ -65,7 +68,11 @@ class Restaurant{
 
   WorkingHour findWorkingHourNow(){
     String day = DateFormat('EEEE').format(DateTime.now()).toLowerCase();
-    return workingHours.firstWhere((w) => (w.day == day));
+    try {
+      return workingHours.firstWhere((w) => (w.day == day));
+    } catch (ex) {
+      return null;
+    }
   }
 
   factory Restaurant.fromJson(Map<String, dynamic> json) {
@@ -77,6 +84,11 @@ class Restaurant{
       lat: json['lat'],
       lng: json['lng'],
       coverId: json['cover_id'],
+      currency: json['currency'],
+      phone: json['phone'],
+      link: json['link'],
+      distance: json['distance'] != null ? json['distance'] * 1000 : null,
+      openNow: json['open_now'],
       workingHours: json['working_hours'].map<WorkingHour>((w) => WorkingHour.fromJson(w)).toList(),
       //menuCategories: json['menu_categories'] != null ? json['menu_categories'].map<MenuCategory>((w) => MenuCategory.fromJson(w)).toList() : null,
     );

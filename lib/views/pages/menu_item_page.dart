@@ -3,59 +3,83 @@ import 'package:flutter/material.dart';
 import '../widgets/cart_widget.dart';
 
 import '../../helpers/view/formatter.dart';
+import '../../helpers/view/localization.dart';
 
-import '../../models/cart_item.dart';
 import '../../models/storage/cart.dart';
+
+import '../../models/api/order_menu_item.dart';
 import '../../models/api/menu_item.dart';
+import '../../models/api/restaurant.dart';
+
 
 class MenuItemPage extends StatefulWidget {
   
   MenuItem item;
+  Restaurant restaurant;
 
-  MenuItemPage({this.item}){
+  MenuItemPage({this.item, this.restaurant}){
   }
 
   @override
-  _MenuItemPageState createState() => _MenuItemPageState();
+  MenuItemPageState createState() => MenuItemPageState();
 }
   
-class _MenuItemPageState extends State<MenuItemPage> with SingleTickerProviderStateMixin {
+class MenuItemPageState extends State<MenuItemPage> with SingleTickerProviderStateMixin {
 
-  CartWidget _cart;
+  CartWidget cart;
 
-  int _count = 1;
-
-  void _onMinus(){
-    if (_count > 1){
+  int count = 1;
+  
+  void onMinus(){
+    if (count > 1){
       setState(() {
-        _count -= 1;                                                      
+        count -= 1;                                                      
       });
     }
   }
 
-  void _onPlus(){
-    if (_count < 5){
+  void onPlus(){
+    if (count < 5){
         setState(() {
-        _count += 1;
+        count += 1;
       });
     }
   }
 
-  void _onAdd(BuildContext context){
-    Scaffold.of(context).showSnackBar(new SnackBar(
-      content: new Text('${widget.item.name} added to your cart'),
-    ));
-    Cart.items.add(CartItem(
-      count: _count,
-      item: widget.item
-    ));
-    setState(() {          
-    });
+  void onAdd(BuildContext context){
+    if (Cart.canAdd(widget.item)){
+      Scaffold.of(context).showSnackBar(new SnackBar(
+        content: Text('${widget.item.name} ${Localization.word('added to your cart')}'),
+      ));
+      setState(() {          
+        Cart.add(OrderMenuItem(
+          count: count,
+          menuItem: widget.item,
+          menuItemId: widget.item.id
+        ));
+        Cart.changeRestaurant(widget.restaurant);
+      });
+    }else{
+      showDialog(context: context, 
+        child: AlertDialog(
+          title: Text(Localization.word('Wrong item')),
+          content: Text(Localization.word('Cannot add item from another restaurant. Please, finish your current order')),
+          actions: [
+            FlatButton(
+              child: Text(Localization.word('OK')),
+              onPressed: () {  
+                Navigator.pop(context);             
+              }
+            ),
+          ],
+        )
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    _cart = CartWidget();
+    cart = CartWidget();
     return Scaffold(  
       appBar: AppBar(
         centerTitle: true,
@@ -69,7 +93,7 @@ class _MenuItemPageState extends State<MenuItemPage> with SingleTickerProviderSt
         ),
         backgroundColor: Color.fromARGB(255, 247, 131, 6),
         actions: [
-          _cart
+          cart
         ]           
       ),
       body: Builder(
@@ -93,7 +117,7 @@ class _MenuItemPageState extends State<MenuItemPage> with SingleTickerProviderSt
                     ),
                   ),
                   Padding(padding: EdgeInsets.only(top: 30.0)),
-                  Text('${widget.item.price} р',
+                  Text('${widget.item.price} ${Localization.word(widget.item.currency)}',
                     style: TextStyle(
                       color: Color.fromARGB(255, 247, 131, 6),
                       fontSize: 30.0
@@ -106,7 +130,7 @@ class _MenuItemPageState extends State<MenuItemPage> with SingleTickerProviderSt
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        widget.item.creationTime != null ? 
+                        widget.item.cookingTime != null ? 
                         Row(
                           children: [
                             Icon(Icons.timer,
@@ -115,7 +139,7 @@ class _MenuItemPageState extends State<MenuItemPage> with SingleTickerProviderSt
                             ),
                             Container(
                               margin: EdgeInsets.only(right: 10.0, left: 3.0),
-                              child: Text('${Formatter.duration(Duration(seconds: widget.item.creationTime))}',
+                              child: Text('${Formatter.shortDuration(Duration(seconds: widget.item.cookingTime))}',
                                 maxLines: 3,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
@@ -135,7 +159,7 @@ class _MenuItemPageState extends State<MenuItemPage> with SingleTickerProviderSt
                             ),
                             Container(
                               margin: EdgeInsets.only(right: 10.0),
-                              child: Text('${widget.item.kCal} kcal',
+                              child: Text('${widget.item.kCal} ${Localization.word('kcal')}',
                                 maxLines: 3,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
@@ -173,7 +197,7 @@ class _MenuItemPageState extends State<MenuItemPage> with SingleTickerProviderSt
                           child: FlatButton(
                             color: Color.fromARGB(255, 227, 116, 116),
                             onPressed: (){
-                              _onMinus();
+                              onMinus();
                             },
                             child: Text('-',
                               textAlign: TextAlign.center,
@@ -185,7 +209,7 @@ class _MenuItemPageState extends State<MenuItemPage> with SingleTickerProviderSt
                             shape: CircleBorder()
                           ),
                         ),  
-                        Text('${_count}',
+                        Text('${count}',
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 25.0
@@ -197,7 +221,7 @@ class _MenuItemPageState extends State<MenuItemPage> with SingleTickerProviderSt
                           child: FlatButton(
                             color: Color.fromARGB(255, 87, 176, 60),  
                             onPressed: (){
-                              _onPlus();
+                              onPlus();
                             },
                             child: Text('+',
                               textAlign: TextAlign.center,
@@ -220,9 +244,9 @@ class _MenuItemPageState extends State<MenuItemPage> with SingleTickerProviderSt
                       FlatButton(
                         color: Color.fromARGB(255, 247, 131, 6),
                         onPressed: (){
-                          _onAdd(context);
+                          onAdd(context);
                         },
-                        child: Text('ADD TO CART',
+                        child: Text(Localization.word('ADD TO CART'),
                           style: TextStyle(
                             color: Colors.white
                           ),

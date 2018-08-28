@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'login_page.dart';
 import 'signup_page.dart';
 
+import '../../helpers/view/localization.dart';
+
 import '../routes/default_page_route.dart';
 
 class StartPage extends StatelessWidget {
@@ -107,7 +109,7 @@ class StartPage extends StatelessWidget {
                     onPressed: (){
                       Navigator.push(context, DefaultPageRoute(builder: (context) => LoginPage()));
                     },
-                    child: Text('LOG IN',
+                    child: Text(Localization.word('LOG IN'),
                       style: TextStyle(
                         color: Color.fromARGB(255, 247, 131, 6),
                       ),
@@ -124,7 +126,7 @@ class StartPage extends StatelessWidget {
                     onPressed: (){
                       Navigator.push(context, DefaultPageRoute(builder: (context) => SignupPage()));
                     },
-                    child: Text('SIGN UP',
+                    child: Text(Localization.word('SIGN UP')  ,
                       style: TextStyle(
                         color: Colors.white,
                       ),

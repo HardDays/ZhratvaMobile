@@ -6,6 +6,7 @@ import 'package:validator/validator.dart';
 import 'main_page.dart';
 
 import '../../helpers/api/main_api.dart';
+import '../../helpers/view/localization.dart';
 
 import '../../models/api/user.dart';
 import '../../models/storage/database.dart';
@@ -47,19 +48,48 @@ class SignupPageState extends State<SignupPage> {
     super.dispose();
   }
 
-  void _onSignup(){
+  void onSignup(){
     FormState form = formKey.currentState;
 
     if (form.validate()) {
       form.save();
+      showDialog(context: context, 
+        child: AlertDialog(
+          content: Container(
+            child: Container(
+              alignment: Alignment.center,
+              width: 50.0,
+              height: 120.0,
+              child: CircularProgressIndicator( valueColor: AlwaysStoppedAnimation(Color.fromARGB(255, 247, 131, 6))),
+            )
+          )           
+        )
+      );
       MainAPI.createUser(user).then(
         (res){
           if (res != null){
             Database.setCurrentUser(res);
+            Cache.flush();
             Cache.currentUser = res;
             Navigator.pushReplacement(
               context,
               DefaultPageRoute(builder: (context) => MainPage()),
+            );
+          }else{
+            showDialog(context: context, 
+              child: AlertDialog(
+                title: Text(Localization.word('Not registered')),
+                content: Text(Localization.word('Email already taken')),
+                actions: [
+                  FlatButton(
+                    child: Text(Localization.word('OK')),
+                    onPressed: () {  
+                      Navigator.pop(context);             
+                      Navigator.pop(context);           
+                    }
+                  ),
+                ],
+              )
             );
           }
         }
@@ -131,7 +161,7 @@ class SignupPageState extends State<SignupPage> {
                               focusNode: firstNameNode,
                               textAlign: TextAlign.center,
                               decoration: InputDecoration(
-                                hintText: 'First name',
+                                hintText: Localization.word('First name'),
                                 hintStyle: TextStyle(
                                   color: Color.fromARGB(128, 255, 255, 255),
                                   fontSize: 20.0, 
@@ -139,7 +169,7 @@ class SignupPageState extends State<SignupPage> {
                               ),
                               validator: (val) {
                                 if (val.isEmpty){
-                                  return 'Enter your first name';
+                                  return Localization.word('Enter your first name');
                                 }                               
                               },                              
                               onFieldSubmitted: (text){
@@ -170,7 +200,7 @@ class SignupPageState extends State<SignupPage> {
                               focusNode: lastNameNode,
                               textAlign: TextAlign.center,
                               decoration: InputDecoration(
-                                hintText: 'Last name',
+                                hintText: Localization.word('Last name'),
                                 hintStyle: TextStyle(
                                   color: Color.fromARGB(128, 255, 255, 255),
                                   fontSize: 20.0, 
@@ -178,7 +208,7 @@ class SignupPageState extends State<SignupPage> {
                               ),
                               validator: (val) {
                                 if (val.isEmpty){
-                                  return 'Enter your last name';
+                                  return Localization.word('Enter your last name');
                                 }                               
                               },                              
                               onFieldSubmitted: (text){
@@ -209,7 +239,7 @@ class SignupPageState extends State<SignupPage> {
                               focusNode: phoneNode,
                               textAlign: TextAlign.center,
                               decoration: InputDecoration(
-                                hintText: 'Phone',
+                                hintText: Localization.word('Phone'),
                                 hintStyle: TextStyle(
                                   color: Color.fromARGB(128, 255, 255, 255),
                                   fontSize: 20.0, 
@@ -217,7 +247,7 @@ class SignupPageState extends State<SignupPage> {
                               ),
                               validator: (val) {
                                 if (val.length < 5){
-                                  return 'Enter valid phone';
+                                  return Localization.word('Enter valid phone');
                                 }                                 
                               },                              
                               onFieldSubmitted: (text){
@@ -248,7 +278,7 @@ class SignupPageState extends State<SignupPage> {
                               focusNode: emailNode,
                               textAlign: TextAlign.center,
                               decoration: InputDecoration(
-                                hintText: 'Email',
+                                hintText: Localization.word('Email'),
                                 hintStyle: TextStyle(
                                   color: Color.fromARGB(128, 255, 255, 255),
                                   fontSize: 20.0, 
@@ -256,7 +286,7 @@ class SignupPageState extends State<SignupPage> {
                               ),
                               validator: (val) {
                                 if (!isEmail(val)){
-                                  return 'Not a valid email';
+                                  return Localization.word('Not a valid email');
                                 }                               
                               },                              
                               onFieldSubmitted: (text){
@@ -287,7 +317,7 @@ class SignupPageState extends State<SignupPage> {
                               focusNode: passwordNode,
                               textAlign: TextAlign.center,
                               decoration: InputDecoration(
-                                hintText: 'Password',
+                                hintText: Localization.word('Password'),
                                 hintStyle: TextStyle(
                                   color: Color.fromARGB(128, 255, 255, 255),
                                   fontSize: 20.0,
@@ -299,7 +329,7 @@ class SignupPageState extends State<SignupPage> {
                               ),
                               validator: (val) {
                                 if (val.length < 7){
-                                  return 'Enter more than 7 symbols';
+                                  return Localization.word('Pasword too short');
                                 }                               
                               },  
                               onSaved: (val){
@@ -319,9 +349,9 @@ class SignupPageState extends State<SignupPage> {
                   child: FlatButton(
                     color: Colors.white,
                     onPressed: (){
-                      _onSignup();
+                      onSignup();
                     },
-                    child: Text('SIGN UP',
+                    child: Text(Localization.word('SIGN UP'),
                       style: TextStyle(
                         color: Color.fromARGB(255, 247, 131, 6),
                       ),

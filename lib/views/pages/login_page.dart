@@ -6,6 +6,7 @@ import 'package:validator/validator.dart';
 import 'main_page.dart';
 
 import '../../helpers/api/main_api.dart';
+import '../../helpers/view/localization.dart';
 
 import '../../models/storage/database.dart';
 import '../../models/storage/cache.dart';
@@ -32,6 +33,8 @@ class LoginPageState extends State<LoginPage> {
   String email;
   String password;
 
+  bool loading = false;
+
   @override
   void initState() {
     super.initState();
@@ -42,19 +45,47 @@ class LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
-  void _onLogin(){
-    FormState form = formKey.currentState;
-
+  void onLogin(){
+    FormState form =  formKey.currentState;
     if (form.validate()) {
+      showDialog(context: context, 
+        child: AlertDialog(
+          content: Container(
+            child: Container(
+              alignment: Alignment.center,
+              width: 50.0,
+              height: 120.0,
+              child: CircularProgressIndicator( valueColor: AlwaysStoppedAnimation(Color.fromARGB(255, 247, 131, 6))),
+            )
+          )           
+        )
+      );
       form.save();
       MainAPI.authorize(email, password).then(
         (res){
           if (res != null){
             Database.setCurrentUser(res);
+            Cache.flush();  
             Cache.currentUser = res;
             Navigator.pushReplacement(
               context,
               DefaultPageRoute(builder: (context) => MainPage()),
+            );
+          } else {
+            showDialog(context: context, 
+              child: AlertDialog(
+                title: Text(Localization.word('Unauthorized')),
+                content: Text(Localization.word('Wrong email or password')),
+                actions: [
+                  FlatButton(
+                    child: Text(Localization.word('OK')),
+                    onPressed: () {  
+                      Navigator.pop(context);             
+                      Navigator.pop(context);           
+                    }
+                  ),
+                ],
+              )
             );
           }
         } 
@@ -126,7 +157,7 @@ class LoginPageState extends State<LoginPage> {
                               focusNode: emailNode,
                               textAlign: TextAlign.center,
                               decoration: InputDecoration(
-                                hintText: 'Email',
+                                hintText: Localization.word('Email'),
                                 hintStyle: TextStyle(
                                   color: Color.fromARGB(128, 255, 255, 255),
                                   fontSize: 20.0, 
@@ -137,7 +168,7 @@ class LoginPageState extends State<LoginPage> {
                               },
                               validator: (val) {
                                 if (!isEmail(val)){
-                                  return 'Not a valid email';
+                                  return Localization.word('Not a valid email');
                                 }                               
                               },                              
                               onFieldSubmitted: (text){
@@ -165,7 +196,7 @@ class LoginPageState extends State<LoginPage> {
                               focusNode: passwordNode,
                               textAlign: TextAlign.center,
                               decoration: InputDecoration(
-                                hintText: 'Password',
+                                hintText: Localization.word('Password'),
                                 hintStyle: TextStyle(
                                   color: Color.fromARGB(128, 255, 255, 255),
                                   fontSize: 20.0,
@@ -176,8 +207,8 @@ class LoginPageState extends State<LoginPage> {
                                 fontSize: 20.0
                               ),
                               validator: (val) {
-                                if (val.length < 6){
-                                  return 'Not a valid password';
+                                if (val.length < 5){
+                                  return Localization.word('Password too short');
                                 }                               
                               },  
                               onSaved: (val) {
@@ -198,9 +229,9 @@ class LoginPageState extends State<LoginPage> {
                   child: FlatButton(
                     color: Colors.white,
                     onPressed: (){
-                      _onLogin();
+                      onLogin();
                     },
-                    child: Text('LOG IN',
+                    child: Text(Localization.word('LOG IN'),
                       style: TextStyle(
                         color: Color.fromARGB(255, 247, 131, 6),
                       ),
@@ -214,7 +245,7 @@ class LoginPageState extends State<LoginPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     FlatButton(
-                      child: Text("FORGOT PASSWORD",
+                      child: Text(Localization.word('FORGOT PASSWORD'),
                         style: TextStyle(
                           color: Colors.white
                         ),

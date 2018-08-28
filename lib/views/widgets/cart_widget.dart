@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../models/storage/cart.dart';
 
+import '../../helpers/view/localization.dart';
+
 import '../pages/cart_page.dart';
 
 import '../routes/menu_page_route.dart';
@@ -22,11 +24,19 @@ class CartWidgetState extends State<CartWidget> with SingleTickerProviderStateMi
   void _onCart(BuildContext context){
     var ctx = widget.parentContext != null ? widget.parentContext : context;
     
-    if (Cart.items.isEmpty){
+    if (Cart.items().isEmpty){
       showDialog(context: ctx, 
         child: AlertDialog(
-          title: new Text("Empty cart"),
-          content: new Text("Please, add some items to your cart"),
+          title: Text(Localization.word('Empty cart')),
+          content: Text(Localization.word('Please, add some items to your cart')),
+          actions: [
+            FlatButton(
+              child: Text(Localization.word('OK')),
+              onPressed: () {  
+                Navigator.pop(context);             
+              }
+            ),
+          ],
         )
       );
     }else{
@@ -39,7 +49,7 @@ class CartWidgetState extends State<CartWidget> with SingleTickerProviderStateMi
 
   @override 
   Widget build(BuildContext context) {
-    if (Cart.items.isNotEmpty) {
+    if (Cart.items().isNotEmpty) {
       return GestureDetector(
         onTap: (){
           _onCart(context);
@@ -60,7 +70,7 @@ class CartWidgetState extends State<CartWidget> with SingleTickerProviderStateMi
               height: 20.0,
               alignment: Alignment.center,
               margin: EdgeInsets.only(top: 25.0),
-              child: Text('${Cart.items.map((item) => item.count).reduce((a, b) => a + b)}',
+              child: Text('${Cart.items().map((item) => item.count).reduce((a, b) => a + b)}',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.white,

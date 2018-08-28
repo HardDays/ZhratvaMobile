@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 
+import 'payment_page.dart';
+
 import '../routes/default_page_route.dart';
 
 import '../../helpers/view/formatter.dart';
+import '../../helpers/view/localization.dart';
 
 import '../../models/storage/cart.dart';
 import '../../models/cart_item.dart';
@@ -15,44 +18,35 @@ class CartPage extends StatefulWidget {
   
 class CartPageState extends State<CartPage> with SingleTickerProviderStateMixin {
 
-  double _totalPrice = 0.0;
-  int _totalCal = 0;
-  int _totalCreationTime = 0;
-
   CartPageState(){
-    Cart.items.forEach((item){_totalPrice += item.count * item.item.price;});
-    Cart.items.forEach((item){_totalCreationTime += item.item.creationTime ?? 0;});
-    Cart.items.forEach((item){_totalCal += item.item.kCal ?? 0;});
+;
   }
 
-  void _onMinus(int index){
-    if (Cart.items[index].count > 1){
+  void onMinus(int index){
+    if (Cart.items()[index].count > 1){
       setState(() {
-        Cart.items[index].count -= 1;    
-        _totalPrice -= Cart.items[index].item.price;     
-        _totalCreationTime -= Cart.items[index].item.creationTime ?? 0;           
-        _totalCal -= Cart.items[index].item.kCal ?? 0;                              
+        Cart.decCount(index);                        
       });
     }else{
       showDialog(context: context, 
         child: AlertDialog(
-          title: Text("Remove"),
-          content: Text("Do you want to remove item from your cart?"),
+          title: Text(Localization.word('Remove')),
+          content: Text(Localization.word('Do you want to remove item from your cart?')),
           actions: [
             FlatButton(
-              child: const Text('NO'),
+              child: Text(Localization.word('NO')),
               onPressed: () {
                 Navigator.pop(context);
               }
             ),
             FlatButton(
-              child: const Text('YES'),
+              child: Text(Localization.word('YES')),
               onPressed: () { 
                 setState(() {
-                  Cart.items.removeAt(index);             
+                  Cart.remove(index);             
                   Navigator.pop(context);     
                 });
-                if (Cart.items.isEmpty){
+                if (Cart.items().isEmpty){
                   Navigator.pop(context);
                 }
               }
@@ -63,15 +57,10 @@ class CartPageState extends State<CartPage> with SingleTickerProviderStateMixin 
     }
   }
 
-  void _onPlus(int index){
-    if (Cart.items[index].count < 5){
-      setState(() {
-        Cart.items[index].count += 1;
-        _totalPrice += Cart.items[index].item.price;     
-        _totalCreationTime +=  Cart.items[index].item.creationTime ?? 0;           
-        _totalCal += Cart.items[index].item.kCal ?? 0;            
-      });
-    }
+  void onPlus(int index){
+    setState(() {
+      Cart.incCount(index);       
+    });
   }
 
   @override
@@ -79,7 +68,7 @@ class CartPageState extends State<CartPage> with SingleTickerProviderStateMixin 
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('Checkout',
+        title: Text(Localization.word('Cart'),
           style: TextStyle(
             color: Colors.white
           ),
@@ -97,8 +86,8 @@ class CartPageState extends State<CartPage> with SingleTickerProviderStateMixin 
             height: MediaQuery.of(context).size.height * 0.7,
                 alignment: Alignment.center,
                 child: ListView(
-                  children:  List.generate(Cart.items.length, (index){
-                        return Container(
+                  children:  List.generate(Cart.items().length, (index){
+                    return Container(
                           margin: EdgeInsets.only(left: 10.0, right: 10.0),
                           width: MediaQuery.of(context).size.width * 1.0,
                           height: MediaQuery.of(context).size.height * 0.15,
@@ -114,28 +103,28 @@ class CartPageState extends State<CartPage> with SingleTickerProviderStateMixin 
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,
                                       image: DecorationImage(
-                                        image: NetworkImage(Cart.items[index].item.cover()),
+                                        image: NetworkImage(Cart.items()[index].menuItem.cover()),
                                         fit: BoxFit.cover,
                                       ),
                                     ),
                                   ),
                                   Container(
                                     width: MediaQuery.of(context).size.width * 0.3,
-                                    margin: EdgeInsets.only(left: 15.0, top: 5.0),
+                                    margin: EdgeInsets.only(left: 15.0, top: 12.0, right: 10.0),
                                     child: Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        Text(Cart.items[index].item.name,
+                                        Text(Cart.items()[index].menuItem.name,
                                           maxLines: 1,
                                           style: TextStyle(
                                             fontSize: 16.0
                                           ),
                                         ),
                                         Padding(padding: EdgeInsets.only(top: 3.0)),
-                                        Text('${Cart.items[index].item.price} р',
+                                        Text('${Cart.items()[index].menuItem.price} ${Localization.word(Cart.items()[index].menuItem.currency)}',
                                           maxLines: 1,
                                           style: TextStyle(
-                                            fontSize: 24.0,
+                                            fontSize: 20.0,
                                             color: Color.fromARGB(255, 247, 131, 6)
                                           ),
                                         ),
@@ -155,7 +144,7 @@ class CartPageState extends State<CartPage> with SingleTickerProviderStateMixin 
                                           child: FlatButton(  
                                             color: Color.fromARGB(255, 227, 116, 116),
                                             onPressed: (){
-                                              _onMinus(index);
+                                              onMinus(index);
                                             },
                                             child: Text('-',
                                               textAlign: TextAlign.center,
@@ -167,7 +156,7 @@ class CartPageState extends State<CartPage> with SingleTickerProviderStateMixin 
                                             shape: CircleBorder()
                                           ),
                                         ),  
-                                        Text('${Cart.items[index].count}',
+                                        Text('${Cart.items()[index].count}',
                                           style: TextStyle(
                                             color: Colors.black,
                                             fontSize: 25.0
@@ -179,7 +168,7 @@ class CartPageState extends State<CartPage> with SingleTickerProviderStateMixin 
                                           child: FlatButton(
                                             color: Color.fromARGB(255, 87, 176, 60),  
                                             onPressed: (){
-                                              _onPlus(index);
+                                              onPlus(index);
                                             },
                                             child: Text('+',
                                               textAlign: TextAlign.center,
@@ -201,8 +190,6 @@ class CartPageState extends State<CartPage> with SingleTickerProviderStateMixin 
                         );
                       }),
                     ),
-                  
-
           ),
           Divider(
             color: Colors.grey, 
@@ -244,7 +231,7 @@ class CartPageState extends State<CartPage> with SingleTickerProviderStateMixin 
                               ),
                               Container(
                                 margin: EdgeInsets.only(right: 10.0, left: 3.0),
-                                child: Text('${_totalPrice} p',
+                                child: Text(Cart.items().isNotEmpty ? '${Cart.totalPrice()} ${Localization.word(Cart.items()[0].menuItem.currency)}' : '',
                                   maxLines: 3,
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
@@ -263,7 +250,7 @@ class CartPageState extends State<CartPage> with SingleTickerProviderStateMixin 
                               ),
                               Container(
                                 margin: EdgeInsets.only(right: 10.0, left: 3.0),
-                                child: Text('${Formatter.duration(Duration(seconds: _totalCreationTime))}',
+                                child: Text(Cart.items().isNotEmpty ? '${Formatter.shortDuration(Duration(seconds: Cart.totalCookingTime()))}' : '',
                                   maxLines: 3,
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
@@ -282,7 +269,7 @@ class CartPageState extends State<CartPage> with SingleTickerProviderStateMixin 
                               ),
                               Container(
                                 margin: EdgeInsets.only(right: 10.0),
-                                child: Text('${_totalCal} kcal',
+                                child: Text(Cart.items().isNotEmpty ? '${Cart.totalCal()} ${Localization.word('kcal')}' : '',
                                   maxLines: 3,
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
@@ -303,8 +290,12 @@ class CartPageState extends State<CartPage> with SingleTickerProviderStateMixin 
                       child: FlatButton(
                         color: Color.fromARGB(255, 247, 131, 6),
                         onPressed: (){    
+                           Navigator.push(
+                            context,
+                            DefaultPageRoute(builder: (context) => PaymentPage()),
+                          );
                         },
-                        child: Text('PROCESS ORDER',
+                        child: Text(Localization.word('PROCESS ORDER'),
                           style: TextStyle(
                             color: Colors.white
                           ),

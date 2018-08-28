@@ -6,6 +6,7 @@ import '../widgets/cart_widget.dart';
 import '../routes/default_page_route.dart';
 
 import '../../helpers/api/main_api.dart';
+import '../../helpers/view/localization.dart';
 
 import '../../models/storage/cart.dart';
 import '../../models/api/restaurant.dart';
@@ -36,6 +37,10 @@ class RestaurantPageState  extends State<RestaurantPage> {
         }     
       );
     }
+    setState(
+      () {
+      }
+    );
   }
 
   @override
@@ -52,7 +57,6 @@ class RestaurantPageState  extends State<RestaurantPage> {
         ),
       );
     }
-
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -133,22 +137,74 @@ class RestaurantPageState  extends State<RestaurantPage> {
                                 ),
                               ) : Container(),
                               Padding(padding: EdgeInsets.only(top: 7.0)),
-                              Text(widget.restaurant.address,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  fontSize: 14.0,
-                                  color: Colors.grey
-                                ),  
-                              ),  
+                              Row(
+                                  children: [
+                                    Icon(Icons.location_on,
+                                      size: 18.0,
+                                      color: Color.fromARGB(160, 0, 0, 0)
+                                    ),
+                                    Padding(padding: EdgeInsets.only(right: 5.0)),
+                                    Text(widget.restaurant.address,
+                                      style: TextStyle(
+                                        color: Color.fromARGB(160, 0, 0, 0)
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
+                                    )
+                                  ],
+                              ),
+                              widget.restaurant.phone != null ? 
+                                Container(
+                                  padding: EdgeInsets.only(top: 7.0),
+                                  child: Row(
+                                    children: [
+                                      Icon(Icons.phone,
+                                        size: 18.0,
+                                        color: Color.fromARGB(160, 0, 0, 0)
+                                      ),
+                                      Padding(padding: EdgeInsets.only(right: 5.0)),
+                                      Text(widget.restaurant.phone,
+                                        style: TextStyle(
+                                          color: Color.fromARGB(160, 0, 0, 0)
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      )
+                                    ],
+                                ),
+                              ) : Container(),
+                              widget.restaurant.link != null ? 
+                                Container(
+                                  padding: EdgeInsets.only(top: 7.0),
+                                  child: Row(
+                                    children: [
+                                      Icon(Icons.web,
+                                        size: 18.0,
+                                        color: Color.fromARGB(160, 0, 0, 0)
+                                      ),
+                                      Padding(padding: EdgeInsets.only(right: 5.0)),
+                                      Text(widget.restaurant.link,
+                                        style: TextStyle(
+                                          color: Color.fromARGB(160, 0, 0, 0)
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      )
+                                    ],
+                                ),
+                              ) : Container(),
                               Padding(padding: EdgeInsets.only(top: 7.0)),
-                              Text(widget.restaurant.openNow ? 'Open till ${widget.restaurant.workingHourNow.close}' : 'Closed now',
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  fontSize: 14.0,
-                                  color: Colors.grey
-                                ),  
+                               Row(
+                                  children: [
+                                    Icon(Icons.timer,
+                                      size: 18.0,
+                                      color: Color.fromARGB(160, 0, 0, 0)
+                                    ),
+                                    Padding(padding: EdgeInsets.only(right: 5.0)),
+                                    Text(widget.restaurant.openNow ? '${Localization.word('Open till')} ${widget.restaurant.workingHourNow.close}' : Localization.word('Closed now'),
+                                      style: TextStyle(
+                                        color: Color.fromARGB(160, 0, 0, 0)
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
+                                    )
+                                  ],
                               ),  
                               Padding(padding: EdgeInsets.only(top: 10.0)),
                               Container(
@@ -157,7 +213,7 @@ class RestaurantPageState  extends State<RestaurantPage> {
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
                                     fontSize: 14.0,
-                                    color: Colors.grey
+                                    color: Color.fromARGB(160, 0, 0, 0)
                                   ),  
                                 ),    
                               ),     
@@ -165,7 +221,7 @@ class RestaurantPageState  extends State<RestaurantPage> {
                               InkWell(
                                 onTap: (){
                                 },
-                                child: Text('Show more',),
+                                child: Text(Localization.word('Show more')),
                               )
                             ],
                           ),
@@ -187,7 +243,7 @@ class RestaurantPageState  extends State<RestaurantPage> {
                 return Container(
                   margin: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.04),
                   alignment: Alignment.topLeft,
-                  child: Text('Menu',
+                  child: Text(Localization.word('Menu'),
                     style: TextStyle(
                       fontSize: 18.0,
                     ),
@@ -210,7 +266,7 @@ class RestaurantPageState  extends State<RestaurantPage> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      DefaultPageRoute(builder: (context) => MenuPage(widget.restaurant.menuCategories[index].menuItems)),
+                      DefaultPageRoute(builder: (context) => MenuPage(restaurant: widget.restaurant, list: widget.restaurant.menuCategories[index].menuItems)),
                     );
                   },
                   child: Card(                 
@@ -245,7 +301,7 @@ class RestaurantPageState  extends State<RestaurantPage> {
                                   ),  
                                 ), 
                                 Padding(padding: EdgeInsets.only(left: 2.0)),
-                                Text('${widget.restaurant.menuCategories[index].menuItems.length} items',
+                                Text('${widget.restaurant.menuCategories[index].menuItems.length} ${Localization.word('items')}',
                                   maxLines: 1,
                                   textAlign: TextAlign.left,
                                   style: TextStyle(

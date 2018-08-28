@@ -14,7 +14,8 @@ dependencies:
   haversine: ^1.0.2
   validator: ">=0.0.4 <0.1.0"
   path_provider: ^0.4.1
-
+  synchronized: ^1.5.1+1
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter

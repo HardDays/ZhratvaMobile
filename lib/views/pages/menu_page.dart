@@ -5,22 +5,24 @@ import '../widgets/cart_widget.dart';
 
 import '../routes/default_page_route.dart';
 
+import '../../models/api/restaurant.dart';
 import '../../models/api/menu_item.dart';
 
+import '../../helpers/view/localization.dart';
 
 class MenuPage extends StatelessWidget {
 
-  List <MenuItem> _list = [];
+  Restaurant restaurant;
+  List <MenuItem> list;
 
-  MenuPage(List<MenuItem> list){
-    _list = list;
+  MenuPage({this.restaurant, this.list}){
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Menu',
+        title: Text(Localization.word('Menu'),
           style: TextStyle(
             color: Colors.white
           ),
@@ -37,8 +39,15 @@ class MenuPage extends StatelessWidget {
       body: GridView.count(
         crossAxisCount: 2,
         childAspectRatio: 0.85,
-        children: List.generate(_list.length, (index) {
-          return Container(
+        children: List.generate(list.length, (index) {
+          return GestureDetector(
+              onTap: (){
+                Navigator.push(
+                  context,
+                  DefaultPageRoute(builder: (context) => MenuItemPage(item: list[index], restaurant: restaurant,)),
+                );
+              },
+            child: Container(
             margin: EdgeInsets.all(5.0),
             child: Stack(
               alignment: Alignment.topCenter,
@@ -59,13 +68,13 @@ class MenuPage extends StatelessWidget {
                             decoration: BoxDecoration(
                             shape: BoxShape.circle,
                               image: DecorationImage(
-                                image: NetworkImage(_list[index].cover()),
+                                image: NetworkImage(list[index].cover()),
                                 fit: BoxFit.cover,
                               ),
                             ),
                           ),
                           Padding(padding: EdgeInsets.only(top: 3.0)),
-                          Text(_list[index].name,
+                          Text(list[index].name,
                             maxLines: 1,
                             textAlign: TextAlign.center,
                             style: TextStyle(
@@ -74,12 +83,12 @@ class MenuPage extends StatelessWidget {
                             ),
                           ),
                           Padding(padding: EdgeInsets.only(top: 3.0)),
-                          Text('${_list[index].price} р',
+                          Text('${list[index].price} ${Localization.word(list[index].currency)}',
                             maxLines: 1,
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 18.0,
-                              color: Colors.black
+                              color: Color.fromARGB(255, 247, 131, 6),
                             ),
                           ),
                         ]
@@ -94,18 +103,20 @@ class MenuPage extends StatelessWidget {
                     onPressed: (){
                       Navigator.push(
                         context,
-                        DefaultPageRoute(builder: (context) => MenuItemPage(item: _list[index])),
+                        DefaultPageRoute(builder: (context) => MenuItemPage(item: list[index], restaurant: restaurant,)),
                       );
                     },
-                    child: Text('Buy',
+                    child: Text(Localization.word('BUY'),
                       style: TextStyle(
-                        color: Colors.white
+                        color: Colors.white,
+                        fontSize: 13.0
                       ),
                     ),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0))
                   ),
                 ),
               ]
+            )
             )
           );
         }),
