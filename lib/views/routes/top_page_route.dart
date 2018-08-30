@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class MenuPageRoute<T> extends MaterialPageRoute<T> {
-  MenuPageRoute({ WidgetBuilder builder, RouteSettings settings })
+class TopPageRoute<T> extends MaterialPageRoute<T> {
+  TopPageRoute({ WidgetBuilder builder, RouteSettings settings })
       : super(builder: builder, settings: settings);
 
   @override

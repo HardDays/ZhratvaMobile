@@ -216,9 +216,11 @@ class PaymentPageState extends State<PaymentPage> with SingleTickerProviderState
       });
       MainAPI.createOrder(order).then(
         (res){
-          setState(() {
-            loading = false;     
-          });
+          setState(
+            () {
+              loading = false;     
+            }
+          );
           if (res == null){
             showDialog(context: context, 
               child: AlertDialog(

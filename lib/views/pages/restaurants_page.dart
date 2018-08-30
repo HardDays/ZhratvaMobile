@@ -2,8 +2,13 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import 'restaurant_page.dart';
+import 'restaurants_filters_page.dart';
+import 'main_page.dart';
 
 import '../routes/default_page_route.dart';
+import '../routes/left_page_route.dart';
+import '../routes/no_animation_route.dart';
+
 import '../widgets/cart_widget.dart';
 
 import '../../helpers/util/geolocation_cache.dart';
@@ -17,9 +22,7 @@ import '../../models/storage/cache.dart';
 
 class RestaurantsPage extends StatefulWidget {
 
-  BuildContext parentContext;
-
-  RestaurantsPage({this.parentContext}){
+  RestaurantsPage(){
   }
 
   @override
@@ -73,7 +76,7 @@ class RestaurantsPageState extends State<RestaurantsPage> with AutomaticKeepAliv
   }
 
   @override 
-  Widget build(BuildContext context) {
+  Widget build(BuildContext ctx) {
     if (Cache.restaurants == null){
       return MaterialApp(
         home: Scaffold(
@@ -82,7 +85,7 @@ class RestaurantsPageState extends State<RestaurantsPage> with AutomaticKeepAliv
             title: Text(Localization.word('Restaurants')),
             backgroundColor: Color.fromARGB(255, 247, 131, 6),
             actions: [
-              CartWidget(parentContext: widget.parentContext)
+              CartWidget()
             ]       
           ),
           body: Center(
@@ -98,8 +101,26 @@ class RestaurantsPageState extends State<RestaurantsPage> with AutomaticKeepAliv
           centerTitle: true,
           title: Text(Localization.word('Restaurants')),
           backgroundColor: Color.fromARGB(255, 247, 131, 6),
+          leading: IconButton(
+            icon: Icon(Icons.filter_list),
+            onPressed: () {          
+              Navigator.push(
+                context,
+                LeftPageRoute(builder: (context) => RestaurantsFiltersPage()),
+              );
+            },
+          ),
           actions: [
-            CartWidget(parentContext: widget.parentContext)
+            IconButton(
+              icon: Icon(Icons.location_on,),
+              onPressed: () {          
+                Navigator.pushReplacement(
+                  context,
+                  NoAnimationPageRoute(builder: (context) => MainPage(showMap: true)),
+                );
+              },
+            ),
+            CartWidget(parentContext: this.context)
           ]       
         ),
         body: RefreshIndicator(
@@ -108,8 +129,8 @@ class RestaurantsPageState extends State<RestaurantsPage> with AutomaticKeepAliv
           color: Color.fromARGB(255, 247, 131, 6),
           child: ListView.builder(
           itemCount: Cache.restaurants.length,
-          itemBuilder: (context, index) {
-            return  Container(
+          itemBuilder: (ctx, index) {
+            return Container(
               child: Card(
                 margin: const EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
                 child: Container(
@@ -124,7 +145,7 @@ class RestaurantsPageState extends State<RestaurantsPage> with AutomaticKeepAliv
                           GestureDetector(
                             onTap: (){
                               Navigator.push(
-                                widget.parentContext,
+                                this.context,
                                 DefaultPageRoute(builder: (context) => RestaurantPage(restaurant: Cache.restaurants[index])),
                               );
                             },

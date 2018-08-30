@@ -13,9 +13,9 @@ import '../../models/storage/cache.dart';
 import '../../models/storage/database.dart';
 
 class ProfilePage extends StatefulWidget {
-  BuildContext parentContext;
+  //BuildContext parentContext;
 
-  ProfilePage({this.parentContext});
+  //ProfilePage({this.parentContext});
 
   @override
   ProfilePageState createState() => new ProfilePageState();
@@ -70,7 +70,7 @@ class ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin 
                 onSelected: (value){
                   if (value == 0){
                     Navigator.push(
-                      widget.parentContext, 
+                      context, 
                       DefaultPageRoute(builder: (ctx) => OrderHistoryPage())
                     );
                   } else if (value == 1){

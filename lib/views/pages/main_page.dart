@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'restaurants_page.dart';
+import 'restaurants_map_page.dart';
 import 'profile_page.dart';
 import 'current_orders_page.dart';
 
@@ -10,9 +11,9 @@ import '../../helpers/view/localization.dart';
 
 class MainPage extends StatefulWidget {
   int index = 1;
+  bool showMap;
 
-  MainPage({this.index}){
-
+  MainPage({this.index, this.showMap = false}){
   }
 
   @override
@@ -66,7 +67,7 @@ class MainPageState extends State<MainPage> with SingleTickerProviderStateMixin 
     return Scaffold(
       body: TabBarView(
         physics: NeverScrollableScrollPhysics(),
-        children: [CurrentOrdersPage(parentContext: context), RestaurantsPage(parentContext: context), ProfilePage(parentContext: context)],
+        children: [CurrentOrdersPage(), widget.showMap ? RestaurantsMapPage() : RestaurantsPage(), ProfilePage()],
         controller: controller,
       ),
       bottomNavigationBar: Material(

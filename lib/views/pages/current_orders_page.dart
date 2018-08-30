@@ -18,10 +18,9 @@ import '../../models/storage/cache.dart';
 
 class CurrentOrdersPage extends StatefulWidget {
   
-  BuildContext parentContext;
+  //BuildContext parentContext;
 
-  CurrentOrdersPage({this.parentContext}){
-  }
+  //CurrentOrdersPage({this.parentContext}){}
 
   @override
   CurrentOrdersPageState createState() => CurrentOrdersPageState();

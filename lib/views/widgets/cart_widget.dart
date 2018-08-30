@@ -6,7 +6,7 @@ import '../../helpers/view/localization.dart';
 
 import '../pages/cart_page.dart';
 
-import '../routes/menu_page_route.dart';
+import '../routes/top_page_route.dart';
 
 class CartWidget extends StatefulWidget {
 
@@ -42,7 +42,7 @@ class CartWidgetState extends State<CartWidget> with SingleTickerProviderStateMi
     }else{
       Navigator.push(
         ctx,
-        MenuPageRoute(builder: (ctx) => CartPage()),
+        TopPageRoute(builder: (ctx) => CartPage()),
       );
     }
   }
