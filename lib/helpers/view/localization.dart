@@ -92,7 +92,7 @@ class Localization {
       'WITH ME': 'С СОБОЙ',
       'ON PLACE': 'НА МЕСТЕ',
       'People count': 'Количесто человек',
-
+      'Map': 'Карта'
     }
   };
 

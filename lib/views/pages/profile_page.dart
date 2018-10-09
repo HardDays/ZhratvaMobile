@@ -274,7 +274,7 @@ class ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin 
                                                 width: MediaQuery.of(context).size.width * 0.4,
                                                 child: Column(
                                                   children: [   
-                                                    Text('${Cache.statistics[index].moneySpent.toStringAsFixed(1)}',
+                                                    Text('${Cache.statistics[index].moneySpent.toStringAsFixed(1)} ' + Localization.word('RUB'),
                                                       style: TextStyle(
                                                         fontSize: 25.0,
                                                         color: Color.fromARGB(255, 247, 131, 6),
@@ -293,7 +293,7 @@ class ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin 
                                                 width: MediaQuery.of(context).size.width * 0.4,
                                                 child: Column(
                                                   children: [   
-                                                    Text('${Cache.statistics[index].moneySaved.toStringAsFixed(1)}',
+                                                    Text('${Cache.statistics[index].moneySaved.toStringAsFixed(1)} ' + Localization.word('RUB'),
                                                       style: TextStyle(
                                                         fontSize: 25.0,
                                                         color: Color.fromARGB(255, 247, 131, 6),

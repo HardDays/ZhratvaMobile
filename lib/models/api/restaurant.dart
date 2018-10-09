@@ -1,5 +1,6 @@
 import 'package:intl/intl.dart';
-import 'package:haversine/haversine.dart';
+import 'package:latlong/latlong.dart' as ln;
+import 'package:geo/geo.dart' as geo;
 
 import 'menu_category.dart';
 import 'working_hour.dart';
@@ -35,8 +36,6 @@ class Restaurant{
 
   Restaurant({this.id, this.name, this.distance, this.openNow, this.coverId, this.address, this.lat, this.lng, this.hours, this.link, this.phone, this.workingHours, this.description, this.currency, this.rating, this.menuCategories}){
     openNow = isOpenNow();
-    distance = calcDistance();
-    travelTime = calcTravelTime();
     cover = getCover();
     workingHourNow = findWorkingHourNow();
   }
@@ -47,16 +46,15 @@ class Restaurant{
     return workingHours.any((w) => (w.day == day && w.open.compareTo(time) < 0 && w.close.compareTo(time) > 0));
   }
 
-  double calcDistance(){
-    var loc = GeolocationCache.lastLocation();
+  double calcDistance(ln.LatLng loc){
     if (loc != null && lat != null && lng != null){
-      var dist = Haversine.fromDegrees(latitude1: loc.latitude, longitude1: loc.longitude, latitude2: lat, longitude2: lng);
-      return dist.distance();
+      var dist = geo.computeDistanceBetween(geo.LatLng(loc.latitude, loc.longitude), geo.LatLng(lat, lng)); // .fromDegrees(latitude1: loc.latitude, longitude1: loc.longitude, latitude2: lat, longitude2: lng);
+      return dist;
     }
   }
 
-  Duration calcTravelTime(){
-    var dist = calcDistance();
+  Duration calcTravelTime(ln.LatLng loc){
+    var dist = calcDistance(loc);
     if (dist != null){
       return Duration(seconds: dist ~/ 1.3);
     }

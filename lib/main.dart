@@ -30,7 +30,6 @@ class AppState extends State<App> {
   void initState() {
     super.initState();
     
-    GeolocationCache.init();
     Database.init().then(
       (v){
         var user = Database.getCurrentUser();

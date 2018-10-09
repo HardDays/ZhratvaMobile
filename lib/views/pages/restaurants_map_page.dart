@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map/plugin_api.dart';
 import 'package:latlong/latlong.dart';
+import 'package:geolocator/geolocator.dart';
 
 import 'main_page.dart';
 import 'restaurant_page.dart';
@@ -31,14 +32,25 @@ class RestaurantsMapPage extends StatefulWidget {
 class RestaurantsMapPageState  extends State<RestaurantsMapPage> {
   MapController mapController;
 
+  LatLng lastLocation;
+
   @override
   void initState() {
     super.initState();
-     setState(
-      () {
-        mapController = MapController();
-      }
-    );
+    mapController = MapController();
+
+    mapController.onReady.then((val){
+      Geolocator().getCurrentPosition().timeout(Duration(seconds: 5)).then(
+        (p){
+          if (p != null){
+            setState(() {
+              lastLocation = LatLng(p.latitude, p.longitude);
+              mapController.move(lastLocation, mapController.zoom);
+            });
+          }
+        }
+      );
+    });
   }
   
   void onMarker(int index){
@@ -57,145 +69,133 @@ class RestaurantsMapPageState  extends State<RestaurantsMapPage> {
           left: MediaQuery.of(context).size.width * 0.07
         ),
         child: Card(
-                child: Container(
-                  margin: const EdgeInsets.only(top: 5.0, left: 5.0, right: 5.0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          GestureDetector(
-                            onTap: (){
-                              Navigator.push(
-                                this.context,
-                                DefaultPageRoute(builder: (context) => RestaurantPage(restaurant: Cache.restaurants[index])),
-                              );
-                            },
-                            child: Container(  
-                              width: MediaQuery.of(context).size.width * 0.86 - 20.0,
-                              height: MediaQuery.of(context).size.height * 0.25,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.all(Radius.circular(10.0)),   
-                                image: DecorationImage(
-                                  image: NetworkImage(Cache.restaurants[index].cover),
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
+          child: Container(
+            margin: const EdgeInsets.only(top: 5.0, left: 5.0, right: 5.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    GestureDetector(
+                      onTap: (){
+                        Navigator.push(
+                          this.context,
+                          DefaultPageRoute(builder: (context) => RestaurantPage(restaurant: Cache.restaurants[index])),
+                        );
+                      },
+                      child: Container(  
+                        width: MediaQuery.of(context).size.width * 0.86 - 20.0,
+                        height: MediaQuery.of(context).size.height * 0.25,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),   
+                          image: DecorationImage(
+                            image: NetworkImage(Cache.restaurants[index].cover),
+                            fit: BoxFit.cover,
                           ),
-                        ],
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(top: 5.0, left: 3.0),
-                        width: MediaQuery.of(context).size.width * 1.0,
-                        child: Text(Cache.restaurants[index].name,
-                          maxLines: 1,
-                          style: TextStyle(
-                            fontSize: 20.0,
-                            color: Colors.black
-                          ),
-                          overflow: TextOverflow.clip,
                         ),
                       ),
-                      Row(
+                    ),
+                  ],
+                ),
+                Container(
+                  margin: const EdgeInsets.only(top: 5.0, left: 3.0),
+                  width: MediaQuery.of(context).size.width * 1.0,
+                  child: Text(Cache.restaurants[index].name,
+                    maxLines: 1,
+                    style: TextStyle(
+                      fontSize: 20.0,
+                      color: Colors.black
+                    ),
+                    overflow: TextOverflow.clip,
+                  ),
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.only(top: 10.0),
+                      width: MediaQuery.of(context).size.width * 0.5,
+                      child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Container(
-                            margin: const EdgeInsets.only(top: 10.0),
-                            width: MediaQuery.of(context).size.width * 0.5,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    Icon(Icons.location_on,
-                                      size: 18.0,
-                                      color: Color.fromARGB(160, 0, 0, 0)
-                                    ),
-                                    Padding(padding: EdgeInsets.only(right: 5.0)),
-                                    Container(
-                                      width: MediaQuery.of(context).size.width * 0.5 - 40.0,
-                                      child: Text(Cache.restaurants[index].address,
-                                        style: TextStyle(
-                                          color: Color.fromARGB(160, 0, 0, 0)
-                                        ),
-                                        overflow: TextOverflow.ellipsis,
-                                      )
-                                    )
-                                  ],
-                                ),
-                                Padding(padding: EdgeInsets.only(bottom: 3.0),),
-                                Row(
-                                  children: [
-                                    Icon(Icons.timer,
-                                      size: 18.0,
-                                      color: Cache.restaurants[index].openNow ? Color.fromARGB(128, 0, 163, 24) : Color.fromARGB(128, 181, 42, 42)
-                                    ),
-                                    Padding(padding: EdgeInsets.only(right: 5.0)),
-                                    Text(Cache.restaurants[index].openNow ? Localization.word('Open now') : Localization.word('Closed now'),
-                                      style: TextStyle(
-                                        fontSize: 14.0,
-                                        color: Cache.restaurants[index].openNow ? Color.fromARGB(128, 0, 163, 24) : Color.fromARGB(128, 181, 42, 42)
-                                      ),
-                                      overflow: TextOverflow.clip,
-                                    ),
-                                  ],
-                                ),       
-                                Padding(padding: EdgeInsets.only(bottom: 10.0),)
-                              ],
-                            ),
-                          ),
-                          Container(
-                            margin: const EdgeInsets.only(top: 10.0),
-                            width: MediaQuery.of(context).size.width * 0.25,
-                            alignment: Alignment.center,
-                            height: 36.0,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.all(Radius.circular(10.0)), 
-                              border: Border.all(
-                                color: Colors.grey
-                              )
-                            ),
-                            child: Container(
-                              margin: const EdgeInsets.only(top: 0.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [                             
-                                  Text(Cache.restaurants[index].distance != null ? Formatter.distance(Cache.restaurants[index].distance.floor()) : Localization.word('Far away'),
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: Colors.grey,
-                                      fontSize: 16.0
-                                    ),
-                                  ),
-                                ]
+                          Row(
+                            children: [
+                              Icon(Icons.location_on,
+                                size: 18.0,
+                                color: Color.fromARGB(160, 0, 0, 0)
                               ),
-                            ),
+                              Padding(padding: EdgeInsets.only(right: 5.0)),
+                              Container(
+                                width: MediaQuery.of(context).size.width * 0.5 - 40.0,
+                                child: Text(Cache.restaurants[index].address,
+                                  style: TextStyle(
+                                    color: Color.fromARGB(160, 0, 0, 0)
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                )
+                              )
+                            ],
                           ),
+                          Padding(padding: EdgeInsets.only(bottom: 3.0),),
+                          Row(
+                            children: [
+                              Icon(Icons.timer,
+                                size: 18.0,
+                                color: Cache.restaurants[index].openNow ? Color.fromARGB(128, 0, 163, 24) : Color.fromARGB(128, 181, 42, 42)
+                              ),
+                              Padding(padding: EdgeInsets.only(right: 5.0)),
+                              Text(Cache.restaurants[index].openNow ? Localization.word('Open now') : Localization.word('Closed now'),
+                                style: TextStyle(
+                                  fontSize: 14.0,
+                                  color: Cache.restaurants[index].openNow ? Color.fromARGB(128, 0, 163, 24) : Color.fromARGB(128, 181, 42, 42)
+                                ),
+                                overflow: TextOverflow.clip,
+                              ),
+                            ],
+                          ),       
+                          Padding(padding: EdgeInsets.only(bottom: 10.0),)
                         ],
                       ),
-                    ],
-                  ),
-                )
-              )
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(top: 10.0),
+                      width: MediaQuery.of(context).size.width * 0.25,
+                      alignment: Alignment.center,
+                      height: 36.0,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)), 
+                        border: Border.all(
+                          color: Colors.grey
+                        )
+                      ),
+                      child: Container(
+                        margin: const EdgeInsets.only(top: 0.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [                             
+                            Text(Cache.restaurants[index].distance != null ? Formatter.distance(Cache.restaurants[index].distance.floor()) : Localization.word('Far away'),
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 16.0
+                              ),
+                            ),
+                          ]
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],  
             ),
+          )
+        )
+      ),
     );
-  }
-
-  LatLng getCenter(){
-    LatLng location = LatLng(55.8, 49.15);
-    if (GeolocationCache.lastLocation() != null){
-      location = LatLng(GeolocationCache.lastLocation().latitude, GeolocationCache.lastLocation().longitude);
-    } else {
-      if (Cache.restaurants != null && Cache.restaurants.isNotEmpty){
-        location = LatLng(Cache.restaurants[0].lat, Cache.restaurants[0].lng);
-      }
-    }
-    return location;
   }
 
   @override
@@ -203,7 +203,7 @@ class RestaurantsMapPageState  extends State<RestaurantsMapPage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('Mapa',
+        title: Text(Localization.word('Map'),
           style: TextStyle(
             color: Colors.white
           ),
@@ -213,16 +213,6 @@ class RestaurantsMapPageState  extends State<RestaurantsMapPage> {
         ),
         backgroundColor: Color.fromARGB(255, 247, 131, 6),
         leading: IconButton(
-          icon: Icon(Icons.filter_list),
-          onPressed: () {          
-            Navigator.push(
-              context,
-              LeftPageRoute(builder: (context) => RestaurantsFiltersPage()),
-            );
-          },
-        ),
-        actions: [
-          IconButton(
             icon: Icon(Icons.list, size: 30.0),
             onPressed: () {          
               Navigator.pushReplacement(
@@ -230,7 +220,16 @@ class RestaurantsMapPageState  extends State<RestaurantsMapPage> {
                 NoAnimationPageRoute(builder: (context) => MainPage(showMap: false)),
               );
             },
-          ),
+          ),/*IconButton(
+          icon: Icon(Icons.filter_list),
+          onPressed: () {          
+            Navigator.push(
+              context,
+              LeftPageRoute(builder: (context) => RestaurantsFiltersPage()),
+            );
+          },
+        ),*/
+        actions: [
           CartWidget()
         ]       
       ),
@@ -240,7 +239,7 @@ class RestaurantsMapPageState  extends State<RestaurantsMapPage> {
             FlutterMap(
               mapController: mapController,
               options: MapOptions(
-                center: getCenter(),
+                center: LatLng(55.8, 49.15),
                 zoom: 12.0,
               ),
               layers: [
@@ -273,66 +272,98 @@ class RestaurantsMapPageState  extends State<RestaurantsMapPage> {
                         ),
                       );
                     }
-                  )   
+                  )..add(
+                    lastLocation != null ? Marker(
+                    width: 15.0, 
+                    height: 15.0,
+                    point: lastLocation,
+                    builder: (ctx) => 
+                      Container(
+                        width: 25.0,
+                        height: 25.0,
+                        decoration: BoxDecoration(
+                          color: Colors.blueAccent.withAlpha(200),
+                          shape: BoxShape.circle
+                        ),
+                      )
+                    ): Marker(point: LatLng(0.0, 0.0))
+                  )  
                 ),
               ],
             ),
-            Container(
-              alignment: Alignment.centerRight,
-              padding: EdgeInsets.only(right: 5.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    decoration:  BoxDecoration(
-                       shape: BoxShape.circle,
-                       color: Color.fromARGB(170, 255, 255, 255),
+              Container(
+                alignment: Alignment.centerRight,
+                padding: EdgeInsets.only(right: 5.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 40.0,
+                      height: 40.0,
+                      decoration:  BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Color.fromARGB(170, 255, 255, 255),
+                      ),
+                      child: IconButton(
+                        iconSize: 20.0,
+                        icon: Icon(Icons.zoom_in),
+                        color: Color.fromARGB(160, 0, 0, 0),
+                        onPressed: () {
+                          setState(() {
+                            mapController.move(mapController.center, mapController.zoom + 1);             
+                          });
+                        },
+                      )
                     ),
-                    child: IconButton(
-                      icon: Icon(Icons.zoom_in),
-                      color: Color.fromARGB(160, 0, 0, 0),
-                      onPressed: () {
-                        setState(() {
-                          mapController.move(mapController.center, mapController.zoom + 1);             
-                        });
-                      },
-                    )
-                  ),
-                  Padding(padding: EdgeInsets.only(top: 5.0)),
-                  Container(
-                    decoration:  BoxDecoration(
-                       shape: BoxShape.circle,
-                       color: Color.fromARGB(170, 255, 255, 255),
+                    Padding(padding: EdgeInsets.only(top: 5.0)),
+                    Container(
+                      width: 40.0,
+                      height: 40.0,
+                      decoration:  BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Color.fromARGB(170, 255, 255, 255),
+                      ),
+                      child: IconButton(
+                        iconSize: 20.0,
+                        icon: Icon(Icons.zoom_out),
+                        color: Color.fromARGB(160, 0, 0, 0),
+                        onPressed: () {
+                          setState(() {
+                            mapController.move(mapController.center, mapController.zoom - 1);             
+                          });
+                        },
+                      )
                     ),
-                    child: IconButton(
-                      icon: Icon(Icons.zoom_out),
-                      color: Color.fromARGB(160, 0, 0, 0),
-                      onPressed: () {
-                        setState(() {
-                          mapController.move(mapController.center, mapController.zoom - 1);             
-                        });
-                      },
+                    Padding(padding: EdgeInsets.only(top: 5.0)),
+                    Container(
+                      width: 40.0,
+                      height: 40.0,
+                      decoration:  BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Color.fromARGB(170, 255, 255, 255),
+                      ),
+                      child: IconButton(
+                        iconSize: 20.0,
+                        icon: Icon(Icons.center_focus_strong),
+                        color: Color.fromARGB(160, 0, 0, 0),
+                        onPressed: () {
+                             Geolocator().getCurrentPosition().timeout(Duration(seconds: 5)).then(
+                              (p){
+                                if (p != null){
+                                  setState(() {
+                                    lastLocation = LatLng(p.latitude, p.longitude);
+                                    mapController.move(lastLocation, mapController.zoom);
+                                  }
+                                );
+                              }
+                            }
+                          );  
+                        },
+                      )
                     )
-                  ),
-                  Padding(padding: EdgeInsets.only(top: 5.0)),
-                  Container(
-                    decoration:  BoxDecoration(
-                       shape: BoxShape.circle,
-                       color: Color.fromARGB(170, 255, 255, 255),
-                    ),
-                    child: IconButton(
-                      icon: Icon(Icons.center_focus_strong),
-                      color: Color.fromARGB(160, 0, 0, 0),
-                      onPressed: () {
-                        setState(() {
-                          mapController.move(getCenter(), mapController.zoom);             
-                        });
-                      },
-                    )
-                  )
-                ]
+                  ]
+                )
               )
-            )
           ]
         )
       )

@@ -33,7 +33,7 @@ class CartWidgetState extends State<CartWidget> with SingleTickerProviderStateMi
             FlatButton(
               child: Text(Localization.word('OK')),
               onPressed: () {  
-                Navigator.pop(context);             
+                Navigator.pop(ctx);
               }
             ),
           ],

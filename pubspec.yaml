@@ -10,12 +10,11 @@ dependencies:
   cupertino_icons: ^0.1.2
   http: ^0.11.3+16
   intl: ^0.15.7
-  geolocation: ^0.2.1
-  haversine: ^1.0.2
-  validator: ">=0.0.4 <0.1.0"
+  geolocator: ^2.0.0
   path_provider: ^0.4.1
   synchronized: ^1.5.1+1
-  flutter_map: ^0.0.1
+  flutter_map: any
+  geo: ^0.2.0
 
   
 dev_dependencies:

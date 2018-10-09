@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:validator/validator.dart';
 
 import 'main_page.dart';
 
@@ -167,7 +166,7 @@ class LoginPageState extends State<LoginPage> {
                                 email = val;
                               },
                               validator: (val) {
-                                if (!isEmail(val)){
+                                if (!RegExp(r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(val)){
                                   return Localization.word('Not a valid email');
                                 }                               
                               },                              

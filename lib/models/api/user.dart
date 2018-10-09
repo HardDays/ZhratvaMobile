@@ -1,5 +1,4 @@
 import 'package:intl/intl.dart';
-import 'package:haversine/haversine.dart';
 
 import 'menu_category.dart';
 import 'working_hour.dart';

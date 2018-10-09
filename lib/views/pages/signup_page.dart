@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:validator/validator.dart';
 
 import 'main_page.dart';
 
@@ -68,6 +67,7 @@ class SignupPageState extends State<SignupPage> {
       MainAPI.createUser(user).then(
         (res){
           if (res != null){
+            MainAPI.token = user.token;
             Database.setCurrentUser(res);
             Cache.flush();
             Cache.currentUser = res;
@@ -285,7 +285,7 @@ class SignupPageState extends State<SignupPage> {
                                 ),
                               ),
                               validator: (val) {
-                                if (!isEmail(val)){
+                                if (!RegExp(r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(val)){
                                   return Localization.word('Not a valid email');
                                 }                               
                               },                              
@@ -328,7 +328,7 @@ class SignupPageState extends State<SignupPage> {
                                 fontSize: 20.0
                               ),
                               validator: (val) {
-                                if (val.length < 7){
+                                if (val.length <= 7){
                                   return Localization.word('Pasword too short');
                                 }                               
                               },  

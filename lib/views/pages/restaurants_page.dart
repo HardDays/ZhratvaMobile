@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 
 import 'restaurant_page.dart';
 import 'restaurants_filters_page.dart';
@@ -33,33 +34,42 @@ class RestaurantsPageState extends State<RestaurantsPage> with AutomaticKeepAliv
   GlobalKey<RefreshIndicatorState> refreshIndicatorKey = new GlobalKey<RefreshIndicatorState>();
 
   Future<Null> loadRestaurants(){
-    var loc = GeolocationCache.lastLocation();
-    return MainAPI.getRestaurants(DateTime.now(), loc?.latitude, loc?.longitude).then(
-      (res){
-        setState(
-          () {
-            Cache.restaurants = res;          
-            /*
-            double maxDist = 20000.0;
-            Cache.restaurants.sort((first, second) => (first.distance ?? maxDist).compareTo(second.distance ?? maxDist));
-            Cache.restaurants.sort(
-              (first, second) {
-                if ((first.distance ?? maxDist) <= maxDist && (second.distance ?? maxDist) <= maxDist){
-                  if (first.openNow){
-                    return -1;
-                  }else if (second.openNow){
-                    return 1;
-                  }else {
-                    return 0;
-                  }
-                }else{
-                  return 0;
+    Geolocator().getCurrentPosition().timeout(Duration(seconds: 3), 
+      onTimeout: (){
+          return MainAPI.getRestaurants(DateTime.now()).then(
+            (res){
+              setState(
+                () {
+                  Cache.restaurants = res;          
                 }
-              }
-            );*/
-          }
-        );        
-      }     
+              );        
+            }     
+          );
+        }
+      ).then(
+      (p){
+        if (p != null){
+          return MainAPI.getRestaurants(DateTime.now(), p.latitude, p.longitude).then(
+            (res){
+              setState(
+                () {
+                  Cache.restaurants = res;          
+                }
+              );        
+            }     
+          );
+        } else {
+          return MainAPI.getRestaurants(DateTime.now()).then(
+            (res){
+              setState(
+                () {
+                  Cache.restaurants = res;          
+                }
+              );        
+            }     
+          );
+        }
+      }
     );
   }
 
@@ -102,16 +112,6 @@ class RestaurantsPageState extends State<RestaurantsPage> with AutomaticKeepAliv
           title: Text(Localization.word('Restaurants')),
           backgroundColor: Color.fromARGB(255, 247, 131, 6),
           leading: IconButton(
-            icon: Icon(Icons.filter_list),
-            onPressed: () {          
-              Navigator.push(
-                context,
-                LeftPageRoute(builder: (context) => RestaurantsFiltersPage()),
-              );
-            },
-          ),
-          actions: [
-            IconButton(
               icon: Icon(Icons.location_on,),
               onPressed: () {          
                 Navigator.pushReplacement(
@@ -119,7 +119,25 @@ class RestaurantsPageState extends State<RestaurantsPage> with AutomaticKeepAliv
                   NoAnimationPageRoute(builder: (context) => MainPage(showMap: true)),
                 );
               },
-            ),
+            ), /*IconButton(
+            icon: Icon(Icons.filter_list),
+            onPressed: () {          
+              Navigator.push(
+                context,
+                LeftPageRoute(builder: (context) => RestaurantsFiltersPage()),
+              );
+            },
+          ),*/
+          actions: [
+           /* IconButton(
+              icon: Icon(Icons.location_on,),
+              onPressed: () {          
+                Navigator.pushReplacement(
+                  context,
+                  NoAnimationPageRoute(builder: (context) => MainPage(showMap: true)),
+                );
+              },
+            ),*/
             CartWidget(parentContext: this.context)
           ]       
         ),
