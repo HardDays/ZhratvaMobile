@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'menu_item_page.dart';
 
-import '../widgets/cart_widget.dart';
+import '../../../widgets/cart_widget.dart';
 
-import '../routes/default_page_route.dart';
+import '../../../routes/default_page_route.dart';
 
-import '../../models/api/restaurant.dart';
-import '../../models/api/menu_item.dart';
+import '../../../../models/api/restaurant.dart';
+import '../../../../models/api/menu_item.dart';
 
-import '../../helpers/view/localization.dart';
+import '../../../../helpers/view/localization.dart';
 
 class MenuPage extends StatelessWidget {
 
@@ -22,7 +22,7 @@ class MenuPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(Localization.word('Menu'),
+        title: Text(Localization.titleMenu,
           style: TextStyle(
             color: Colors.white
           ),
@@ -83,7 +83,7 @@ class MenuPage extends StatelessWidget {
                             ),
                           ),
                           Padding(padding: EdgeInsets.only(top: 3.0)),
-                          Text('${list[index].price} ${Localization.word(list[index].currency)}',
+                          Text('${list[index].price} ${Localization.textRUB}',
                             maxLines: 1,
                             textAlign: TextAlign.center,
                             style: TextStyle(
@@ -106,7 +106,7 @@ class MenuPage extends StatelessWidget {
                         DefaultPageRoute(builder: (context) => MenuItemPage(item: list[index], restaurant: restaurant,)),
                       );
                     },
-                    child: Text(Localization.word('BUY'),
+                    child: Text(Localization.buttonBuy,
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 13.0

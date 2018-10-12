@@ -3,23 +3,22 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 
 import 'restaurant_page.dart';
-import 'restaurants_filters_page.dart';
-import 'main_page.dart';
+import '../main_page.dart';
 
-import '../routes/default_page_route.dart';
-import '../routes/left_page_route.dart';
-import '../routes/no_animation_route.dart';
+import '../../../routes/default_page_route.dart';
+import '../../../routes/left_page_route.dart';
+import '../../../routes/no_animation_route.dart';
 
-import '../widgets/cart_widget.dart';
+import '../../../widgets/cart_widget.dart';
 
-import '../../helpers/util/geolocation_cache.dart';
-import '../../helpers/api/main_api.dart';
-import '../../helpers/view/formatter.dart';
-import '../../helpers/view/localization.dart';
+import '../../../../helpers/util/geolocation_cache.dart';
+import '../../../../helpers/api/main_api.dart';
+import '../../../../helpers/view/formatter.dart';
+import '../../../../helpers/view/localization.dart';
 
-import '../../models/api/restaurant.dart';
-import '../../models/api/working_hour.dart';
-import '../../models/storage/cache.dart';
+import '../../../../models/api/restaurant.dart';
+import '../../../../models/api/working_hour.dart';
+import '../../../../models/storage/cache.dart';
 
 class RestaurantsPage extends StatefulWidget {
 
@@ -92,7 +91,7 @@ class RestaurantsPageState extends State<RestaurantsPage> with AutomaticKeepAliv
         home: Scaffold(
           appBar: AppBar(
             centerTitle: true,
-            title: Text(Localization.word('Restaurants')),
+            title: Text(Localization.titleRestaurants),
             backgroundColor: Color.fromARGB(255, 247, 131, 6),
             actions: [
               CartWidget()
@@ -104,12 +103,11 @@ class RestaurantsPageState extends State<RestaurantsPage> with AutomaticKeepAliv
         )
       );
     }
-
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: Text(Localization.word('Restaurants')),
+          title: Text(Localization.titleRestaurants),
           backgroundColor: Color.fromARGB(255, 247, 131, 6),
           leading: IconButton(
               icon: Icon(Icons.location_on,),
@@ -229,7 +227,7 @@ class RestaurantsPageState extends State<RestaurantsPage> with AutomaticKeepAliv
                                       color: Cache.restaurants[index].openNow ? Color.fromARGB(128, 0, 163, 24) : Color.fromARGB(128, 181, 42, 42)
                                     ),
                                     Padding(padding: EdgeInsets.only(right: 5.0)),
-                                    Text(Cache.restaurants[index].openNow ? Localization.word('Open now') : Localization.word('Closed now'),
+                                    Text(Cache.restaurants[index].openNow ? Localization.textOpen : Localization.textClosed,
                                       style: TextStyle(
                                         fontSize: 14.0,
                                         color: Cache.restaurants[index].openNow ? Color.fromARGB(128, 0, 163, 24) : Color.fromARGB(128, 181, 42, 42)
@@ -259,7 +257,7 @@ class RestaurantsPageState extends State<RestaurantsPage> with AutomaticKeepAliv
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [                             
-                                  Text(Cache.restaurants[index].distance != null ? Formatter.distance(Cache.restaurants[index].distance.floor()) : Localization.word('Far away'),
+                                  Text(Cache.restaurants[index].distance != null ? Formatter.distance(Cache.restaurants[index].distance.floor()) : Localization.textFarAway,
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       color: Colors.grey,

@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import '../../models/storage/cart.dart';
 
 import '../../helpers/view/localization.dart';
+import '../../helpers/view/dialogs.dart';
 
-import '../pages/cart_page.dart';
+import '../pages/main/common/cart_page.dart';
 
 import '../routes/top_page_route.dart';
 
@@ -25,20 +26,7 @@ class CartWidgetState extends State<CartWidget> with SingleTickerProviderStateMi
     var ctx = widget.parentContext != null ? widget.parentContext : context;
     
     if (Cart.items().isEmpty){
-      showDialog(context: ctx, 
-        child: AlertDialog(
-          title: Text(Localization.word('Empty cart')),
-          content: Text(Localization.word('Please, add some items to your cart')),
-          actions: [
-            FlatButton(
-              child: Text(Localization.word('OK')),
-              onPressed: () {  
-                Navigator.pop(ctx);
-              }
-            ),
-          ],
-        )
-      );
+      Dialogs.showMessage(ctx, Localization.textEmptyCart, Localization.textAddSomeItems, Localization.buttonOk);
     }else{
       Navigator.push(
         ctx,

@@ -16,7 +16,6 @@ dependencies:
   flutter_map: any
   geo: ^0.2.0
 
-  
 dev_dependencies:
   flutter_test:
     sdk: flutter

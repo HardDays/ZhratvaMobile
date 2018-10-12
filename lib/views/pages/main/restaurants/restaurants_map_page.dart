@@ -4,23 +4,22 @@ import 'package:flutter_map/plugin_api.dart';
 import 'package:latlong/latlong.dart';
 import 'package:geolocator/geolocator.dart';
 
-import 'main_page.dart';
+import '../main_page.dart';
 import 'restaurant_page.dart';
 import 'restaurants_filters_page.dart';
 
-import '../widgets/cart_widget.dart';
+import '../../../widgets/cart_widget.dart';
 
-import '../routes/default_page_route.dart';
-import '../routes/left_page_route.dart';
-import '../routes/no_animation_route.dart';
+import '../../../routes/default_page_route.dart';
+import '../../../routes/left_page_route.dart';
+import '../../../routes/no_animation_route.dart';
 
-import '../../helpers/util/geolocation_cache.dart';
-import '../../helpers/view/localization.dart';
-import '../../helpers/view/formatter.dart';
+import '../../../../helpers/view/localization.dart';
+import '../../../../helpers/view/formatter.dart';
 
 
-import '../../models/storage/cache.dart';
-import '../../models/api/restaurant.dart';
+import '../../../../models/storage/cache.dart';
+import '../../../../models/api/restaurant.dart';
 
 class RestaurantsMapPage extends StatefulWidget {
 
@@ -147,7 +146,7 @@ class RestaurantsMapPageState  extends State<RestaurantsMapPage> {
                                 color: Cache.restaurants[index].openNow ? Color.fromARGB(128, 0, 163, 24) : Color.fromARGB(128, 181, 42, 42)
                               ),
                               Padding(padding: EdgeInsets.only(right: 5.0)),
-                              Text(Cache.restaurants[index].openNow ? Localization.word('Open now') : Localization.word('Closed now'),
+                              Text(Cache.restaurants[index].openNow ? Localization.textOpen : Localization.textClosed,
                                 style: TextStyle(
                                   fontSize: 14.0,
                                   color: Cache.restaurants[index].openNow ? Color.fromARGB(128, 0, 163, 24) : Color.fromARGB(128, 181, 42, 42)
@@ -177,7 +176,7 @@ class RestaurantsMapPageState  extends State<RestaurantsMapPage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [                             
-                            Text(Cache.restaurants[index].distance != null ? Formatter.distance(Cache.restaurants[index].distance.floor()) : Localization.word('Far away'),
+                            Text(Cache.restaurants[index].distance != null ? Formatter.distance(Cache.restaurants[index].distance.floor()) : Localization.textFarAway,
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: Colors.grey,
@@ -203,7 +202,7 @@ class RestaurantsMapPageState  extends State<RestaurantsMapPage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text(Localization.word('Map'),
+        title: Text(Localization.titleMap,
           style: TextStyle(
             color: Colors.white
           ),

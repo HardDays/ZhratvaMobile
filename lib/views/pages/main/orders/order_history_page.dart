@@ -4,18 +4,19 @@ import 'dart:async';
 
 import 'order_page.dart';
 
-import '../routes/default_page_route.dart';
+import '../../../routes/default_page_route.dart';
 
-import '../widgets/timer_widget.dart';
+import '../../../widgets/timer_widget.dart';
 
-import '../../helpers/api/main_api.dart';
-import '../../helpers/view/formatter.dart';
-import '../../helpers/view/localization.dart';
+import '../../../../helpers/api/main_api.dart';
+import '../../../../helpers/api/consts.dart';
+import '../../../../helpers/view/formatter.dart';
+import '../../../../helpers/view/localization.dart';
 
-import '../../models/api/order.dart';
-import '../../models/api/order_menu_item.dart';
+import '../../../../models/api/order.dart';
+import '../../../../models/api/order_menu_item.dart';
 
-import '../../models/storage/cache.dart';
+import '../../../../models/storage/cache.dart';
 
 class OrderHistoryPage extends StatefulWidget {
   
@@ -92,11 +93,11 @@ class OrderHistoryPageState extends State<OrderHistoryPage> with AutomaticKeepAl
   Widget buildOrderStatus(Order order){
     String text;
     Color color;
-    if (order.orderStatus == 'no_payment'){
-      text = Localization.word('Not payed');
+    if (order.orderStatus == Consts.noPayment){
+      text = Localization.textNotPayed;
       color = Color.fromARGB(255, 227, 116, 116);
-    } else if (order.orderStatus == 'in_process' || order.orderStatus == 'finished') {
-      text = Localization.word('Finished');
+    } else if (order.orderStatus == Consts.inProcess || order.orderStatus == Consts.finished) {
+      text = Localization.textFinished;
       color = Color.fromARGB(255, 0, 150, 0);
     } 
     return Container(
@@ -126,7 +127,7 @@ class OrderHistoryPageState extends State<OrderHistoryPage> with AutomaticKeepAl
       return Scaffold(
           appBar: AppBar(
             centerTitle: true,
-            title: Text(Localization.word('Order history'),
+            title: Text(Localization.titleOrderHistory,
               style: TextStyle(color: Colors.white),
             ),
             backgroundColor: Color.fromARGB(255, 247, 131, 6),   
@@ -143,7 +144,9 @@ class OrderHistoryPageState extends State<OrderHistoryPage> with AutomaticKeepAl
       return Scaffold(
           appBar: AppBar(
             centerTitle: true,
-              title: Text(Localization.word('Order history'), style: TextStyle(color: Colors.white)),
+            title: Text(Localization.titleOrderHistory, 
+              style: TextStyle(color: Colors.white)
+            ),
             backgroundColor: Color.fromARGB(255, 247, 131, 6),     
             iconTheme: IconThemeData(
               color: Colors.white
@@ -154,7 +157,7 @@ class OrderHistoryPageState extends State<OrderHistoryPage> with AutomaticKeepAl
             key: refreshIndicatorKey,
             color: Color.fromARGB(255, 247, 131, 6),
               child:Center(
-                child: Text(Localization.word('No orders'),
+                child: Text(Localization.textNoOrders,
                   style: TextStyle(fontSize: 25.0, color: Color.fromARGB(160, 0, 0, 0)),)
               ),
             )
@@ -164,7 +167,7 @@ class OrderHistoryPageState extends State<OrderHistoryPage> with AutomaticKeepAl
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: Text(Localization.word('Order history'),
+          title: Text(Localization.titleOrderHistory,
             style: TextStyle(
               color: Colors.white
             ),
@@ -205,7 +208,7 @@ class OrderHistoryPageState extends State<OrderHistoryPage> with AutomaticKeepAl
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children:[
-                                  Text('${Localization.word('Order')} №${orders[index].id.substring(0, 8)}',
+                                  Text('${Localization.textOrder} №${orders[index].id.substring(0, 8)}',
                                     style: TextStyle(
                                       fontSize: 20.0,
                                       color: Colors.black
@@ -215,7 +218,7 @@ class OrderHistoryPageState extends State<OrderHistoryPage> with AutomaticKeepAl
                                 ]
                               ),
                               Padding(padding: EdgeInsets.only(top: 2.0)),
-                              Text('${Localization.word('Ordered at')} ${DateFormat('HH:mm dd.MM.y').format(orders[index].createdAt)}',
+                              Text('${Localization.textOrderedAt} ${DateFormat('HH:mm dd.MM.y').format(orders[index].createdAt)}',
                                 style: TextStyle(
                                   color: Colors.grey
                                 ),
@@ -265,7 +268,7 @@ class OrderHistoryPageState extends State<OrderHistoryPage> with AutomaticKeepAl
                                     color: Color.fromARGB(160, 0, 0, 0)
                                   ),
                                   Padding(padding: EdgeInsets.only(right: 5.0)),
-                                  Text('${orders[index].price} ${Localization.word(orders[index].currency)}',
+                                  Text('${orders[index].price} ${Localization.textRUB}',
                                     style: TextStyle(
                                       color: Color.fromARGB(160, 0, 0, 0)
                                     ),

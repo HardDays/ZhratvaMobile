@@ -3,22 +3,22 @@ import 'dart:math';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 
-import 'main_page.dart';
+import '../main_page.dart';
 
-import '../widgets/cart_widget.dart';
+import '../../../widgets/cart_widget.dart';
 
-import '../../helpers/view/localization.dart';
-import '../../helpers/view/formatter.dart';
-import '../../helpers/api/main_api.dart';
+import '../../../../helpers/view/localization.dart';
+import '../../../../helpers/view/formatter.dart';
+import '../../../../helpers/api/main_api.dart';
 
-import '../../models/storage/cache.dart';
-import '../../models/storage/cart.dart';
+import '../../../../models/storage/cache.dart';
+import '../../../../models/storage/cart.dart';
 
-import '../../models/api/menu_item.dart';
-import '../../models/api/order.dart';
-import '../../models/api/order_menu_item.dart';
+import '../../../../models/api/menu_item.dart';
+import '../../../../models/api/order.dart';
+import '../../../../models/api/order_menu_item.dart';
 
-import '../routes/default_page_route.dart';
+import '../../../routes/default_page_route.dart';
 
 class OrderPage extends StatefulWidget {
   Order order;
@@ -41,7 +41,7 @@ class OrderPageState extends State<OrderPage> with SingleTickerProviderStateMixi
     return Scaffold(  
       appBar: AppBar(
         centerTitle: true,
-        title: Text(Localization.word('Order details'),
+        title: Text(Localization.titleOrderDetails,
           style: TextStyle(
             color: Colors.white
           ),
@@ -63,7 +63,7 @@ class OrderPageState extends State<OrderPage> with SingleTickerProviderStateMixi
                 children: [
                   Padding(
                     padding: EdgeInsets.only(left: 5.0, top: 5.0),
-                    child: Text(Localization.word('Address'),
+                    child: Text(Localization.textAddress,
                       style: TextStyle(
                         fontSize: 20.0  
                       ),
@@ -95,7 +95,7 @@ class OrderPageState extends State<OrderPage> with SingleTickerProviderStateMixi
                   Padding(padding: EdgeInsets.only(top: 15.0)),
                   Padding(
                     padding: EdgeInsets.only(left: 5.0),
-                    child: Text(Localization.word('When'),
+                    child: Text(Localization.textWhen,
                       style: TextStyle(
                         fontSize: 20.0  
                       ),
@@ -127,7 +127,7 @@ class OrderPageState extends State<OrderPage> with SingleTickerProviderStateMixi
                   Padding(padding: EdgeInsets.only(top: 15.0)),
                   Padding(
                     padding: EdgeInsets.only(left: 5.0),
-                    child: Text(Localization.word('My order'),
+                    child: Text(Localization.textMyOrder,
                       style: TextStyle(
                         fontSize: 20.0  
                       ),
@@ -168,7 +168,7 @@ class OrderPageState extends State<OrderPage> with SingleTickerProviderStateMixi
                                   Container(
                                     alignment: Alignment.topRight,
                                     width: MediaQuery.of(context).size.width * 0.3,
-                                    child: Text('${item.count * item.menuItem.price} ${Localization.word(item.menuItem.currency)}',
+                                    child: Text('${item.count * item.menuItem.price} ${Localization.textRUB}',
                                       style: TextStyle(
                                       color: Color.fromARGB(160, 0, 0, 0),
                                         fontSize: 16.0
@@ -189,7 +189,7 @@ class OrderPageState extends State<OrderPage> with SingleTickerProviderStateMixi
                     children: [
                       Padding(
                         padding: EdgeInsets.only(left: 5.0),
-                        child: Text(Localization.word('Total price'),
+                        child: Text(Localization.textTotalPrice,
                           style: TextStyle(
                             fontSize: 20.0  
                           ),
@@ -197,7 +197,7 @@ class OrderPageState extends State<OrderPage> with SingleTickerProviderStateMixi
                       ),
                       Padding(
                         padding: EdgeInsets.only(right: 5.0),
-                        child: Text('${widget.order.price} ${Localization.word(widget.order.currency)}',
+                        child: Text('${widget.order.price} ${Localization.textRUB}',
                           style: TextStyle(
                             fontSize: 20.0  
                           ),

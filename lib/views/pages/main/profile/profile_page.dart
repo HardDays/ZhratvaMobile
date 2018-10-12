@@ -1,16 +1,17 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 
-import 'start_page.dart';
-import 'order_history_page.dart';
+import '../orders/order_history_page.dart';
 
-import '../routes/default_page_route.dart';
+import '../../start/start_page.dart';
 
-import '../../helpers/api/main_api.dart';
-import '../../helpers/view/localization.dart';
+import '../../../routes/default_page_route.dart';
 
-import '../../models/storage/cache.dart';
-import '../../models/storage/database.dart';
+import '../../../../helpers/api/main_api.dart';
+import '../../../../helpers/view/localization.dart';
+
+import '../../../../models/storage/cache.dart';
+import '../../../../models/storage/database.dart';
 
 class ProfilePage extends StatefulWidget {
   //BuildContext parentContext;
@@ -59,11 +60,11 @@ class ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin 
   @override 
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: Localization.word('Profile'),
+      title: Localization.titleProfile,
       home: Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: Text(Localization.word('Profile')),
+          title: Text(Localization.titleProfile),
           backgroundColor: Color.fromARGB(255, 247, 131, 6),     
             actions:[ 
               PopupMenuButton<int>(         
@@ -83,8 +84,8 @@ class ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin 
                   }
                 },
                 itemBuilder:  (BuildContext context) => [
-                  PopupMenuItem<int>(child: Text(Localization.word('History')), value: 0),
-                  PopupMenuItem<int>(child: Text(Localization.word('Logout')), value: 1)
+                  PopupMenuItem<int>(child: Text(Localization.textHistory), value: 0),
+                  PopupMenuItem<int>(child: Text(Localization.textLogout), value: 1)
                 ],
             )
           ]
@@ -160,7 +161,7 @@ class ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin 
                 Padding(padding: EdgeInsets.only(top: 10.0)),
                 Container(
                   padding: EdgeInsets.only(left: 10.0),
-                  child: Text(Localization.word('Statistics'),
+                  child: Text(Localization.textStatistics,
                     style: TextStyle(
                       fontSize: 18.0
                     )
@@ -193,17 +194,17 @@ class ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin 
                                   Container(
                                     alignment: Alignment.center,
                                     height: 40.0, 
-                                    child: Text(Localization.word('Week')),
+                                    child: Text(Localization.textWeek),
                                   ),
                                   Container(
                                     alignment: Alignment.center,
                                     height: 40.0, 
-                                    child: Text(Localization.word('Month')),
+                                    child: Text(Localization.textMonth),
                                   ),
                                   Container(
                                     alignment: Alignment.center,
                                     height: 40.0, 
-                                    child: Text(Localization.word('Total')),
+                                    child: Text(Localization.textTotal),
                                   ),
                                 ],
                               ),
@@ -237,7 +238,7 @@ class ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin 
                                                         color: Color.fromARGB(255, 247, 131, 6),
                                                       ),                                                      
                                                     ),
-                                                    Text(Localization.word('Visited places'),
+                                                    Text(Localization.textVisitedPlaces,
                                                       style: TextStyle(
                                                         fontSize: 14.0,
                                                         color: Color.fromARGB(160, 0, 0, 0)
@@ -256,7 +257,7 @@ class ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin 
                                                         color: Color.fromARGB(255, 247, 131, 6),
                                                       ),                                                      
                                                     ),
-                                                    Text(Localization.word('Items ordered'),
+                                                    Text(Localization.textItemsOrdered,
                                                       style: TextStyle(
                                                         fontSize: 14.0,
                                                         color: Color.fromARGB(160, 0, 0, 0)
@@ -274,13 +275,13 @@ class ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin 
                                                 width: MediaQuery.of(context).size.width * 0.4,
                                                 child: Column(
                                                   children: [   
-                                                    Text('${Cache.statistics[index].moneySpent.toStringAsFixed(1)} ' + Localization.word('RUB'),
+                                                    Text('${Cache.statistics[index].moneySpent.toStringAsFixed(1)} ' + Localization.textRUB,
                                                       style: TextStyle(
                                                         fontSize: 25.0,
                                                         color: Color.fromARGB(255, 247, 131, 6),
                                                       ),                                                      
                                                     ),
-                                                    Text(Localization.word('Money spent'),
+                                                    Text(Localization.textMoneySpent,
                                                       style: TextStyle(
                                                         fontSize: 14.0,
                                                         color: Color.fromARGB(160, 0, 0, 0)
@@ -293,13 +294,13 @@ class ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin 
                                                 width: MediaQuery.of(context).size.width * 0.4,
                                                 child: Column(
                                                   children: [   
-                                                    Text('${Cache.statistics[index].moneySaved.toStringAsFixed(1)} ' + Localization.word('RUB'),
+                                                    Text('${Cache.statistics[index].moneySaved.toStringAsFixed(1)} ' + Localization.textRUB,
                                                       style: TextStyle(
                                                         fontSize: 25.0,
                                                         color: Color.fromARGB(255, 247, 131, 6),
                                                       ),                                                      
                                                     ),
-                                                    Text(Localization.word('Money saved'),
+                                                    Text(Localization.textMoneySaved,
                                                       style: TextStyle(
                                                         fontSize: 14.0,
                                                         color: Color.fromARGB(160, 0, 0, 0)

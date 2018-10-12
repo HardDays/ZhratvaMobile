@@ -8,9 +8,9 @@ import 'models/storage/cache.dart';
 
 import 'models/api/user.dart';
 
-import 'views/pages/start_page.dart';
-import 'views/pages/main_page.dart';
-import 'views/pages/splash_page.dart';
+import 'views/pages/start/start_page.dart';
+import 'views/pages/start/splash_page.dart';
+import 'views/pages/main/main_page.dart';
 
 void main() => runApp(new App());
 

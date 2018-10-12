@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 
-import 'payment_page.dart';
+import '../orders/payment_page.dart';
 
-import '../routes/default_page_route.dart';
+import '../../../routes/default_page_route.dart';
 
-import '../../helpers/view/formatter.dart';
-import '../../helpers/view/localization.dart';
+import '../../../../helpers/view/formatter.dart';
+import '../../../../helpers/view/localization.dart';
+import '../../../../helpers/view/dialogs.dart';
 
-import '../../models/storage/cart.dart';
-import '../../models/cart_item.dart';
+import '../../../../models/storage/cart.dart';
+import '../../../../models/cart_item.dart';
 
 class CartPage extends StatefulWidget {
   
@@ -30,17 +31,17 @@ class CartPageState extends State<CartPage> with SingleTickerProviderStateMixin 
     }else{
       showDialog(context: context, 
         child: AlertDialog(
-          title: Text(Localization.word('Remove')),
-          content: Text(Localization.word('Do you want to remove item from your cart?')),
+          title: Text(Localization.textRemove),
+          content: Text(Localization.textRemoveFromCart),
           actions: [
             FlatButton(
-              child: Text(Localization.word('NO')),
+              child: Text(Localization.buttonNo),
               onPressed: () {
                 Navigator.pop(context);
               }
             ),
             FlatButton(
-              child: Text(Localization.word('YES')),
+              child: Text(Localization.buttonYes),
               onPressed: () { 
                 setState(() {
                   Cart.remove(index);             
@@ -68,7 +69,7 @@ class CartPageState extends State<CartPage> with SingleTickerProviderStateMixin 
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text(Localization.word('Cart'),
+        title: Text(Localization.titleCart,
           style: TextStyle(
             color: Colors.white
           ),
@@ -121,7 +122,7 @@ class CartPageState extends State<CartPage> with SingleTickerProviderStateMixin 
                                           ),
                                         ),
                                         Padding(padding: EdgeInsets.only(top: 3.0)),
-                                        Text('${Cart.items()[index].menuItem.price} ${Localization.word(Cart.items()[index].menuItem.currency)}',
+                                        Text('${Cart.items()[index].menuItem.price} ${Localization.textRUB}',
                                           maxLines: 1,
                                           style: TextStyle(
                                             fontSize: 20.0,
@@ -231,7 +232,7 @@ class CartPageState extends State<CartPage> with SingleTickerProviderStateMixin 
                               ),
                               Container(
                                 margin: EdgeInsets.only(right: 10.0, left: 3.0),
-                                child: Text(Cart.items().isNotEmpty ? '${Cart.totalPrice()} ${Localization.word(Cart.items()[0].menuItem.currency)}' : '',
+                                child: Text(Cart.items().isNotEmpty ? '${Cart.totalPrice()} ${Localization.textRUB}' : '',
                                   maxLines: 3,
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
@@ -269,7 +270,7 @@ class CartPageState extends State<CartPage> with SingleTickerProviderStateMixin 
                               ),
                               Container(
                                 margin: EdgeInsets.only(right: 10.0),
-                                child: Text(Cart.items().isNotEmpty ? '${Cart.totalCal()} ${Localization.word('kcal')}' : '',
+                                child: Text(Cart.items().isNotEmpty ? '${Cart.totalCal()} ${Localization.textKcal}' : '',
                                   maxLines: 3,
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
@@ -295,7 +296,7 @@ class CartPageState extends State<CartPage> with SingleTickerProviderStateMixin 
                             DefaultPageRoute(builder: (context) => PaymentPage()),
                           );
                         },
-                        child: Text(Localization.word('PROCESS ORDER'),
+                        child: Text(Localization.buttonProcessOrder,
                           style: TextStyle(
                             color: Colors.white
                           ),

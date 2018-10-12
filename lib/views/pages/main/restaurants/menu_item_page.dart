@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 
-import '../widgets/cart_widget.dart';
+import '../../../widgets/cart_widget.dart';
 
-import '../../helpers/view/formatter.dart';
-import '../../helpers/view/localization.dart';
+import '../../../../helpers/view/formatter.dart';
+import '../../../../helpers/view/localization.dart';
+import '../../../../helpers/view/dialogs.dart';
 
-import '../../models/storage/cart.dart';
+import '../../../../models/storage/cart.dart';
 
-import '../../models/api/order_menu_item.dart';
-import '../../models/api/menu_item.dart';
-import '../../models/api/restaurant.dart';
+import '../../../../models/api/order_menu_item.dart';
+import '../../../../models/api/menu_item.dart';
+import '../../../../models/api/restaurant.dart';
 
 
 class MenuItemPage extends StatefulWidget {
@@ -49,7 +50,7 @@ class MenuItemPageState extends State<MenuItemPage> with SingleTickerProviderSta
   void onAdd(BuildContext context){
     if (Cart.canAdd(widget.item)){
       Scaffold.of(context).showSnackBar(new SnackBar(
-        content: Text('${widget.item.name} ${Localization.word('added to your cart')}'),
+        content: Text('${widget.item.name} ${Localization.textAddedToCart}'),
       ));
       setState(() {          
         Cart.add(OrderMenuItem(
@@ -60,20 +61,7 @@ class MenuItemPageState extends State<MenuItemPage> with SingleTickerProviderSta
         Cart.changeRestaurant(widget.restaurant);
       });
     }else{
-      showDialog(context: context, 
-        child: AlertDialog(
-          title: Text(Localization.word('Wrong item')),
-          content: Text(Localization.word('Cannot add item from another restaurant. Please, finish your current order')),
-          actions: [
-            FlatButton(
-              child: Text(Localization.word('OK')),
-              onPressed: () {  
-                Navigator.pop(context);             
-              }
-            ),
-          ],
-        )
-      );
+      Dialogs.showMessage(context, Localization.textWrongItem, Localization.textFullCart, Localization.buttonOk);
     }
   }
 
@@ -117,7 +105,7 @@ class MenuItemPageState extends State<MenuItemPage> with SingleTickerProviderSta
                     ),
                   ),
                   Padding(padding: EdgeInsets.only(top: 30.0)),
-                  Text('${widget.item.price} ${Localization.word(widget.item.currency)}',
+                  Text('${widget.item.price} ${Localization.textRUB}',
                     style: TextStyle(
                       color: Color.fromARGB(255, 247, 131, 6),
                       fontSize: 30.0
@@ -159,7 +147,7 @@ class MenuItemPageState extends State<MenuItemPage> with SingleTickerProviderSta
                             ),
                             Container(
                               margin: EdgeInsets.only(right: 10.0),
-                              child: Text('${widget.item.kCal} ${Localization.word('kcal')}',
+                              child: Text('${widget.item.kCal} ${Localization.textKcal}',
                                 maxLines: 3,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
@@ -246,7 +234,7 @@ class MenuItemPageState extends State<MenuItemPage> with SingleTickerProviderSta
                         onPressed: (){
                           onAdd(context);
                         },
-                        child: Text(Localization.word('ADD TO CART'),
+                        child: Text(Localization.buttonAddToCart,
                           style: TextStyle(
                             color: Colors.white
                           ),

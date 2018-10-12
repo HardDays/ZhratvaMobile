@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'menu_page.dart';
 
-import '../widgets/cart_widget.dart';
+import '../../../widgets/cart_widget.dart';
 
-import '../routes/default_page_route.dart';
+import '../../../routes/default_page_route.dart';
 
-import '../../helpers/api/main_api.dart';
-import '../../helpers/view/localization.dart';
+import '../../../../helpers/api/main_api.dart';
+import '../../../../helpers/view/localization.dart';
 
-import '../../models/storage/cart.dart';
-import '../../models/api/restaurant.dart';
+import '../../../../models/storage/cart.dart';
+import '../../../../models/api/restaurant.dart';
 
 class RestaurantPage extends StatefulWidget {
 
@@ -198,7 +198,7 @@ class RestaurantPageState  extends State<RestaurantPage> {
                                       color: Color.fromARGB(160, 0, 0, 0)
                                     ),
                                     Padding(padding: EdgeInsets.only(right: 5.0)),
-                                    Text(widget.restaurant.openNow ? '${Localization.word('Open till')} ${widget.restaurant.workingHourNow.close}' : Localization.word('Closed now'),
+                                    Text(widget.restaurant.openNow ? '${Localization.textOpenTill} ${widget.restaurant.workingHourNow.close}' : Localization.textClosed,
                                       style: TextStyle(
                                         color: Color.fromARGB(160, 0, 0, 0)
                                       ),
@@ -221,7 +221,7 @@ class RestaurantPageState  extends State<RestaurantPage> {
                               InkWell(
                                 onTap: (){
                                 },
-                                child: Text(Localization.word('Show more')),
+                                child: Text(Localization.textInformation),
                               )
                             ],
                           ),
@@ -243,7 +243,7 @@ class RestaurantPageState  extends State<RestaurantPage> {
                 return Container(
                   margin: EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.04),
                   alignment: Alignment.topLeft,
-                  child: Text(Localization.word('Menu'),
+                  child: Text(Localization.titleMenu,
                     style: TextStyle(
                       fontSize: 18.0,
                     ),
@@ -301,7 +301,7 @@ class RestaurantPageState  extends State<RestaurantPage> {
                                   ),  
                                 ), 
                                 Padding(padding: EdgeInsets.only(left: 2.0)),
-                                Text('${widget.restaurant.menuCategories[index].menuItems.length} ${Localization.word('items')}',
+                                Text('${widget.restaurant.menuCategories[index].menuItems.length} ${Localization.textItems}',
                                   maxLines: 1,
                                   textAlign: TextAlign.left,
                                   style: TextStyle(

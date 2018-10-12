@@ -1,20 +1,22 @@
+import 'dart:async';
+
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
-import 'dart:async';
 
 import 'order_page.dart';
 
-import '../routes/default_page_route.dart';
+import '../../../routes/default_page_route.dart';
 
-import '../widgets/timer_widget.dart';
+import '../../../widgets/timer_widget.dart';
 
-import '../../helpers/api/main_api.dart';
-import '../../helpers/view/formatter.dart';
-import '../../helpers/view/localization.dart';
+import '../../../../helpers/api/main_api.dart';
+import '../../../../helpers/api/consts.dart';
+import '../../../../helpers/view/formatter.dart';
+import '../../../../helpers/view/localization.dart';
 
-import '../../models/api/order.dart';
-import '../../models/api/order_menu_item.dart';
-import '../../models/storage/cache.dart';
+import '../../../../models/api/order.dart';
+import '../../../../models/api/order_menu_item.dart';
+import '../../../../models/storage/cache.dart';
 
 class CurrentOrdersPage extends StatefulWidget {
   
@@ -79,7 +81,7 @@ class CurrentOrdersPageState extends State<CurrentOrdersPage> with AutomaticKeep
   }
 
   Widget buildTimer(Order order){
-    if (order.orderStatus == 'no_payment'){
+    if (order.orderStatus == Consts.noPayment){
       return Container(
         width: MediaQuery.of(context).size.width * 0.5,
         height: 40.0,
@@ -87,7 +89,7 @@ class CurrentOrdersPageState extends State<CurrentOrdersPage> with AutomaticKeep
           color: Color.fromARGB(255, 247, 131, 6),
           onPressed: (){   
           },
-          child: Text(Localization.word('PAY'),
+          child: Text(Localization.buttonPay,
             style: TextStyle(
               color: Colors.white
             ),
@@ -95,7 +97,7 @@ class CurrentOrdersPageState extends State<CurrentOrdersPage> with AutomaticKeep
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0))
         ),
       );
-    } else if (order.orderStatus == 'in_process') {
+    } else if (order.orderStatus == Consts.inProcess) {
       Duration left = order.timeLeft();
       if (left.isNegative){
         return Container(
@@ -111,7 +113,7 @@ class CurrentOrdersPageState extends State<CurrentOrdersPage> with AutomaticKeep
                 }
               );
             },
-            child: Text(Localization.word('FINISH ORDER'),
+            child: Text(Localization.buttonFinishOrder,
               style: TextStyle(
                 color: Colors.white
               ),
@@ -122,7 +124,7 @@ class CurrentOrdersPageState extends State<CurrentOrdersPage> with AutomaticKeep
       } else {
         return Column(
           children:[
-            Text(Localization.word('the order will be ready in'),
+            Text(Localization.textOrderReady,
               style: TextStyle(
                 fontSize: 14.0,
                 color: Colors.grey
@@ -143,16 +145,16 @@ class CurrentOrdersPageState extends State<CurrentOrdersPage> with AutomaticKeep
   Widget buildOrderStatus(Order order){
     String text;
     Color color;
-    if (order.orderStatus == 'no_payment'){
-      text = Localization.word('Not payed');
+    if (order.orderStatus == Consts.noPayment){
+      text = Localization.textNotPayed;
       color = Color.fromARGB(255, 227, 116, 116);
-    } else if (order.orderStatus == 'in_process') {
+    } else if (order.orderStatus == Consts.inProcess) {
       Duration left = order.timeLeft();
       if (left.isNegative){
-        text = Localization.word('Ready');
+        text = Localization.textReady;
         color = Color.fromARGB(255, 0, 150, 0);
       } else {
-        text = Localization.word('In process');
+        text = Localization.textInProcess;
         color = Color.fromARGB(255, 190, 190, 0);
       }
     } 
@@ -184,7 +186,7 @@ class CurrentOrdersPageState extends State<CurrentOrdersPage> with AutomaticKeep
         home: Scaffold(
           appBar: AppBar(
             centerTitle: true,
-            title: Text(Localization.word('Orders')),
+            title: Text(Localization.titleOrders),
             backgroundColor: Color.fromARGB(255, 247, 131, 6),     
           ),
           body: Center(
@@ -194,33 +196,33 @@ class CurrentOrdersPageState extends State<CurrentOrdersPage> with AutomaticKeep
       );
     }
     if (Cache.currentOrders.isEmpty){
-       return MaterialApp(
+      return MaterialApp(
         home: Scaffold(
           appBar: AppBar(
             centerTitle: true,
-              title: Text(Localization.word('Orders'),
+              title: Text(Localization.titleOrders,
             ),
             backgroundColor: Color.fromARGB(255, 247, 131, 6),     
           ),
-          body: 
-          RefreshIndicator(
-          onRefresh: onRefresh,
-          key: refreshIndicatorKey,
-          color: Color.fromARGB(255, 247, 131, 6),
-            child:Center(
-              child: Text(Localization.word('No orders'),
-                style: TextStyle(fontSize: 25.0, color: Color.fromARGB(160, 0, 0, 0)),)
+          body: RefreshIndicator(
+            onRefresh: onRefresh,
+            key: refreshIndicatorKey,
+            color: Color.fromARGB(255, 247, 131, 6),
+            child: Center(
+              child: Text(Localization.textNoOrders,
+                style: TextStyle(fontSize: 25.0, color: Color.fromARGB(160, 0, 0, 0)),
+              )
             ),
           )
         )
       );
     }
     return MaterialApp(
-      title: Localization.word('Orders'),
+      title: Localization.titleOrders,
       home: Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: Text(Localization.word('Orders'),
+          title: Text(Localization.titleOrders,
             style: TextStyle(
               color: Colors.white
             ),
@@ -247,14 +249,14 @@ class CurrentOrdersPageState extends State<CurrentOrdersPage> with AutomaticKeep
                 );
               },
               child: Container(
-              margin: const EdgeInsets.only(top: 5.0, left: 5.0, right: 5.0),
-              width: MediaQuery.of(context).size.width * 1.0,
-              child: Card(
-                child:  Container(
-                  margin: const EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0, bottom: 10.0),
-                  child: Container(
-                    width: MediaQuery.of(context).size.width * 1.0,
-                    child: Column(
+                margin: const EdgeInsets.only(top: 5.0, left: 5.0, right: 5.0),
+                width: MediaQuery.of(context).size.width * 1.0,
+                child: Card(
+                  child:  Container(
+                    margin: const EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0, bottom: 10.0),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 1.0,
+                      child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children:[
                             Padding(padding: EdgeInsets.only(top: 0.0)),
@@ -262,7 +264,7 @@ class CurrentOrdersPageState extends State<CurrentOrdersPage> with AutomaticKeep
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children:[
-                                Text('${Localization.word('Order')} №${Cache.currentOrders[index].id.substring(0, 8)}',
+                                Text('${Localization.textOrder} №${Cache.currentOrders[index].id.substring(0, 8)}',
                                   style: TextStyle(
                                     fontSize: 20.0,
                                     color: Colors.black
@@ -272,7 +274,7 @@ class CurrentOrdersPageState extends State<CurrentOrdersPage> with AutomaticKeep
                               ]
                             ),
                             Padding(padding: EdgeInsets.only(top: 2.0)),
-                            Text('${Localization.word('Ordered at')} ${DateFormat('HH:mm dd.MM.y').format(Cache.currentOrders[index].createdAt)}',
+                            Text('${Localization.textOrderedAt} ${DateFormat('HH:mm dd.MM.y').format(Cache.currentOrders[index].createdAt)}',
                               style: TextStyle(
                                 color: Colors.grey
                               ),
@@ -322,7 +324,7 @@ class CurrentOrdersPageState extends State<CurrentOrdersPage> with AutomaticKeep
                                   color: Color.fromARGB(160, 0, 0, 0)
                                 ),
                                 Padding(padding: EdgeInsets.only(right: 5.0)),
-                                Text('${Cache.currentOrders[index].price} ${Localization.word(Cache.currentOrders[index].currency)}',
+                                Text('${Cache.currentOrders[index].price} ${Localization.textRUB}',
                                   style: TextStyle(
                                     color: Color.fromARGB(160, 0, 0, 0)
                                   ),
@@ -354,12 +356,13 @@ class CurrentOrdersPageState extends State<CurrentOrdersPage> with AutomaticKeep
                           ]
                         ),
                       ),    
-                ))
-              ),
-            );
-          }
-        ),
-      ), 
+                    )
+                  )
+                ),
+              );
+            }
+          ),
+        ), 
       )     
     );
   }

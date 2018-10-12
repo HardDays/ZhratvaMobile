@@ -12,8 +12,8 @@ class SplashPage extends StatelessWidget {
             Container(
               alignment: Alignment.center,
               margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.2),
-              width:  MediaQuery.of(context).size.height * 0.3,
-              height: MediaQuery.of(context).size.height * 0.3,
+              width:  MediaQuery.of(context).size.height * 0.2,
+              height: MediaQuery.of(context).size.height * 0.25,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 image: DecorationImage(
@@ -23,7 +23,8 @@ class SplashPage extends StatelessWidget {
               )
             ),
             Padding(padding: EdgeInsets.only(top: 5.0)),  
-            Text('Eat Up',
+            Text('Food\nApp',
+              textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 45.0,
                 color: Colors.white,

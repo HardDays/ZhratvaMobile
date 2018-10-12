@@ -3,20 +3,8 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map/plugin_api.dart';
 import 'package:latlong/latlong.dart';
 
-import 'main_page.dart';
-import 'restaurant_page.dart';
-
-import '../widgets/cart_widget.dart';
-
-import '../routes/default_page_route.dart';
-
-import '../../helpers/util/geolocation_cache.dart';
-import '../../helpers/view/localization.dart';
-import '../../helpers/view/formatter.dart';
-
-
-import '../../models/storage/cache.dart';
-import '../../models/api/restaurant.dart';
+import '../../../../models/storage/cache.dart';
+import '../../../../models/api/restaurant.dart';
 
 class RestaurantsFiltersPage extends StatefulWidget {
 

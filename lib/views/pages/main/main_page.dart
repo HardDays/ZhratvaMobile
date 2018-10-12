@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 
-import 'restaurants_page.dart';
-import 'restaurants_map_page.dart';
-import 'profile_page.dart';
-import 'current_orders_page.dart';
+import 'restaurants/restaurants_page.dart';
+import 'restaurants/restaurants_map_page.dart';
+import 'profile/profile_page.dart';
+import 'orders/current_orders_page.dart';
 
-import '../routes/default_page_route.dart';
-
-import '../../helpers/view/localization.dart';
+import '../../../helpers/view/localization.dart';
 
 class MainPage extends StatefulWidget {
   int index = 1;
@@ -85,7 +83,7 @@ class MainPageState extends State<MainPage> with SingleTickerProviderStateMixin 
                       Icon(IconData(0xe801, fontFamily: 'icons'),
                         color: tabColors[0],
                       ),
-                      Text(Localization.word('Orders'),
+                      Text(Localization.titleOrders,
                         style: TextStyle(
                           color: tabColors[0],
                           fontSize: 12.0
@@ -102,7 +100,7 @@ class MainPageState extends State<MainPage> with SingleTickerProviderStateMixin 
                       Icon(Icons.restaurant,
                         color: tabColors[1],
                       ),
-                      Text(Localization.word('Restaurants'),
+                      Text(Localization.titleRestaurants,
                         style: TextStyle(
                           color: tabColors[1],
                           fontSize: 12.0
@@ -119,7 +117,7 @@ class MainPageState extends State<MainPage> with SingleTickerProviderStateMixin 
                       Icon(IconData(0xe800, fontFamily: 'icons'),
                         color: tabColors[2],
                       ),
-                      Text(Localization.word('Profile'),
+                      Text(Localization.titleProfile,
                         style: TextStyle(
                           color: tabColors[2],
                           fontSize: 12.0

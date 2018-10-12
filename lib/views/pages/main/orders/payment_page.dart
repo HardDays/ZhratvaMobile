@@ -3,22 +3,23 @@ import 'dart:math';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 
-import 'main_page.dart';
+import '../main_page.dart';
 
-import '../widgets/cart_widget.dart';
+import '../../../widgets/cart_widget.dart';
 
-import '../../helpers/view/localization.dart';
-import '../../helpers/view/formatter.dart';
-import '../../helpers/api/main_api.dart';
+import '../../../../helpers/view/localization.dart';
+import '../../../../helpers/view/dialogs.dart';
+import '../../../../helpers/api/main_api.dart';
+import '../../../../helpers/api/consts.dart';
 
-import '../../models/storage/cache.dart';
-import '../../models/storage/cart.dart';
+import '../../../../models/storage/cache.dart';
+import '../../../../models/storage/cart.dart';
 
-import '../../models/api/menu_item.dart';
-import '../../models/api/order.dart';
-import '../../models/api/order_menu_item.dart';
+import '../../../../models/api/menu_item.dart';
+import '../../../../models/api/order.dart';
+import '../../../../models/api/order_menu_item.dart';
 
-import '../routes/default_page_route.dart';
+import '../../../routes/default_page_route.dart';
 
 class PaymentPage extends StatefulWidget {
   
@@ -130,84 +131,45 @@ class PaymentPageState extends State<PaymentPage> with SingleTickerProviderState
 
   void showTime(){
     if (order.date == null){
-      showDialog(context: context, 
-        child: AlertDialog(
-          title: Text(Localization.word('No date')),
-          content: Text(Localization.word('Please, select the date')),
-           actions: [
-            FlatButton(
-              child: Text(Localization.word('OK')),
-              onPressed: () {  
-                Navigator.pop(context);             
-              }
-            ),
-          ],
-        )
-      );
-      } else {
-        String day = DateFormat('EEEE').format(order.date).toLowerCase();
-        var wh = Cart.restaurant().workingHours.firstWhere((w) => (w.day == day));
-                  
-        var firstTime = wh.open;
-        var secondTime = wh.close;
-        
-        if (order.date.day == DateTime.now().day){
-          firstTime = DateFormat('HH:mm').format(DateTime.now().add(Duration(seconds: max(300, Cart.totalCookingTime()))));
-        }
-        showTimePicker(
-          initialTime: TimeOfDay.fromDateTime(DateTime.parse('1970-01-01 ${firstTime}')),
-          context: context,
-        ).then(
-          (time){
-            setState(
-              () {
-                if (time != null){
-                  var date = DateTime(order.date.year, order.date.month, order.date.day, time.hour, time.minute);      
-                  var selectedTime = DateFormat('HH:mm').format(date); 
+      Dialogs.showMessage(context, Localization.textNoDate, Localization.textSelectDate, Localization.buttonOk);
+    } else {
+      String day = DateFormat('EEEE').format(order.date).toLowerCase();
+      var wh = Cart.restaurant().workingHours.firstWhere((w) => (w.day == day));
+                
+      var firstTime = wh.open;
+      var secondTime = wh.close;
+      
+      if (order.date.day == DateTime.now().day){
+        firstTime = DateFormat('HH:mm').format(DateTime.now().add(Duration(seconds: max(300, Cart.totalCookingTime()))));
+      }
+      showTimePicker(
+        initialTime: TimeOfDay.fromDateTime(DateTime.parse('1970-01-01 ${firstTime}')),
+        context: context,
+      ).then(
+        (time){
+          setState(
+            () {
+              if (time != null){
+                var date = DateTime(order.date.year, order.date.month, order.date.day, time.hour, time.minute);      
+                var selectedTime = DateFormat('HH:mm').format(date); 
 
-                  if (firstTime.compareTo(selectedTime) > 0 || secondTime.compareTo(selectedTime) < 0){
-                    showDialog(context: context, 
-                      child: AlertDialog(
-                        title: Text(Localization.word('Wrong time')),
-                        content: Text('${Localization.word('Please, select time in range')} ${firstTime} - ${secondTime}'),
-                        actions: [
-                          FlatButton(
-                            child: Text(Localization.word('OK')),
-                            onPressed: () {  
-                              Navigator.pop(context);             
-                            }
-                          ),
-                        ],
-                      )
-                    );
-                  } else {
-                    this.time = time;
-                    order.date = date;
-                  }
+                if (firstTime.compareTo(selectedTime) > 0 || secondTime.compareTo(selectedTime) < 0){
+                  Dialogs.showMessage(context, Localization.textWrongTime, '${Localization.textSelectDiffTime} ${firstTime} - ${secondTime}', Localization.buttonOk);
+                } else {
+                  this.time = time;
+                  order.date = date;
                 }
               }
-            );
-          }
+            }
+          );
+        }
       );
     }
   }
 
   void pay(){
     if (order.date == null || time == null){
-      showDialog(context: context, 
-        child: AlertDialog(
-          title: Text(Localization.word('No date or time')),
-          content: Text(Localization.word('Please, select date and time')),
-          actions: [
-            FlatButton(
-              child: Text(Localization.word('OK')),
-              onPressed: () {  
-                Navigator.pop(context);             
-              }
-            ),
-          ],
-        )
-      );
+      Dialogs.showMessage(context, Localization.textNoDate, Localization.textSelectDate, Localization.buttonOk);
     }else{
       order.date = DateTime(order.date.year, order.date.month, order.date.day, time.hour, time.minute);
       order.orderMenuItems = Cart.items();
@@ -222,28 +184,15 @@ class PaymentPageState extends State<PaymentPage> with SingleTickerProviderState
             }
           );
           if (res == null){
-            showDialog(context: context, 
-              child: AlertDialog(
-                title: Text(Localization.word('Error')),
-                content: Text(Localization.word('Please, try again later')),
-                actions: [
-                  FlatButton(
-                    child: Text(Localization.word('OK')),
-                    onPressed: () {  
-                      Navigator.pop(context);             
-                    }
-                  ),
-                ],
-              )
-            );  
+            Dialogs.showMessage(context, Localization.textError, Localization.textTryAgain, Localization.buttonOk);
           }else{
             showDialog(context: context, 
               child: AlertDialog(
-                title: Text(Localization.word('Success')),
-                content: Text(Localization.word('Your order was created')),
+                title: Text(Localization.textSuccess),
+                content: Text(Localization.textOrderCreated),
                 actions: [
                   FlatButton(
-                    child: Text(Localization.word('OK')),
+                    child: Text(Localization.buttonOk),
                     onPressed: () {  
                       Cart.clear();
                       Cache.currentOrders = null;
@@ -270,7 +219,7 @@ class PaymentPageState extends State<PaymentPage> with SingleTickerProviderState
         home: Scaffold(
           appBar: AppBar(
             centerTitle: true,
-            title: Text(Localization.word('Order details')),
+            title: Text(Localization.titleOrderDetails),
             backgroundColor: Color.fromARGB(255, 247, 131, 6),     
           ),
           body: Center(
@@ -282,7 +231,7 @@ class PaymentPageState extends State<PaymentPage> with SingleTickerProviderState
     return Scaffold(  
       appBar: AppBar(
         centerTitle: true,
-        title: Text(Localization.word('Order details'),
+        title: Text(Localization.titleOrderDetails,
           style: TextStyle(
             color: Colors.white
           ),
@@ -304,7 +253,7 @@ class PaymentPageState extends State<PaymentPage> with SingleTickerProviderState
                 children: [
                   Padding(
                     padding: EdgeInsets.only(left: 5.0, top: 5.0),
-                    child: Text(Localization.word('Address'),
+                    child: Text(Localization.textAddress,
                       style: TextStyle(
                         fontSize: 20.0  
                       ),
@@ -336,7 +285,7 @@ class PaymentPageState extends State<PaymentPage> with SingleTickerProviderState
                   Padding(padding: EdgeInsets.only(top: 15.0)),
                   Padding(
                     padding: EdgeInsets.only(left: 5.0),
-                    child: Text(Localization.word('My order'),
+                    child: Text(Localization.textMyOrder,
                       style: TextStyle(
                         fontSize: 20.0  
                       ),
@@ -377,7 +326,7 @@ class PaymentPageState extends State<PaymentPage> with SingleTickerProviderState
                                   Container(
                                     alignment: Alignment.topRight,
                                     width: MediaQuery.of(context).size.width * 0.3,
-                                    child: Text('${item.count * item.menuItem.price} ${Localization.word(item.menuItem.currency)}',
+                                    child: Text('${item.count * item.menuItem.price} ${Localization.textRUB}',
                                       style: TextStyle(
                                       color: Color.fromARGB(160, 0, 0, 0),
                                         fontSize: 16.0
@@ -395,7 +344,7 @@ class PaymentPageState extends State<PaymentPage> with SingleTickerProviderState
                   Padding(padding: EdgeInsets.only(top: 15.0)),
                   Padding(
                     padding: EdgeInsets.only(left: 5.0),
-                    child: Text(Localization.word('Variants'),
+                    child: Text(Localization.textVariants,
                       style: TextStyle(
                         fontSize: 20.0  
                       ),
@@ -413,24 +362,24 @@ class PaymentPageState extends State<PaymentPage> with SingleTickerProviderState
                             child:  InkWell(
                               onTap: (){
                                 setState(() {
-                                  order.carryOption = 'with_me';                              
+                                  order.carryOption = Consts.withMe;                              
                                 });
                               },
                               child: Container(
                                 height: 40.0,
                                 decoration: BoxDecoration(
-                                  color: order.carryOption == 'with_me' ? Color.fromARGB(255, 247, 131, 6) : Colors.white,
+                                  color: order.carryOption == Consts.withMe ? Color.fromARGB(255, 247, 131, 6) : Colors.white,
                                   border: Border.all(
-                                    color: order.carryOption == 'with_me' ? Colors.white : Color.fromARGB(160, 0, 0, 0),
+                                    color: order.carryOption == Consts.withMe  ? Colors.white : Color.fromARGB(160, 0, 0, 0),
                                     width: 0.5
                                   ),
                                   borderRadius: BorderRadius.circular(25.0),
                                 ),
                                 child: Center(child: 
-                                  Text(Localization.word('WITH ME'),
+                                  Text(Localization.buttonWithMe,
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
-                                      color: order.carryOption == 'with_me' ? Colors.white : Color.fromARGB(160, 0, 0, 0),
+                                      color: order.carryOption == Consts.withMe ? Colors.white : Color.fromARGB(160, 0, 0, 0),
                                       fontWeight: FontWeight.w600
                                     ),
                                   )
@@ -443,24 +392,24 @@ class PaymentPageState extends State<PaymentPage> with SingleTickerProviderState
                             child:  InkWell(
                               onTap: (){
                                 setState(() {
-                                  order.carryOption = 'on_place';                              
+                                  order.carryOption = Consts.onPlace;                              
                                 });
                               },
                               child: Container(
                                 height: 40.0,
                                 decoration: BoxDecoration(
-                                  color: order.carryOption == 'on_place' ? Color.fromARGB(255, 247, 131, 6) : Colors.white,
+                                  color: order.carryOption == Consts.onPlace ? Color.fromARGB(255, 247, 131, 6) : Colors.white,
                                   border: Border.all(
-                                    color:  order.carryOption == 'on_place' ? Colors.white : Color.fromARGB(160, 0, 0, 0),
+                                    color:  order.carryOption == Consts.onPlace ? Colors.white : Color.fromARGB(160, 0, 0, 0),
                                     width: 0.5
                                   ),
                                   borderRadius: BorderRadius.circular(25.0),
                                 ),
                                 child: Center(child: 
-                                  Text(Localization.word('ON PLACE'),
+                                  Text(Localization.buttonOnPlace,
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
-                                      color: order.carryOption == 'on_place' ? Colors.white : Color.fromARGB(160, 0, 0, 0),
+                                      color: order.carryOption == Consts.onPlace ? Colors.white : Color.fromARGB(160, 0, 0, 0),
                                       fontWeight: FontWeight.w600
                                     ),
                                   )
@@ -475,7 +424,7 @@ class PaymentPageState extends State<PaymentPage> with SingleTickerProviderState
                   Padding(padding: EdgeInsets.only(top: 15.0)),
                   Padding(
                     padding: EdgeInsets.only(left: 5.0),
-                    child: Text(Localization.word('People count'),
+                    child: Text(Localization.textPeopleCount,
                       style: TextStyle(
                         fontSize: 20.0  
                       ),
@@ -538,7 +487,7 @@ class PaymentPageState extends State<PaymentPage> with SingleTickerProviderState
                   Padding(padding: EdgeInsets.only(top: 15.0)),
                   Padding(
                     padding: EdgeInsets.only(left: 5.0),
-                    child: Text(Localization.word('When'),
+                    child: Text(Localization.textWhen,
                       style: TextStyle(
                         fontSize: 20.0  
                       ),
@@ -562,7 +511,7 @@ class PaymentPageState extends State<PaymentPage> with SingleTickerProviderState
                               onPressed: (){ 
                                 showDate();
                               },
-                              child: Text(order.date == null ? Localization.word('DATE') : DateFormat('dd.MM.yyy').format(order.date),
+                              child: Text(order.date == null ? Localization.buttonDate : DateFormat('dd.MM.yyy').format(order.date),
                                 style: TextStyle(
                                   color: Color.fromARGB(160, 0, 0, 0)
                                 ),
@@ -583,7 +532,7 @@ class PaymentPageState extends State<PaymentPage> with SingleTickerProviderState
                               onPressed: (){    
                                 showTime();
                               },
-                              child: Text(time == null ? Localization.word('TIME') : '${time.format(context)}',
+                              child: Text(time == null ? Localization.buttonTime : '${time.format(context)}',
                                 style: TextStyle(
                                   color: Color.fromARGB(160, 0, 0, 0)
                                 ),
@@ -604,7 +553,7 @@ class PaymentPageState extends State<PaymentPage> with SingleTickerProviderState
                     children: [
                       Padding(
                         padding: EdgeInsets.only(left: 5.0),
-                        child: Text(Localization.word('Total price'),
+                        child: Text(Localization.textTotalPrice,
                           style: TextStyle(
                             fontSize: 20.0  
                           ),
@@ -612,7 +561,7 @@ class PaymentPageState extends State<PaymentPage> with SingleTickerProviderState
                       ),
                       Padding(
                         padding: EdgeInsets.only(right: 5.0),
-                        child: Text('${Cart.totalPrice()} ${Localization.word(Cart.items()[0].menuItem.currency)}',
+                        child: Text('${Cart.totalPrice()} ${Localization.textRUB}',
                           style: TextStyle(
                             fontSize: 20.0  
                           ),
@@ -631,7 +580,7 @@ class PaymentPageState extends State<PaymentPage> with SingleTickerProviderState
                         onPressed: (){                              
                           pay();
                         },
-                        child: Text(Localization.word('PAY'),
+                        child: Text(Localization.buttonPay,
                           style: TextStyle(
                             color: Colors.white
                           ),
