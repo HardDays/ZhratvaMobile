@@ -1,4 +1,4 @@
-package com.example.foodtest;
+package io.foodapp.android;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;

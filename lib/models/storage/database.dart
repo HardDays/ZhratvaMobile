@@ -22,7 +22,6 @@ class Database {
       String body = await _file.readAsString(); 
       _db = json.decode(body);     
     } else {
-      print('here2');
       await _file.create();
       await _file.writeAsString('{}');
     }

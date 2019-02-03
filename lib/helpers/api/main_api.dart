@@ -13,7 +13,7 @@ import '../../models/api/statistics.dart';
 
 class MainAPI {
 
-  static const String url = 'http://35.224.230.2:3000';
+  static const String url = 'http://35.222.158.184:3000';
 
   static const String images = '/images';
   static const String restaurants = '/restaurants';
