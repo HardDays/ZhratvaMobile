@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 import 'restaurant_page.dart';
 import '../main_page.dart';
@@ -165,16 +166,34 @@ class RestaurantsPageState extends State<RestaurantsPage> with AutomaticKeepAliv
                                 DefaultPageRoute(builder: (context) => RestaurantPage(restaurant: Cache.restaurants[index])),
                               );
                             },
-                            child: Container(  
-                              width: MediaQuery.of(context).size.width - 40.0,
-                              height: MediaQuery.of(context).size.width * 0.5,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.all(Radius.circular(10.0)),   
-                                image: DecorationImage(
-                                  image: NetworkImage(Cache.restaurants[index].cover),
-                                  fit: BoxFit.cover,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.all(Radius.circular(10)),
+                              child: CachedNetworkImage(  
+                                width: MediaQuery.of(context).size.width - 40.0,
+                                height: MediaQuery.of(context).size.width * 0.5,
+                                fadeOutDuration: Duration(milliseconds: 100),
+                                fadeInDuration: Duration(milliseconds: 100),
+                                imageUrl: Cache.restaurants[index].cover,
+                                fit: BoxFit.cover,
+                                placeholder: Container(
+                                  width: MediaQuery.of(context).size.width - 40.0,
+                                  height: MediaQuery.of(context).size.width * 0.5,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                                    border: Border.all(color: Colors.grey.withOpacity(0.2))
+                                  ),
+                                  child: Icon(Icons.restaurant, color: Colors.grey.withOpacity(0.5), size: 25),
                                 ),
-                              ),
+                                errorWidget: Container(
+                                  width: MediaQuery.of(context).size.width - 40.0,
+                                  height: MediaQuery.of(context).size.width * 0.5,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                                    border: Border.all(color: Colors.grey.withOpacity(0.2))
+                                  ),
+                                  child: Icon(Icons.restaurant, color: Colors.grey.withOpacity(0.5), size: 25),
+                                ),
+                              )
                             ),
                           ),
                         ],

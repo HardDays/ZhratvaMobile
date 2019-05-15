@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+
 import 'menu_item_page.dart';
 
 import '../../../widgets/cart_widget.dart';
@@ -63,15 +65,34 @@ class MenuPage extends StatelessWidget {
                         children: [
                           Container(
                             margin: EdgeInsets.only(top: 15.0),
-                            width:  MediaQuery.of(context).size.width * 0.27,
-                            height: MediaQuery.of(context).size.width * 0.27,
-                            decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                              image: DecorationImage(
-                                image: NetworkImage(list[index].cover()),
-                                fit: BoxFit.cover,
+                          ),
+                          ClipOval(
+                            child: CachedNetworkImage(  
+                              width:  MediaQuery.of(context).size.width * 0.27,
+                              height: MediaQuery.of(context).size.width * 0.27,
+                              fadeOutDuration: Duration(milliseconds: 100),
+                              fadeInDuration: Duration(milliseconds: 100),
+                              imageUrl: list[index].cover(),
+                              fit: BoxFit.cover,
+                              placeholder: Container(
+                                width:  MediaQuery.of(context).size.width * 0.27,
+                                height: MediaQuery.of(context).size.width * 0.27,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: Border.all(color: Colors.grey.withOpacity(0.2))
+                                ),
+                                child: Icon(Icons.restaurant, color: Colors.grey.withOpacity(0.5), size: 25),
                               ),
-                            ),
+                              errorWidget: Container(
+                                width:  MediaQuery.of(context).size.width * 0.27,
+                                height: MediaQuery.of(context).size.width * 0.27,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: Border.all(color: Colors.grey.withOpacity(0.2))
+                                ),
+                                child: Icon(Icons.restaurant, color: Colors.grey.withOpacity(0.5), size: 25),
+                              ),
+                            )
                           ),
                           Padding(padding: EdgeInsets.only(top: 3.0)),
                           Text(list[index].name,

@@ -97,6 +97,8 @@ class CurrentOrdersPageState extends State<CurrentOrdersPage> with AutomaticKeep
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0))
         ),
       );
+    } else if (order.orderStatus == Consts.ready){
+      return Container();
     } else if (order.orderStatus == Consts.inProcess) {
       Duration left = order.timeLeft();
       if (left.isNegative){
@@ -124,6 +126,7 @@ class CurrentOrdersPageState extends State<CurrentOrdersPage> with AutomaticKeep
       } else {
         return Column(
           children:[
+            Divider(),
             Text(Localization.textOrderReady,
               style: TextStyle(
                 fontSize: 14.0,
@@ -149,15 +152,12 @@ class CurrentOrdersPageState extends State<CurrentOrdersPage> with AutomaticKeep
       text = Localization.textNotPayed;
       color = Color.fromARGB(255, 227, 116, 116);
     } else if (order.orderStatus == Consts.inProcess) {
-      Duration left = order.timeLeft();
-      if (left.isNegative){
-        text = Localization.textReady;
-        color = Color.fromARGB(255, 0, 150, 0);
-      } else {
-        text = Localization.textInProcess;
-        color = Color.fromARGB(255, 190, 190, 0);
-      }
-    } 
+      text = Localization.textInProcess;
+      color = Color.fromARGB(255, 190, 190, 0);
+    } else if (order.orderStatus == Consts.ready) {
+      text = Localization.textReady;
+      color = Color.fromARGB(255, 0, 150, 0);
+    }
     return Container(
       width: MediaQuery.of(context).size.width * 0.25,
       height: 25.0,
@@ -181,6 +181,7 @@ class CurrentOrdersPageState extends State<CurrentOrdersPage> with AutomaticKeep
 
   @override
   Widget build(BuildContext context) {
+    //Cache.currentOrders.first.orderStatus = 'in_process';
     if (Cache.currentOrders == null){
       return MaterialApp(
         home: Scaffold(
@@ -346,8 +347,6 @@ class CurrentOrdersPageState extends State<CurrentOrdersPage> with AutomaticKeep
                                 ),
                               ],
                             ),
-                            Padding(padding: EdgeInsets.only(top: 5.0)),
-                            Divider(),
                             Padding(padding: EdgeInsets.only(top: 5.0)),
                             Container(
                               alignment: Alignment.center,

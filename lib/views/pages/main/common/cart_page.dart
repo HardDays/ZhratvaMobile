@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 import '../orders/payment_page.dart';
 
@@ -97,17 +98,35 @@ class CartPageState extends State<CartPage> with SingleTickerProviderStateMixin 
                               margin: EdgeInsets.all(10.0),
                               child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Container(
-                                    width: MediaQuery.of(context).size.height * 0.10,
-                                    height: MediaQuery.of(context).size.height * 0.10,
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      image: DecorationImage(
-                                        image: NetworkImage(Cart.items()[index].menuItem.cover()),
-                                        fit: BoxFit.cover,
+                                  ClipOval(
+                                    child: CachedNetworkImage(  
+                                      width: MediaQuery.of(context).size.height * 0.10,
+                                      height: MediaQuery.of(context).size.height * 0.10,
+                                      fadeOutDuration: Duration(milliseconds: 100),
+                                      fadeInDuration: Duration(milliseconds: 100),
+                                      imageUrl: Cart.items()[index].menuItem.cover(),
+                                      fit: BoxFit.cover,
+                                      placeholder: Container(
+                                        width: MediaQuery.of(context).size.height * 0.10,
+                                        height: MediaQuery.of(context).size.height * 0.10,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          border: Border.all(color: Colors.grey.withOpacity(0.2))
+                                        ),
+                                        child: Icon(Icons.restaurant, color: Colors.grey.withOpacity(0.5), size: 25),
                                       ),
-                                    ),
+                                      errorWidget: Container(
+                                        width: MediaQuery.of(context).size.height * 0.10,
+                                        height: MediaQuery.of(context).size.height * 0.10,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          border: Border.all(color: Colors.grey.withOpacity(0.2))
+                                        ),
+                                        child: Icon(Icons.restaurant, color: Colors.grey.withOpacity(0.5), size: 25),
+                                      ),
+                                    )
                                   ),
                                   Container(
                                     width: MediaQuery.of(context).size.width * 0.3,
@@ -134,7 +153,7 @@ class CartPageState extends State<CartPage> with SingleTickerProviderStateMixin 
                                   ),           
                                   Container(
                                     alignment: Alignment.centerLeft,
-                                    width: MediaQuery.of(context).size.width * 0.3,
+                                    width: MediaQuery.of(context).size.width * 0.25,
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 import '../../../widgets/cart_widget.dart';
 
@@ -94,15 +95,34 @@ class MenuItemPageState extends State<MenuItemPage> with SingleTickerProviderSta
                 children: [
                   Container(
                     margin: EdgeInsets.only(top: 30.0),
-                    width:  MediaQuery.of(context).size.width * 0.5,
-                    height: MediaQuery.of(context).size.width * 0.5,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: DecorationImage(
-                        image: NetworkImage(widget.item.cover()),
-                        fit: BoxFit.cover,
+                  ),
+                  ClipOval(
+                    child: CachedNetworkImage(  
+                      width:  MediaQuery.of(context).size.width * 0.5,
+                      height: MediaQuery.of(context).size.width * 0.5,
+                      fadeOutDuration: Duration(milliseconds: 100),
+                      fadeInDuration: Duration(milliseconds: 100),
+                      imageUrl: widget.item.cover(),
+                      fit: BoxFit.cover,
+                      placeholder: Container(
+                        width:  MediaQuery.of(context).size.width * 0.5,
+                        height: MediaQuery.of(context).size.width * 0.5,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.grey.withOpacity(0.2))
+                        ),
+                        child: Icon(Icons.restaurant, color: Colors.grey.withOpacity(0.5), size: 25),
                       ),
-                    ),
+                      errorWidget: Container(
+                        width:  MediaQuery.of(context).size.width * 0.5,
+                        height: MediaQuery.of(context).size.width * 0.5,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.grey.withOpacity(0.2))
+                        ),
+                        child: Icon(Icons.restaurant, color: Colors.grey.withOpacity(0.5), size: 30),
+                      ),
+                    )
                   ),
                   Padding(padding: EdgeInsets.only(top: 30.0)),
                   Text('${widget.item.price} ${Localization.textRUB}',
@@ -163,7 +183,7 @@ class MenuItemPageState extends State<MenuItemPage> with SingleTickerProviderSta
                   ),
                   Container(
                     margin: EdgeInsets.only(top: 15.0, left: MediaQuery.of(context).size.width * 0.15, right: MediaQuery.of(context).size.width * 0.15),      
-                    child: Text(widget.item.description,
+                     child: Text(widget.item.description ?? '',
                       maxLines: 3,
                       textAlign: TextAlign.center,
                       style: TextStyle(

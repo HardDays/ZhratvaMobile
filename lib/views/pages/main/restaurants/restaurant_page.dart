@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+
 import 'menu_page.dart';
 
 import '../../../widgets/cart_widget.dart';
@@ -82,16 +84,32 @@ class RestaurantPageState  extends State<RestaurantPage> {
                   alignment: Alignment.topCenter,
                   children: <Widget>[ 
                     Container(  
-                      margin: const EdgeInsets.only(top: 0.0, left: 0.0, right: 0.0),
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height * 0.25,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(0.0)),   
-                        image: DecorationImage(
-                          image: NetworkImage(widget.restaurant.cover),
-                          fit: BoxFit.cover,
+                      child: CachedNetworkImage(  
+                        width: MediaQuery.of(context).size.width,
+                        height: MediaQuery.of(context).size.height * 0.25,
+                        fadeOutDuration: Duration(milliseconds: 100),
+                        fadeInDuration: Duration(milliseconds: 100),
+                        imageUrl: widget.restaurant.cover,
+                        fit: BoxFit.cover,
+                        placeholder: Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: MediaQuery.of(context).size.height * 0.25,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                            border: Border.all(color: Colors.grey.withOpacity(0.2))
+                          ),
+                          child: Icon(Icons.restaurant, color: Colors.grey.withOpacity(0.5), size: 25),
                         ),
-                      ),
+                        errorWidget: Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: MediaQuery.of(context).size.height * 0.25,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                            border: Border.all(color: Colors.grey.withOpacity(0.2))
+                          ),
+                          child: Icon(Icons.restaurant, color: Colors.grey.withOpacity(0.5), size: 25),
+                        ),
+                      )
                     ),
                     Container(
                       alignment: Alignment.center,
@@ -235,9 +253,10 @@ class RestaurantPageState  extends State<RestaurantPage> {
             childCount: 1
             ),
           ),
-          SliverPadding(padding: EdgeInsets.only(top: 10.0)),
-          widget.restaurant.menuCategories != null ? SliverFixedExtentList(
-            itemExtent: 10.0,
+          SliverPadding(
+            padding: EdgeInsets.only(top: 10.0)),
+            widget.restaurant.menuCategories != null ? SliverFixedExtentList(
+            itemExtent: 20.0,
             delegate: SliverChildBuilderDelegate(
               (context, index) {
                 return Container(
@@ -253,7 +272,7 @@ class RestaurantPageState  extends State<RestaurantPage> {
               childCount: 1
             ),
           ) : SliverPadding(padding: EdgeInsets.only(top: 1.0)),
-          SliverPadding(padding: EdgeInsets.only(top: 20.0)),
+          SliverPadding(padding: EdgeInsets.only(top: 10.0)),
           SliverFixedExtentList(
             itemExtent: MediaQuery.of(context).size.height * 0.15,
             delegate: SliverChildBuilderDelegate((context, index) {
@@ -274,17 +293,34 @@ class RestaurantPageState  extends State<RestaurantPage> {
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Container(
-                            margin: EdgeInsets.only(left: 10.0),
-                            width: MediaQuery.of(context).size.height * 0.10,
-                            height: MediaQuery.of(context).size.height * 0.10,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              image: DecorationImage(
-                                image: NetworkImage(widget.restaurant.menuCategories[index].cover()),
-                                fit: BoxFit.cover,
+                          Padding(padding: EdgeInsets.only(left: 10.0)),
+                          ClipOval(
+                            child: CachedNetworkImage(  
+                              width: MediaQuery.of(context).size.height * 0.10,
+                              height: MediaQuery.of(context).size.height * 0.10,
+                              fadeOutDuration: Duration(milliseconds: 100),
+                              fadeInDuration: Duration(milliseconds: 100),
+                              imageUrl: widget.restaurant.menuCategories[index].cover(),
+                              fit: BoxFit.cover,
+                              placeholder: Container(
+                                width: MediaQuery.of(context).size.height * 0.10,
+                                height: MediaQuery.of(context).size.height * 0.10,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: Border.all(color: Colors.grey.withOpacity(0.2))
+                                ),
+                                child: Icon(Icons.restaurant, color: Colors.grey.withOpacity(0.5), size: 25),
                               ),
-                            ),
+                              errorWidget: Container(
+                                width: MediaQuery.of(context).size.height * 0.10,
+                                height: MediaQuery.of(context).size.height * 0.10,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: Border.all(color: Colors.grey.withOpacity(0.2))
+                                ),
+                                child: Icon(Icons.restaurant, color: Colors.grey.withOpacity(0.5), size: 25),
+                              ),
+                            )
                           ),
                           Container(
                             margin: EdgeInsets.only(left: 15.0),

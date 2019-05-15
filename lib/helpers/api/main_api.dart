@@ -13,7 +13,8 @@ import '../../models/api/statistics.dart';
 
 class MainAPI {
 
-  static const String url = 'http://35.189.206.115:3000';
+  static const String url = 'http://35.189.206.115:3000'; 
+  static const String posUrl = 'https://foodapp-pos.herokuapp.com'; 
 
   static const String images = '/images';
   static const String restaurants = '/restaurants';

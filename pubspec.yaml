@@ -15,6 +15,7 @@ dependencies:
   synchronized: ^1.5.1+1
   flutter_map: any
   geo: ^0.2.0
+  cached_network_image: any
 
 dev_dependencies:
   flutter_test:
