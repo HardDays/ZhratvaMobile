@@ -91,7 +91,7 @@ class RestaurantPageState  extends State<RestaurantPage> {
                         fadeInDuration: Duration(milliseconds: 100),
                         imageUrl: widget.restaurant.cover,
                         fit: BoxFit.cover,
-                        placeholder: Container(
+                        placeholder: (ctx, image) => Container(
                           width: MediaQuery.of(context).size.width,
                           height: MediaQuery.of(context).size.height * 0.25,
                           decoration: BoxDecoration(
@@ -100,7 +100,7 @@ class RestaurantPageState  extends State<RestaurantPage> {
                           ),
                           child: Icon(Icons.restaurant, color: Colors.grey.withOpacity(0.5), size: 25),
                         ),
-                        errorWidget: Container(
+                        errorWidget: (ctx, image, o) => Container(
                           width: MediaQuery.of(context).size.width,
                           height: MediaQuery.of(context).size.height * 0.25,
                           decoration: BoxDecoration(
@@ -302,7 +302,7 @@ class RestaurantPageState  extends State<RestaurantPage> {
                               fadeInDuration: Duration(milliseconds: 100),
                               imageUrl: widget.restaurant.menuCategories[index].cover(),
                               fit: BoxFit.cover,
-                              placeholder: Container(
+                              placeholder: (ctx, image) => Container(
                                 width: MediaQuery.of(context).size.height * 0.10,
                                 height: MediaQuery.of(context).size.height * 0.10,
                                 decoration: BoxDecoration(
@@ -311,7 +311,7 @@ class RestaurantPageState  extends State<RestaurantPage> {
                                 ),
                                 child: Icon(Icons.restaurant, color: Colors.grey.withOpacity(0.5), size: 25),
                               ),
-                              errorWidget: Container(
+                              errorWidget: (ctx, image, o) => Container(
                                 width: MediaQuery.of(context).size.height * 0.10,
                                 height: MediaQuery.of(context).size.height * 0.10,
                                 decoration: BoxDecoration(

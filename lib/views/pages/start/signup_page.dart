@@ -57,10 +57,10 @@ class SignupPageState extends State<SignupPage> {
       MainAPI.createUser(user).then(
         (res){
           if (res != null){
-            MainAPI.token = user.token;
-            Database.setCurrentUser(res);
             Cache.flush();
             Cache.currentUser = res;
+            Database.setCurrentUser(res);
+            MainAPI.token = res.token;
             Navigator.pushReplacement(
               context,
               DefaultPageRoute(builder: (context) => MainPage()),

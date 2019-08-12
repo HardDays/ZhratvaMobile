@@ -104,7 +104,7 @@ class MenuItemPageState extends State<MenuItemPage> with SingleTickerProviderSta
                       fadeInDuration: Duration(milliseconds: 100),
                       imageUrl: widget.item.cover(),
                       fit: BoxFit.cover,
-                      placeholder: Container(
+                      placeholder: (ctx, image) => Container(
                         width:  MediaQuery.of(context).size.width * 0.5,
                         height: MediaQuery.of(context).size.width * 0.5,
                         decoration: BoxDecoration(
@@ -113,7 +113,7 @@ class MenuItemPageState extends State<MenuItemPage> with SingleTickerProviderSta
                         ),
                         child: Icon(Icons.restaurant, color: Colors.grey.withOpacity(0.5), size: 25),
                       ),
-                      errorWidget: Container(
+                      errorWidget: (ctx, image, o) => Container(
                         width:  MediaQuery.of(context).size.width * 0.5,
                         height: MediaQuery.of(context).size.width * 0.5,
                         decoration: BoxDecoration(

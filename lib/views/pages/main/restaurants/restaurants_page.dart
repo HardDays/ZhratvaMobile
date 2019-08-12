@@ -175,7 +175,7 @@ class RestaurantsPageState extends State<RestaurantsPage> with AutomaticKeepAliv
                                 fadeInDuration: Duration(milliseconds: 100),
                                 imageUrl: Cache.restaurants[index].cover,
                                 fit: BoxFit.cover,
-                                placeholder: Container(
+                                placeholder: (ctx, image) => Container(
                                   width: MediaQuery.of(context).size.width - 40.0,
                                   height: MediaQuery.of(context).size.width * 0.5,
                                   decoration: BoxDecoration(
@@ -184,7 +184,7 @@ class RestaurantsPageState extends State<RestaurantsPage> with AutomaticKeepAliv
                                   ),
                                   child: Icon(Icons.restaurant, color: Colors.grey.withOpacity(0.5), size: 25),
                                 ),
-                                errorWidget: Container(
+                                errorWidget: (ctx, image, o) => Container(
                                   width: MediaQuery.of(context).size.width - 40.0,
                                   height: MediaQuery.of(context).size.width * 0.5,
                                   decoration: BoxDecoration(
